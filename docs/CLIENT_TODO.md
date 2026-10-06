@@ -19,7 +19,7 @@ expected to be answered by it.
 
 ## 2. Products _(copy)_
 
-- [ ] Confirm product names (placeholders: "Hair Growth & Scalp Oil", "Deep Conditioning Mask")
+- [ ] Confirm product names (see section 10: now using the label names)
 - [ ] Prices (ZAR, VAT-inclusive), compare-at prices if any
 - [ ] Sizes (e.g. 100 ml), starting stock levels
 - [ ] Full INCI ingredient lists for both products
@@ -82,3 +82,31 @@ client copy arrives). Each needs `TODO(CLIENT): approve claim wording`.
 - [ ] Newsletter consent wording and welcome email text (`src/lib/email/templates.ts`)
 - [ ] Hero headline/body (`content/home.ts`), About copy (`content/about.ts`), page SEO titles/descriptions (`content/pages.ts`)
 - [ ] OWNER_EMAIL: where contact messages are sent
+
+## 9. Added in Phase 3 (catalogue)
+
+Seeded values in `content/products.ts` are **placeholders**. Replace them (or edit in /admin after seeding):
+
+- [ ] Real prices (placeholders: R100.00 oil, R150.00 mask), compare-at prices, sizes, stock
+- [ ] Full INCI lists, shelf life / period-after-opening
+- [ ] Approve all claim wording on the product pages (benefits, descriptions, "Cruelty-Free", "No sulfates, parabens, phthalates or silicones")
+- [ ] Confirm the oil's four uses and steps; confirm mask directions and leave-on time
+- [ ] Confirm allergen notice (mask: hydrolysed wheat protein / gluten, coconut) and warnings text
+- [ ] Real product photos (replace the SVG placeholders in `public/images/products/`) and alt text
+- [ ] Product SEO titles/descriptions
+
+## 10. From the client's brochure (applied to the site; confirm each)
+
+Read from the two brochure images supplied in chat. Treat as likely answers to confirm:
+
+- [ ] **Product names on the labels:** "Hair Growth Oil" (Rosemary & Vitamin E, 100ml) and "Pre-wash Conditioning Mask" (Hibiscus & Fenugreek, 100ml). The site now uses these label names (slugs `hair-growth-oil`, `pre-wash-conditioning-mask`). Confirm final names, and that "Hair Growth" is acceptable (claims review).
+- [ ] **Sizes:** both 100 ml per the labels.
+- [ ] **Key ingredients:** oil: rosemary, vitamin E; mask: hibiscus, fenugreek. Full INCI still required.
+- [ ] **Mask directions (brochure):** apply to rinsed hair root to tips, leave 20 minutes, rinse thoroughly, shampoo and condition; use every 2 to 3 weeks.
+- [ ] **Oil directions (brochure):** a few drops to the scalp with the dropper, massage 3 to 5 minutes. (The oil's other uses in our draft are still unconfirmed.)
+- [ ] **Care and storage (brochure):** store cool, dry, away from direct sunlight; avoid getting water into jars; patch test on inner elbow.
+- [ ] **Brand line:** "Growth with purpose". Social: Instagram and TikTok @kunta.nia. Website on brochure is a template placeholder.
+- [ ] **Castor oil:** our soft claim says "rosemary and castor oil" (from the build brief) but the label lists rosemary and vitamin E. Confirm whether castor oil is in the formula; otherwise reword.
+- [ ] **Brochure claims to review before reuse on the site:** "results-driven", "restorative", "support healthy length retention", "deeply hydrate, strengthen", "clean" (see section 3).
+- [ ] **Brand colours and fonts:** palette sampled from the brochure into `src/styles/tokens.css` (maroon #592c29, dusty rose #a27464, cream #fff9f1); confirm against a brand guide. Display font on the brochure is a heavy high-contrast serif; Gloock is an approximation.
+- [ ] **Photos:** brochure images are Canva stock models and product shots. Confirm licensing/ownership before using on the website; get original product photos.

@@ -8,6 +8,8 @@
   --color-ink: var(--kn-ink);
   --color-ink-muted: var(--kn-ink-muted);
   --color-line: var(--kn-line);
+  --color-control: var(--kn-control-border);
+  --color-rose: var(--kn-rose);
   --color-brand: var(--kn-brand);
   --color-brand-contrast: var(--kn-brand-contrast);
   --color-accent: var(--kn-accent);

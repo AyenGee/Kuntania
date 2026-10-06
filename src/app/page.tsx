@@ -1,8 +1,28 @@
 import Link from "next/link";
 import { home } from "@content/home";
+import { ProductCard } from "@/components/catalogue/ProductCard";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
+import { getActiveProducts, type CatalogueProduct } from "@/lib/catalogue";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+/** Featured products; if the database is unreachable the home page still renders. */
+async function loadFeatured(): Promise<CatalogueProduct[]> {
+  try {
+    return await getActiveProducts();
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        event: "home.featured_failed",
+        error: error instanceof Error ? error.message : String(error),
+      }),
+    );
+    return [];
+  }
+}
+
+export default async function HomePage() {
+  const featured = await loadFeatured();
   return (
     <div className="space-y-16">
       <section className="py-8">
@@ -29,16 +49,25 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Featured products are added in Phase 3 (Catalogue). */}
       <section aria-labelledby="featured-heading">
         <h2 id="featured-heading" className="text-2xl font-semibold">
           {home.featured.heading}
         </h2>
-        <p className="mt-2">
-          <Link href="/shop" className="underline">
-            Browse the shop
-          </Link>
-        </p>
+        {featured.length > 0 ? (
+          <ul className="mt-4 grid gap-6 sm:grid-cols-2">
+            {featured.map((p) => (
+              <li key={p.id}>
+                <ProductCard product={p} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-2">
+            <Link href="/shop" className="underline">
+              Browse the shop
+            </Link>
+          </p>
+        )}
       </section>
 
       {home.routine.steps.length > 0 && (

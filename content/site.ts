@@ -6,8 +6,8 @@
 
 export const site = {
   name: "Kunta Nia",
-  /** TODO(CLIENT): confirm tagline */
-  tagline: "Natural hair care, made with intention.",
+  /** From the client brochure. TODO(CLIENT): confirm */
+  tagline: "Growth with purpose",
   /** TODO(CLIENT): confirm description (used for SEO default) */
   description:
     "Kunta Nia is a South African natural hair care brand. Shop nourishing oils and conditioning treatments for your hair journey.",
@@ -38,11 +38,11 @@ export const business = {
   },
 } as const;
 
-/** TODO(CLIENT): social profile URLs. Leave empty string to hide the link. */
+/** Handles from the client brochure (@kunta.nia). TODO(CLIENT): confirm. Empty string hides a link. */
 export const social = {
-  instagram: "",
+  instagram: "https://www.instagram.com/kunta.nia",
   facebook: "",
-  tiktok: "",
+  tiktok: "https://www.tiktok.com/@kunta.nia",
 } as const;
 
 export const nav = {

@@ -43,7 +43,7 @@ export function NewsletterForm({ source = "footer" }: { source?: string }) {
           autoComplete="email"
           aria-invalid={errors.email ? true : undefined}
           aria-describedby={errors.email ? `${emailId}-error` : undefined}
-          className="w-full rounded-control border border-line bg-surface px-3 py-2"
+          className="w-full rounded-control border border-control bg-surface px-3 py-2"
         />
         {errors.email && (
           <p id={`${emailId}-error`} className="mt-1 text-sm text-danger">

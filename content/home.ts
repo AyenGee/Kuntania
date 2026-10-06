@@ -6,9 +6,9 @@
 export const home = {
   hero: {
     /** TODO(CLIENT): hero headline */
-    heading: "Natural hair care, made with intention",
+    heading: "Growth with purpose",
     /** TODO(CLIENT): hero supporting text */
-    body: "TODO(CLIENT): hero supporting text. Nourishing care for your hair journey.",
+    body: "Botanical hair care essentials for natural hair. TODO(CLIENT): confirm hero text.",
     cta: { label: "Shop now", href: "/shop" },
   },
   /** TODO(CLIENT): trust badges. Do not claim certifications the client does not hold. */

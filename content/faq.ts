@@ -27,9 +27,9 @@ export const faq: FaqEntry[] = [
   },
   {
     question: "How often should I use the products?",
-    // TODO(CLIENT): confirm recommended frequency for each product
+    // TODO(CLIENT): confirm recommended frequency for each product (mask frequency is from the brochure)
     answer:
-      "TODO(CLIENT): confirm recommended frequency for each product, e.g. how often to use the oil and the mask. Each product page has full directions for use.",
+      "Use the Pre-wash Conditioning Mask every 2 to 3 weeks. TODO(CLIENT): confirm how often to use the Hair Growth Oil. Each product page has full directions for use.",
   },
   {
     question: "Are your products safe for children?",

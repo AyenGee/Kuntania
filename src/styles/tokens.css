@@ -2,18 +2,35 @@
  * DESIGN TOKENS — the single place a designer edits to restyle the site.
  * globals.css maps these to Tailwind utilities (bg-surface, text-ink, font-heading ...).
  * Components never hard-code colours, fonts or radii.
+ *
+ * Palette sampled from the client's brochure (maroon #592c29, dusty rose #a27464,
+ * cream #fff9f1). TODO(CLIENT): confirm exact brand colours / brand guide.
+ *
+ * Contrast notes (WCAG AA): ink, ink-muted, accent, brand-contrast on their backgrounds
+ * all exceed 4.5:1. Cream on dusty rose (--kn-rose) is only ~3.9:1, so rose is for large
+ * text, panels and borders only, never small text.
  */
 
 :root {
-  /* Colour (neutral placeholders; text/background pairs meet WCAG AA) */
-  --kn-surface: #ffffff;
-  --kn-surface-muted: #f6f4f1;
-  --kn-ink: #1c1917;
-  --kn-ink-muted: #57534e;
-  --kn-line: #d6d3d1;
-  --kn-brand: #3f2d20;
-  --kn-brand-contrast: #ffffff;
-  --kn-accent: #8a5a2b;
+  /* Surfaces */
+  --kn-surface: #fff9f1; /* cream */
+  --kn-surface-muted: #f4e8e1; /* light rose tint */
+  --kn-rose: #a27464; /* dusty rose: panels, large text, control borders */
+
+  /* Text */
+  --kn-ink: #2e1a18;
+  --kn-ink-muted: #6b4a45;
+
+  /* Brand */
+  --kn-brand: #592c29; /* maroon */
+  --kn-brand-contrast: #fff9f1;
+  --kn-accent: #8a5240; /* text-safe rose/terracotta on cream */
+
+  /* Lines */
+  --kn-line: #e3d0c6; /* decorative dividers */
+  --kn-control-border: #a27464; /* form controls (3:1+ against surface) */
+
+  /* Status */
   --kn-danger: #b42318;
   --kn-success: #166534;
   --kn-focus: #1d4ed8;

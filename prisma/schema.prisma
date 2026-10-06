@@ -39,3 +39,183 @@ model RateLimit {
   @@id([key, windowStart])
   @@index([windowStart])
 }
+
+// ---------------------------------------------------------------------------
+// Phase 3: catalogue, orders, payments, discounts, admin
+// All money is integer cents (ZAR).
+// ---------------------------------------------------------------------------
+
+model Product {
+  id                  String      @id @default(cuid())
+  slug                String      @unique
+  name                String
+  shortName           String
+  tagline             String
+  description         String
+  /// [{ title, body }]
+  benefits            Json
+  /// [{ title, body }]
+  howToUse            Json
+  ingredientsInci     String
+  warnings            String
+  sizeLabel           String
+  priceCents          Int
+  compareAtPriceCents Int?
+  stock               Int         @default(0)
+  active              Boolean     @default(true)
+  sortOrder           Int         @default(0)
+  /// [{ src, alt }]
+  images              Json
+  seoTitle            String
+  seoDescription      String
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  orderItems          OrderItem[]
+
+  @@index([active, sortOrder])
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum DeliveryMethod {
+  COURIER
+  PICKUP_POINT
+  COLLECTION
+}
+
+enum Province {
+  EASTERN_CAPE
+  FREE_STATE
+  GAUTENG
+  KWAZULU_NATAL
+  LIMPOPO
+  MPUMALANGA
+  NORTHERN_CAPE
+  NORTH_WEST
+  WESTERN_CAPE
+}
+
+enum DiscountType {
+  PERCENT
+  FIXED
+}
+
+model Order {
+  id               String         @id @default(cuid())
+  /// Human-friendly, e.g. KN-10042. Generated from the order_number_seq sequence.
+  orderNumber      String         @unique
+  status           OrderStatus    @default(PENDING_PAYMENT)
+  email            String
+  firstName        String
+  lastName         String
+  phone            String
+  addressLine1     String
+  addressLine2     String?
+  suburb           String
+  city             String
+  province         Province
+  postalCode       String
+  deliveryMethod   DeliveryMethod @default(COURIER)
+  deliveryNotes    String?
+  subtotalCents    Int
+  shippingCents    Int
+  discountCents    Int            @default(0)
+  totalCents       Int
+  vatIncludedCents Int            @default(0)
+  discountCodeId   String?
+  discountCode     DiscountCode?  @relation(fields: [discountCodeId], references: [id])
+  paymentProvider  String         @default("payfast")
+  paymentReference String?
+  paidAt           DateTime?
+  trackingNumber   String?
+  trackingUrl      String?
+  courierName      String?
+  marketingOptIn   Boolean        @default(false)
+  termsAcceptedAt  DateTime
+  /// True if stock ran out between checkout and payment: owner must act.
+  stockShortfall   Boolean        @default(false)
+  adminNotes       String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  items         OrderItem[]
+  events        OrderEvent[]
+  notifications PaymentNotification[]
+
+  @@index([status, createdAt])
+  @@index([email])
+}
+
+model OrderItem {
+  id                     String  @id @default(cuid())
+  orderId                String
+  order                  Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId              String
+  product                Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+  productNameSnapshot    String
+  sizeSnapshot           String
+  unitPriceCentsSnapshot Int
+  quantity               Int
+  lineTotalCents         Int
+
+  @@index([orderId])
+}
+
+/// Audit trail: created, payment received, status changes, emails sent.
+model OrderEvent {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  type      String
+  message   String
+  createdAt DateTime @default(now())
+
+  @@index([orderId, createdAt])
+}
+
+/// Every payment ITN received is logged here, verified or not.
+model PaymentNotification {
+  id            String   @id @default(cuid())
+  provider      String
+  rawPayload    Json
+  verified      Boolean  @default(false)
+  failureReason String?
+  orderId       String?
+  order         Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  createdAt     DateTime @default(now())
+
+  @@index([orderId])
+}
+
+model DiscountCode {
+  id               String       @id @default(cuid())
+  /// Stored uppercase.
+  code             String       @unique
+  type             DiscountType
+  /// PERCENT: 1-100. FIXED: cents.
+  value            Int
+  minSubtotalCents Int          @default(0)
+  maxUses          Int?
+  usedCount        Int          @default(0)
+  startsAt         DateTime?
+  endsAt           DateTime?
+  active           Boolean      @default(true)
+  orders           Order[]
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime  @default(now())
+  lastLoginAt  DateTime?
+}
