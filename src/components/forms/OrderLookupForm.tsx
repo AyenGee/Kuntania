@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { lookupOrder, type OrderStatusState } from "@/app/(site)/order-status/actions";
 import { Field, Honeypot, SubmitButton } from "./Field";
+import { FormAlert } from "./FormAlert";
 
 const initial: OrderStatusState = { ok: false };
 
@@ -16,11 +17,7 @@ export function OrderLookupForm() {
     <div className="space-y-8">
       <form action={action} className="relative space-y-4" noValidate>
         <Honeypot />
-        {state.message && (
-          <p role="alert" className="text-danger">
-            {state.message}
-          </p>
-        )}
+        <FormAlert message={state.message} className="text-danger" />
         <Field
           id="orderNumber"
           label="Order number"

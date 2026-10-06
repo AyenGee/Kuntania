@@ -1,0 +1,55 @@
+import { defineConfig } from "@playwright/test";
+
+/**
+ * End-to-end tests (tests/e2e).
+ *
+ *  - smoke.spec.ts needs NO database: public pages, headers, SEO files, admin gate.
+ *  - checkout.spec.ts needs a real, migrated test database. Set E2E_DATABASE_URL to enable it.
+ *    WARNING: that spec creates orders and seeds data. Use a disposable database, never production.
+ *
+ * Uses your installed Google Chrome by default (no browser download). Set
+ * PLAYWRIGHT_CHANNEL=chromium after `npx playwright install chromium` to use Playwright's own.
+ */
+
+const PORT = 3100;
+const BASE_URL = `http://localhost:${PORT}`;
+export const E2E_DATABASE_URL = process.env.E2E_DATABASE_URL;
+export const MOCK_PAYFAST_PORT = 3101;
+
+export default defineConfig({
+  testDir: "tests/e2e",
+  timeout: 60_000,
+  fullyParallel: false,
+  workers: 1,
+  retries: process.env.CI ? 1 : 0,
+  reporter: [["list"], ["html", { open: "never" }]],
+  use: {
+    baseURL: BASE_URL,
+    channel: process.env.PLAYWRIGHT_CHANNEL === "chromium" ? undefined : "chrome",
+    trace: "retain-on-failure",
+  },
+  webServer: {
+    // Builds, then serves the production build with a throwaway test configuration.
+    command: `npm run build && npx next start -p ${PORT}`,
+    // robots.txt needs no database, so it works for the database-free smoke tests too
+    // (/api/health correctly answers 503 when the database is unreachable).
+    url: `${BASE_URL}/robots.txt`,
+    reuseExistingServer: !process.env.CI,
+    timeout: 300_000,
+    env: {
+      NODE_ENV: "production",
+      SITE_URL: BASE_URL,
+      DATABASE_URL: E2E_DATABASE_URL ?? "postgresql://x:x@127.0.0.1:1/x",
+      SESSION_SECRET: "e2e-session-secret-e2e-session-secret-0123456789",
+      CRON_SECRET: "e2e-cron-secret",
+      PAYFAST_MODE: "sandbox",
+      PAYFAST_MERCHANT_ID: "10000100",
+      PAYFAST_MERCHANT_KEY: "e2e-merchant-key",
+      PAYFAST_PASSPHRASE: "e2e-passphrase",
+      // Stand-in for PayFast's validation endpoint (only honoured in sandbox mode).
+      PAYFAST_VALIDATE_URL: `http://127.0.0.1:${MOCK_PAYFAST_PORT}/validate`,
+      OWNER_EMAIL: "owner@example.test",
+      VAT_REGISTERED: "false",
+    },
+  },
+});

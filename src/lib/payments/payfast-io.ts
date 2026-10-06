@@ -19,8 +19,13 @@ export async function resolvePayfastIps(): Promise<string[]> {
 export async function confirmWithPayfast(
   mode: PayfastMode,
   body: string,
+  testOverrideUrl?: string,
 ): Promise<boolean> {
-  const response = await fetch(PAYFAST_VALIDATE_URL[mode], {
+  // The override exists only so the end-to-end test can stand in for PayFast. It is never
+  // honoured in live mode, so it can't be used to bypass PayFast's own confirmation.
+  const url =
+    mode === "sandbox" && testOverrideUrl ? testOverrideUrl : PAYFAST_VALIDATE_URL[mode];
+  const response = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body,

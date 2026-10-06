@@ -24,7 +24,13 @@ export async function subscribeToNewsletter(
     }
 
     const parsed = newsletterSchema.safeParse(Object.fromEntries(formData));
-    if (!parsed.success) return { ok: false, fieldErrors: fieldErrorsFrom(parsed.error) };
+    if (!parsed.success) {
+      return {
+        ok: false,
+        message: "Please check the highlighted fields.",
+        fieldErrors: fieldErrorsFrom(parsed.error),
+      };
+    }
     const email = parsed.data.email.toLowerCase();
 
     const db = getDb();

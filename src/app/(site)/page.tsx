@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { home } from "@content/home";
 import { ProductCard } from "@/components/catalogue/ProductCard";
@@ -5,6 +6,10 @@ import { NewsletterForm } from "@/components/forms/NewsletterForm";
 import { getActiveProducts, type CatalogueProduct } from "@/lib/catalogue";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 /** Featured products; if the database is unreachable the home page still renders. */
 async function loadFeatured(): Promise<CatalogueProduct[]> {

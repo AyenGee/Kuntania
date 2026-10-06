@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Card, PageHeader, StatusBadge, TableWrap, td, th } from "@/components/admin/ui";
 import { getDashboard, type PeriodStats } from "@/lib/admin/dashboard";
 import { formatDateTime } from "@/lib/admin/format";
+import { requireAdmin } from "@/lib/admin/session";
 import { formatZar } from "@/lib/money";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +20,8 @@ function Stat({ label, stats }: { label: string; stats: PeriodStats }) {
 }
 
 export default async function AdminDashboardPage() {
+  // Layouts and pages render in parallel, so the page must check the session itself.
+  await requireAdmin();
   const d = await getDashboard();
 
   return (

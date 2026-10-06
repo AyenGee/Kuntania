@@ -78,7 +78,8 @@ export async function POST(request: Request): Promise<Response> {
       {
         resolveValidIps: resolvePayfastIps,
         getExpectedAmountCents: async () => order?.totalCents ?? null,
-        confirmWithPayfast: (b) => confirmWithPayfast(env.PAYFAST_MODE, b),
+        confirmWithPayfast: (b) =>
+          confirmWithPayfast(env.PAYFAST_MODE, b, env.PAYFAST_VALIDATE_URL),
       },
     );
 

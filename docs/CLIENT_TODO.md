@@ -135,3 +135,9 @@ All wording is in `content/emails.ts`. Review each email before launch:
 - [ ] Admin sessions last 8 hours, then the owner signs in again. Confirm that's acceptable
 - [ ] Owner to review the order actions: cancelling a **paid, unshipped** order puts its stock back; refunds are _records only_ (the actual refund is made in the PayFast dashboard)
 - [ ] Product photos are still file-based (`public/images/products`): the owner can't upload photos in v1
+
+## 14. Hardening (Phase 8)
+
+- [ ] A default **social share image** (`public/og.jpg`, about 1200x630) so links shared on WhatsApp, Facebook and X show a preview. Then switch `twitter.card` to `summary_large_image` in `src/app/layout.tsx`
+- [ ] A **logo** file (for the Organization structured data and emails)
+- [ ] Analytics choice (Plausible or Umami) and its settings (`ANALYTICS_*`); none is loaded until configured

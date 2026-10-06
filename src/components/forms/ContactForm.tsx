@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { submitContact } from "@/app/(site)/contact/actions";
 import type { FormState } from "@/lib/validation/forms";
 import { Field, Honeypot, SubmitButton } from "./Field";
+import { FormAlert } from "./FormAlert";
 
 const initial: FormState = { ok: false };
 
@@ -23,11 +24,7 @@ export function ContactForm() {
   return (
     <form action={action} className="relative space-y-4" noValidate>
       <Honeypot />
-      {state.message && (
-        <p role="alert" className="text-danger">
-          {state.message}
-        </p>
-      )}
+      <FormAlert message={state.message} className="text-danger" />
       <Field
         id="name"
         label="Name"

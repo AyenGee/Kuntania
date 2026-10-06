@@ -40,3 +40,9 @@ h3 {
   outline: 3px solid var(--kn-focus);
   outline-offset: 2px;
 }
+
+/* On the maroon brand colour (admin header, buttons) the blue focus ring is hard to see: use cream. */
+.bg-brand :focus-visible,
+.bg-brand:focus-visible {
+  outline-color: var(--kn-brand-contrast);
+}

@@ -50,6 +50,7 @@ export async function lookupOrder(
     if (!parsed.success) {
       return {
         ok: false,
+        message: "Please check the highlighted fields.",
         fieldErrors: fieldErrorsFrom(parsed.error),
         values: valuesFrom(formData),
       };

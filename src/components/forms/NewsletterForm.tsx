@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { subscribeToNewsletter } from "@/app/(site)/newsletter/actions";
 import type { FormState } from "@/lib/validation/forms";
 import { Honeypot, SubmitButton } from "./Field";
+import { FormAlert } from "./FormAlert";
 
 const initial: FormState = { ok: false };
 
@@ -26,11 +27,7 @@ export function NewsletterForm({ source = "footer" }: { source?: string }) {
     <form action={action} className="relative space-y-3" noValidate>
       <Honeypot />
       <input type="hidden" name="source" value={source} />
-      {state.message && (
-        <p role="alert" className="text-sm text-danger">
-          {state.message}
-        </p>
-      )}
+      <FormAlert message={state.message} className="text-sm text-danger" />
       <div>
         <label htmlFor={emailId} className="mb-1 block text-sm font-medium">
           Email address

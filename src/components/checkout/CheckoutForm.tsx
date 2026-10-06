@@ -12,6 +12,7 @@ import type { ShippingMethod } from "@/lib/shipping";
 import { useCart } from "@/lib/use-cart";
 import { usePricedCart } from "@/lib/use-priced-cart";
 import { PaymentRedirectForm } from "./PaymentRedirectForm";
+import { FormAlert } from "@/components/forms/FormAlert";
 
 const initial: CheckoutState = { ok: false };
 
@@ -85,13 +86,12 @@ export function CheckoutForm() {
 
       <div className="space-y-8">
         {(state.message || notices.length > 0) && (
-          <div
-            role="alert"
-            className="space-y-2 rounded-control border-2 border-danger p-4"
-          >
-            {state.message && <p>{state.message}</p>}
+          <div className="space-y-2 rounded-control border-2 border-danger p-4">
+            <FormAlert message={state.message} className="" />
             {notices.map((n) => (
-              <p key={n}>{n}</p>
+              <p key={n} role="status">
+                {n}
+              </p>
             ))}
             {notices.length > 0 && (
               <button

@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL ?? "http://localhost:3000"),
   title: { default: site.name, template: `%s | ${site.name}` },
   description: site.description,
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    locale: "en_ZA",
+    title: site.name,
+    description: site.description,
+  },
+  // TODO(CLIENT): add a default share image (public/og.jpg) and switch to summary_large_image.
+  twitter: { card: "summary" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

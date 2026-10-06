@@ -23,6 +23,8 @@ const schema = z.object({
   PAYFAST_MERCHANT_ID: optionalString,
   PAYFAST_MERCHANT_KEY: optionalString,
   PAYFAST_PASSPHRASE: optionalString,
+  /** TEST ONLY: replaces PayFast's validate URL, and only ever honoured in sandbox mode. */
+  PAYFAST_VALIDATE_URL: optionalString,
 
   SMTP_HOST: optionalString,
   SMTP_PORT: z.coerce.number().int().positive().default(587),
@@ -34,6 +36,7 @@ const schema = z.object({
 
   ANALYTICS_SCRIPT_URL: optionalString,
   ANALYTICS_DOMAIN: optionalString,
+  ANALYTICS_WEBSITE_ID: optionalString,
 });
 
 export type Env = z.infer<typeof schema>;
