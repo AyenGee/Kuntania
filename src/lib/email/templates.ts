@@ -1,13 +1,7 @@
 import { site } from "@content/site";
-import { escapeHtml, type MailInput } from "./send";
-
-/** Minimal branded-later wrapper. Styling is intentionally plain. */
-function layout(bodyHtml: string): string {
-  return `<!doctype html><html lang="en-ZA"><body style="font-family:Arial,Helvetica,sans-serif;color:#1c1917;line-height:1.5;max-width:560px;margin:0 auto;padding:16px">
-<h1 style="font-size:20px">${escapeHtml(site.name)}</h1>
-${bodyHtml}
-</body></html>`;
-}
+import { escapeHtml } from "./escape";
+import { layout } from "./layout";
+import type { MailInput } from "./send";
 
 export function contactOwnerEmail(
   ownerEmail: string,

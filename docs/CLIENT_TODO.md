@@ -118,3 +118,13 @@ Read from the two brochure images supplied in chat. Treat as likely answers to c
 - [ ] Decide who handles refunds in the PayFast dashboard (the admin only records them)
 - [ ] Confirm the 48-hour unpaid-order expiry (`content/site.ts`, `store.pendingOrderExpiryHours`)
 - [ ] `CRON_SECRET` set in Vercel so the daily cleanup job can run
+
+## 12. Emails (Phase 6)
+
+All wording is in `content/emails.ts`. Review each email before launch:
+
+- [ ] Order confirmation: processing/packing time ("what happens next")
+- [ ] Cancelled and refunded emails: refund timing and wording
+- [ ] Sender address (`EMAIL_FROM`) and `OWNER_EMAIL` (receives new-order alerts and contact messages)
+- [ ] SMTP provider details; SPF, DKIM and DMARC records on the sending domain
+- [ ] Email branding (logo, colours): `src/lib/email/layout.ts`

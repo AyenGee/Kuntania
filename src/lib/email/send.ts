@@ -1,6 +1,8 @@
 import nodemailer from "nodemailer";
 import { getEnv } from "@/lib/env";
 
+export { escapeHtml } from "./escape";
+
 export type MailInput = {
   to: string;
   subject: string;
@@ -8,16 +10,6 @@ export type MailInput = {
   html: string;
   replyTo?: string;
 };
-
-/** Escape user-supplied text before interpolating it into an HTML email. */
-export function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 /**
  * Send an email. Never throws: failures are logged and reported via the return value,
