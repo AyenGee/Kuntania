@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { business, nav, site, social } from "@content/site";
+import { NewsletterForm } from "@/components/forms/NewsletterForm";
 
 export function Footer() {
   const socials = Object.entries(social).filter(([, url]) => url);
@@ -53,7 +54,17 @@ export function Footer() {
           <p>{business.phone}</p>
         </address>
       </div>
-      {/* Newsletter signup is added in Phase 2 */}
+      <section
+        aria-labelledby="footer-newsletter-heading"
+        className="mx-auto max-w-site border-t border-line px-4 py-8"
+      >
+        <h2 id="footer-newsletter-heading" className="text-lg font-semibold">
+          Newsletter
+        </h2>
+        <div className="mt-3 max-w-md">
+          <NewsletterForm source="footer" />
+        </div>
+      </section>
       <p className="border-t border-line py-4 text-center text-xs text-ink-muted">
         &copy; {new Date().getFullYear()} {site.name}. All rights reserved.
       </p>

@@ -1,4 +1,4 @@
-// Phase 1: connection setup only. Models are added in Phase 3 (Catalogue).
+// Phase 2 models (forms + rate limiting). Catalogue, orders and admin models arrive in Phases 3+.
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -6,4 +6,36 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([handled, createdAt])
+}
+
+model NewsletterSubscriber {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  consentAt        DateTime  @default(now())
+  source           String    @default("footer")
+  unsubscribedAt   DateTime?
+  unsubscribeToken String    @unique
+}
+
+/// Fixed-window per-IP rate limiting stored in Postgres (no extra services).
+model RateLimit {
+  key         String   // "<action>:<sha256(ip)>"
+  windowStart DateTime
+  count       Int      @default(1)
+
+  @@id([key, windowStart])
+  @@index([windowStart])
 }

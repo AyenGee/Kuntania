@@ -73,3 +73,12 @@ client copy arrives). Each needs `TODO(CLIENT): approve claim wording`.
 - [ ] Domain name and DNS access
 - [ ] Analytics choice (Plausible or Umami) or none
 - [ ] Owner admin email address
+
+## 8. Added in Phase 2 (draft content awaiting client review)
+
+- [ ] FAQ (`content/faq.ts`): all 7 draft answers need review. Pregnancy and children answers say "consult your doctor" (marked `sensitive`); confirm wording.
+- [ ] Policy drafts in `content/policies/` (`shipping-returns.md`, `terms.md`, `privacy.md`): fill every `TODO(CLIENT)`, then have a legal professional review. A red DRAFT banner shows until `POLICIES_APPROVED=true` in production.
+- [ ] Privacy policy: name the courier, email, hosting and analytics providers and where data is stored; confirm retention periods.
+- [ ] Newsletter consent wording and welcome email text (`src/lib/email/templates.ts`)
+- [ ] Hero headline/body (`content/home.ts`), About copy (`content/about.ts`), page SEO titles/descriptions (`content/pages.ts`)
+- [ ] OWNER_EMAIL: where contact messages are sent
