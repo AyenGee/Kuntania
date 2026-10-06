@@ -1,23 +1,28 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { placeOrder } from "@/lib/checkout";
+import { getPaymentProvider, PaymentsNotConfiguredError } from "@/lib/payments";
+import type { PaymentRedirect } from "@/lib/payments/types";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { checkoutSchema } from "@/lib/validation/checkout";
 import { fieldErrorsFrom, valuesFrom, type FormState } from "@/lib/validation/forms";
 
 const GENERIC_ERROR = "Sorry, something went wrong placing your order. Please try again.";
 
+export type CheckoutState = FormState & { payment?: PaymentRedirect };
+
 /**
- * Validate the checkout form, create the order, then redirect.
- * (Phase 5 replaces the redirect target with the PayFast payment page.)
+ * Validate the checkout form, create the PENDING_PAYMENT order, and return the signed
+ * payment redirect for the browser to submit. The order is never marked paid here:
+ * only the verified payment notification (ITN) does that.
+ *
+ * The redirect is returned to the caller (not put behind a URL) so the signed fields,
+ * which include the customer's name and email, can't be fetched by guessing an order number.
  */
 export async function placeOrderAction(
-  _prev: FormState,
+  _prev: CheckoutState,
   formData: FormData,
-): Promise<FormState> {
-  let orderNumber: string;
-
+): Promise<CheckoutState> {
   try {
     // Honeypot: bots get a generic failure, real users never see this field.
     if (String(formData.get("website") ?? "") !== "") {
@@ -40,10 +45,29 @@ export async function placeOrderAction(
       };
     }
 
+    // Fail before creating an order if payments aren't set up.
+    const provider = getPaymentProvider();
+
     const result = await placeOrder(parsed.data);
     if (!result.ok) return { ...result, values: valuesFrom(formData) };
-    orderNumber = result.orderNumber;
+
+    const payment = provider.createPayment({
+      orderNumber: result.orderNumber,
+      totalCents: result.totalCents,
+      email: result.email,
+      firstName: result.firstName,
+      lastName: result.lastName,
+    });
+    return { ok: true, payment };
   } catch (error) {
+    if (error instanceof PaymentsNotConfiguredError) {
+      console.error(JSON.stringify({ event: "checkout.payments_not_configured" }));
+      return {
+        ok: false,
+        message: "Online payment isn't available right now. Please contact us to order.",
+        values: valuesFrom(formData),
+      };
+    }
     console.error(
       JSON.stringify({
         event: "checkout.failed",
@@ -52,7 +76,4 @@ export async function placeOrderAction(
     );
     return { ok: false, message: GENERIC_ERROR, values: valuesFrom(formData) };
   }
-
-  // redirect() throws, so it must stay outside the try/catch above.
-  redirect(`/checkout/success?order=${encodeURIComponent(orderNumber)}`);
 }

@@ -48,7 +48,14 @@ export async function loadResolution(input: {
 }
 
 export type PlaceOrderResult =
-  | { ok: true; orderNumber: string }
+  | {
+      ok: true;
+      orderNumber: string;
+      totalCents: number;
+      email: string;
+      firstName: string;
+      lastName: string;
+    }
   | { ok: false; message: string; fieldErrors?: Record<string, string> };
 
 /**
@@ -135,12 +142,18 @@ export async function placeOrder(input: CheckoutInput): Promise<PlaceOrderResult
           create: { type: "created", message: "Order created, awaiting payment." },
         },
       },
-      select: { orderNumber: true },
+      select: {
+        orderNumber: true,
+        totalCents: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+      },
     });
   });
 
   console.info(
     JSON.stringify({ event: "checkout.order_created", order: order.orderNumber }),
   );
-  return { ok: true, orderNumber: order.orderNumber };
+  return { ok: true, ...order };
 }

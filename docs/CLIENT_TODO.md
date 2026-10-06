@@ -110,3 +110,11 @@ Read from the two brochure images supplied in chat. Treat as likely answers to c
 - [ ] **Brochure claims to review before reuse on the site:** "results-driven", "restorative", "support healthy length retention", "deeply hydrate, strengthen", "clean" (see section 3).
 - [ ] **Brand colours and fonts:** palette sampled from the brochure into `src/styles/tokens.css` (maroon #592c29, dusty rose #a27464, cream #fff9f1); confirm against a brand guide. Display font on the brochure is a heavy high-contrast serif; Gloock is an approximation.
 - [ ] **Photos:** brochure images are Canva stock models and product shots. Confirm licensing/ownership before using on the website; get original product photos.
+
+## 11. Payments (Phase 5)
+
+- [ ] PayFast merchant account approved (live) with merchant ID, merchant key and a **passphrase** set in the PayFast dashboard (must match `PAYFAST_PASSPHRASE`)
+- [ ] In the PayFast dashboard, enable ITN (Instant Transaction Notifications) for the live account
+- [ ] Decide who handles refunds in the PayFast dashboard (the admin only records them)
+- [ ] Confirm the 48-hour unpaid-order expiry (`content/site.ts`, `store.pendingOrderExpiryHours`)
+- [ ] `CRON_SECRET` set in Vercel so the daily cleanup job can run

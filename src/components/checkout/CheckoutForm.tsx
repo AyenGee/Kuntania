@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useActionState, useState } from "react";
-import { placeOrderAction } from "@/app/checkout/actions";
+import { placeOrderAction, type CheckoutState } from "@/app/checkout/actions";
 import { Totals } from "@/components/cart/Totals";
 import { Field, Honeypot, SelectField, SubmitButton } from "@/components/forms/Field";
 import { formatZar } from "@/lib/money";
@@ -11,9 +11,9 @@ import { PROVINCES } from "@/lib/provinces";
 import type { ShippingMethod } from "@/lib/shipping";
 import { useCart } from "@/lib/use-cart";
 import { usePricedCart } from "@/lib/use-priced-cart";
-import type { FormState } from "@/lib/validation/forms";
+import { PaymentRedirectForm } from "./PaymentRedirectForm";
 
-const initial: FormState = { ok: false };
+const initial: CheckoutState = { ok: false };
 
 export function CheckoutForm() {
   const { items, ready } = useCart();
@@ -22,7 +22,7 @@ export function CheckoutForm() {
   const [appliedCode, setAppliedCode] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [state, action, pending] = useActionState(
-    async (prev: FormState, formData: FormData) => {
+    async (prev: CheckoutState, formData: FormData) => {
       const next = await placeOrderAction(prev, formData);
       // A failed submit may mean stock or prices changed: re-check so the page is current.
       setRefreshKey((k) => k + 1);
@@ -35,6 +35,9 @@ export function CheckoutForm() {
     notices,
     dismissNotices,
   } = usePricedCart(items, method, appliedCode, refreshKey);
+
+  // Order created: hand the customer to the payment page (the form must not be re-submitted).
+  if (state.ok && state.payment) return <PaymentRedirectForm payment={state.payment} />;
 
   const errors = state.fieldErrors ?? {};
   const v = state.values ?? {};
