@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { maxOrderQuantity, stockStatus } from "./catalogue";
+import { maxOrderQuantity, stockStatus } from "./catalogue-stock";
 
 describe("stockStatus", () => {
   it("reports sold out at zero or below", () => {

@@ -1,4 +1,8 @@
-import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import type {
+  InputHTMLAttributes,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+} from "react";
 
 type CommonProps = {
   id: string;
@@ -89,5 +93,50 @@ export function SubmitButton({
     >
       {pending ? "Sending…" : children}
     </button>
+  );
+}
+
+/** Labelled <select> with the same error/hint wiring as Field. */
+export function SelectField({
+  id,
+  label,
+  error,
+  options,
+  placeholder,
+  ...rest
+}: {
+  id: string;
+  label: string;
+  error?: string;
+  options: readonly { value: string; label: string }[];
+  placeholder?: string;
+} & SelectHTMLAttributes<HTMLSelectElement>) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-1 block text-sm font-medium">
+        {label}
+        {rest.required && <span aria-hidden="true"> *</span>}
+      </label>
+      <select
+        id={id}
+        name={id}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? `${id}-error` : undefined}
+        className={controlClass}
+        {...rest}
+      >
+        {placeholder && <option value="">{placeholder}</option>}
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+      {error && (
+        <p id={`${id}-error`} className="mt-1 text-sm text-danger">
+          {error}
+        </p>
+      )}
+    </div>
   );
 }

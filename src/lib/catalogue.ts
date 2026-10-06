@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { z } from "zod";
-import { store } from "@content/site";
 import { getDb } from "@/lib/db";
+import { maxOrderQuantity, stockStatus, type StockStatus } from "@/lib/catalogue-stock";
 import type { Product } from "@/generated/prisma/client";
 
 const titledText = z.array(z.object({ title: z.string(), body: z.string() }));
@@ -21,27 +21,6 @@ function parse(row: Product): CatalogueProduct {
     howToUse: titledText.parse(row.howToUse),
     images: images.parse(row.images),
   };
-}
-
-export type StockStatus =
-  { state: "in_stock" } | { state: "low"; remaining: number } | { state: "sold_out" };
-
-/** Customer-facing stock state. `threshold` defaults to the configured low-stock level. */
-export function stockStatus(
-  stock: number,
-  threshold = store.lowStockThreshold,
-): StockStatus {
-  if (stock <= 0) return { state: "sold_out" };
-  if (stock <= threshold) return { state: "low", remaining: stock };
-  return { state: "in_stock" };
-}
-
-/** Largest quantity a customer may order: capped by stock and the per-order maximum. */
-export function maxOrderQuantity(
-  stock: number,
-  perOrderMax = store.maxQuantityPerOrder,
-): number {
-  return Math.max(0, Math.min(stock, perOrderMax));
 }
 
 export async function getActiveProducts(): Promise<CatalogueProduct[]> {
@@ -70,3 +49,5 @@ export async function getPairedProduct(
   });
   return row ? parse(row) : null;
 }
+
+export { maxOrderQuantity, stockStatus, type StockStatus };

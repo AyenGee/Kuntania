@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { nav, site } from "@content/site";
+import { CartCount } from "@/components/cart/CartCount";
 
 export function Header() {
   return (
@@ -14,10 +15,7 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          {/* Cart count is wired up in Phase 4 */}
-          <Link href="/cart" className="hover:underline">
-            Cart
-          </Link>
+          <CartCount />
         </nav>
       </div>
     </header>

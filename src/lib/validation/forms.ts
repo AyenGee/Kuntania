@@ -51,7 +51,21 @@ export type FormState = {
   ok: boolean;
   message?: string;
   fieldErrors?: Record<string, string>;
+  /** Submitted values echoed back so fields keep their content (React resets forms after an action). */
+  values?: Record<string, string>;
 };
+
+/** Echo submitted text fields back to the form, skipping hidden/internal ones. */
+export function valuesFrom(
+  formData: FormData,
+  skip: string[] = ["website", "cart"],
+): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [key, value] of formData.entries()) {
+    if (typeof value === "string" && !skip.includes(key)) out[key] = value;
+  }
+  return out;
+}
 
 /** Convert Zod issues into a { field: message } map (first message per field). */
 export function fieldErrorsFrom(error: z.ZodError): Record<string, string> {

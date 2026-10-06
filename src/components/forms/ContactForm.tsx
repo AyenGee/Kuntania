@@ -10,6 +10,7 @@ const initial: FormState = { ok: false };
 export function ContactForm() {
   const [state, action, pending] = useActionState(submitContact, initial);
   const errors = state.fieldErrors ?? {};
+  const v = state.values ?? {};
 
   if (state.ok) {
     return (
@@ -27,13 +28,21 @@ export function ContactForm() {
           {state.message}
         </p>
       )}
-      <Field id="name" label="Name" required autoComplete="name" error={errors.name} />
+      <Field
+        id="name"
+        label="Name"
+        required
+        autoComplete="name"
+        defaultValue={v.name}
+        error={errors.name}
+      />
       <Field
         id="email"
         label="Email"
         type="email"
         required
         autoComplete="email"
+        defaultValue={v.email}
         error={errors.email}
       />
       <Field
@@ -42,10 +51,24 @@ export function ContactForm() {
         type="tel"
         autoComplete="tel"
         hint="South African number, e.g. 082 123 4567"
+        defaultValue={v.phone}
         error={errors.phone}
       />
-      <Field id="subject" label="Subject" required error={errors.subject} />
-      <Field id="message" label="Message" required multiline error={errors.message} />
+      <Field
+        id="subject"
+        label="Subject"
+        required
+        defaultValue={v.subject}
+        error={errors.subject}
+      />
+      <Field
+        id="message"
+        label="Message"
+        required
+        multiline
+        defaultValue={v.message}
+        error={errors.message}
+      />
       <p className="text-sm text-ink-muted">
         We use your details only to reply to you. See our{" "}
         <a href="/privacy" className="underline">

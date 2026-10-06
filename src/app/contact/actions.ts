@@ -5,7 +5,12 @@ import { contactAckEmail, contactOwnerEmail } from "@/lib/email/templates";
 import { sendMail } from "@/lib/email/send";
 import { getEnv } from "@/lib/env";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { contactSchema, fieldErrorsFrom, type FormState } from "@/lib/validation/forms";
+import {
+  contactSchema,
+  fieldErrorsFrom,
+  valuesFrom,
+  type FormState,
+} from "@/lib/validation/forms";
 
 const GENERIC_ERROR = "Sorry, something went wrong. Please try again in a moment.";
 
@@ -25,7 +30,13 @@ export async function submitContact(
     }
 
     const parsed = contactSchema.safeParse(Object.fromEntries(formData));
-    if (!parsed.success) return { ok: false, fieldErrors: fieldErrorsFrom(parsed.error) };
+    if (!parsed.success) {
+      return {
+        ok: false,
+        fieldErrors: fieldErrorsFrom(parsed.error),
+        values: valuesFrom(formData),
+      };
+    }
     const data = parsed.data;
 
     await getDb().contactMessage.create({
@@ -51,6 +62,6 @@ export async function submitContact(
         error: error instanceof Error ? error.message : String(error),
       }),
     );
-    return { ok: false, message: GENERIC_ERROR };
+    return { ok: false, message: GENERIC_ERROR, values: valuesFrom(formData) };
   }
 }
