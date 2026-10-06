@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+/* Map tokens to Tailwind utilities: bg-surface, text-ink, border-line, font-heading, ... */
+@theme inline {
+  --color-surface: var(--kn-surface);
+  --color-surface-muted: var(--kn-surface-muted);
+  --color-ink: var(--kn-ink);
+  --color-ink-muted: var(--kn-ink-muted);
+  --color-line: var(--kn-line);
+  --color-brand: var(--kn-brand);
+  --color-brand-contrast: var(--kn-brand-contrast);
+  --color-accent: var(--kn-accent);
+  --color-danger: var(--kn-danger);
+  --color-success: var(--kn-success);
+  --color-focus: var(--kn-focus);
+  --font-sans: var(--kn-font-body);
+  --font-heading: var(--kn-font-heading);
+  --radius-control: var(--kn-radius-control);
+  --radius-card: var(--kn-radius-card);
+  --container-site: var(--kn-container-max);
+}
+
+body {
+  background: var(--kn-surface);
+  color: var(--kn-ink);
+  font-family: var(--kn-font-body);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--kn-font-heading);
+}
+
+/* Visible keyboard focus everywhere (WCAG 2.4.7) */
+:focus-visible {
+  outline: 3px solid var(--kn-focus);
+  outline-offset: 2px;
+}

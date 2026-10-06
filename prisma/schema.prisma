@@ -1,0 +1,9 @@
+// Phase 1: connection setup only. Models are added in Phase 3 (Catalogue).
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}

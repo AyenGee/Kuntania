@@ -1,0 +1,29 @@
+/*
+ * DESIGN TOKENS — the single place a designer edits to restyle the site.
+ * globals.css maps these to Tailwind utilities (bg-surface, text-ink, font-heading ...).
+ * Components never hard-code colours, fonts or radii.
+ */
+
+:root {
+  /* Colour (neutral placeholders; text/background pairs meet WCAG AA) */
+  --kn-surface: #ffffff;
+  --kn-surface-muted: #f6f4f1;
+  --kn-ink: #1c1917;
+  --kn-ink-muted: #57534e;
+  --kn-line: #d6d3d1;
+  --kn-brand: #3f2d20;
+  --kn-brand-contrast: #ffffff;
+  --kn-accent: #8a5a2b;
+  --kn-danger: #b42318;
+  --kn-success: #166534;
+  --kn-focus: #1d4ed8;
+
+  /* Typography (families are loaded in src/app/fonts.ts via next/font) */
+  --kn-font-body: var(--font-body-loaded, system-ui), system-ui, sans-serif;
+  --kn-font-heading: var(--font-heading-loaded, Georgia), Georgia, serif;
+
+  /* Shape and layout */
+  --kn-radius-control: 0.5rem;
+  --kn-radius-card: 0.75rem;
+  --kn-container-max: 72rem;
+}
