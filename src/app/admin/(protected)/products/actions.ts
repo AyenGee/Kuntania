@@ -35,6 +35,7 @@ export async function saveProductAction(
         description: d.description,
         benefits: d.benefits,
         howToUse: d.howToUse,
+        images: d.images,
         ingredientsInci: d.ingredientsInci,
         warnings: d.warnings,
         sizeLabel: d.sizeLabel,

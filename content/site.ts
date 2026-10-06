@@ -15,6 +15,12 @@ export const site = {
   currency: "ZAR",
 } as const;
 
+/**
+ * Thin bar above the header (the reference site has one for shipping). Set to null to hide it.
+ * TODO(CLIENT): confirm delivery coverage and add the flat-rate fee once decided.
+ */
+export const announcement: string | null = "Delivery anywhere in South Africa";
+
 /** Legal disclosures shown in the footer (ECT Act s43). All TODO(CLIENT). */
 export const business = {
   /** TODO(CLIENT): registered business name */

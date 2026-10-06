@@ -3,7 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useActionState, useState } from "react";
-import { placeOrderAction, type CheckoutState } from "@/app/(site)/checkout/actions";
+import {
+  placeOrderAction,
+  type CheckoutState,
+} from "@/app/(site)/(narrow)/checkout/actions";
 import { Totals } from "@/components/cart/Totals";
 import { Field, Honeypot, SelectField, SubmitButton } from "@/components/forms/Field";
 import { formatZar } from "@/lib/money";

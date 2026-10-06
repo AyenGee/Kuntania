@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { z } from "zod";
+import { seedProducts } from "@content/products";
 import { getDb } from "@/lib/db";
 import { maxOrderQuantity, stockStatus, type StockStatus } from "@/lib/catalogue-stock";
 import type { Product } from "@/generated/prisma/client";
@@ -23,19 +24,49 @@ function parse(row: Product): CatalogueProduct {
   };
 }
 
+/**
+ * DEVELOPMENT ONLY. When the database can't be reached while running `next dev`, show the seed
+ * products so pages can be previewed without Postgres. Never active in production builds, where
+ * a database failure must surface as an error. Cart and checkout still need a real database.
+ */
+function devFallback(error: unknown): CatalogueProduct[] {
+  if (process.env.NODE_ENV === "production") throw error;
+  console.warn(
+    JSON.stringify({
+      event: "catalogue.dev_fallback",
+      note: "database unreachable; showing seed data",
+    }),
+  );
+  const now = new Date();
+  return seedProducts.map((p) => ({
+    ...p,
+    id: `demo-${p.slug}`,
+    createdAt: now,
+    updatedAt: now,
+  }));
+}
+
 export async function getActiveProducts(): Promise<CatalogueProduct[]> {
-  const rows = await getDb().product.findMany({
-    where: { active: true },
-    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-  });
-  return rows.map(parse);
+  try {
+    const rows = await getDb().product.findMany({
+      where: { active: true },
+      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    });
+    return rows.map(parse);
+  } catch (error) {
+    return devFallback(error).filter((p) => p.active);
+  }
 }
 
 /** Cached per request so generateMetadata and the page share one query. */
 export const getProductBySlug = cache(
   async (slug: string): Promise<CatalogueProduct | null> => {
-    const row = await getDb().product.findFirst({ where: { slug, active: true } });
-    return row ? parse(row) : null;
+    try {
+      const row = await getDb().product.findFirst({ where: { slug, active: true } });
+      return row ? parse(row) : null;
+    } catch (error) {
+      return devFallback(error).find((p) => p.slug === slug) ?? null;
+    }
   },
 );
 
@@ -43,11 +74,15 @@ export const getProductBySlug = cache(
 export async function getPairedProduct(
   excludeId: string,
 ): Promise<CatalogueProduct | null> {
-  const row = await getDb().product.findFirst({
-    where: { active: true, id: { not: excludeId } },
-    orderBy: [{ sortOrder: "asc" }],
-  });
-  return row ? parse(row) : null;
+  try {
+    const row = await getDb().product.findFirst({
+      where: { active: true, id: { not: excludeId } },
+      orderBy: [{ sortOrder: "asc" }],
+    });
+    return row ? parse(row) : null;
+  } catch (error) {
+    return devFallback(error).find((p) => p.id !== excludeId) ?? null;
+  }
 }
 
 export { maxOrderQuantity, stockStatus, type StockStatus };

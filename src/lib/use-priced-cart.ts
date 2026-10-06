@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { priceCartAction } from "@/app/(site)/cart/actions";
+import { priceCartAction } from "@/app/(site)/(narrow)/cart/actions";
 import { saveCart, type CartItem } from "@/lib/cart";
 import type { Resolution } from "@/lib/cart-resolve";
 import type { ShippingMethod } from "@/lib/shipping";

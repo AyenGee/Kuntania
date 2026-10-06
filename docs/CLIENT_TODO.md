@@ -141,3 +141,21 @@ All wording is in `content/emails.ts`. Review each email before launch:
 - [ ] A default **social share image** (`public/og.jpg`, about 1200x630) so links shared on WhatsApp, Facebook and X show a preview. Then switch `twitter.card` to `summary_large_image` in `src/app/layout.tsx`
 - [ ] A **logo** file (for the Organization structured data and emails)
 - [ ] Analytics choice (Plausible or Umami) and its settings (`ANALYTICS_*`); none is loaded until configured
+
+## 15. Launch (Phase 9)
+
+- [ ] **Legal check on returns:** have a legal professional confirm how the ECT Act s44 cooling-off right and the Consumer Protection Act apply to opened cosmetics, and align the Shipping & Returns policy and Terms with it. The current draft (opened products not returnable unless defective) must not go live unchecked
+- [ ] Ask the legal adviser whether the Information Officer must be registered with the Information Regulator (POPIA)
+- [ ] Decide who owns each account (domain, hosting, database, PayFast, email, analytics): they should be in the client's name
+- [ ] Real product photo files delivered to the developer (the owner then selects them in the admin)
+- [ ] Work through [`LAUNCH_CHECKLIST.md`](LAUNCH_CHECKLIST.md)
+
+## 16. Photos and logo (design pass, October 2026)
+
+Source: 14 phone images supplied by the client. Prepared for the web by `scripts/prepare-images.py`.
+
+- [ ] **7 of the 14 images look AI-generated** (they carry a small Gemini sparkle mark, now cropped off) and the product label text in them is wrong in places ("Hlbiscus", "Vltamin E", "OlI"). Used only for atmosphere: the oil-on-scalp image (How to use card). The other AI images (satin bottles, mask + oil on brown, diagonal split, brand card, logo on satin) are **not used** yet. Client to confirm she is happy with AI imagery and that the tool's terms allow commercial use
+- [ ] Real product photos in use: the range photo (home banner and story band), oil bottles and mask jars (product cards and pages). Ask for **more real photos**: a single oil bottle and a single mask jar on a clean background, and a landscape lifestyle shot, would improve the product pages
+- [ ] **Clean logo file** (transparent PNG or SVG). The emblem on the site was extracted from an AI-generated poster; the "KUNTA NIA" wordmark is set in the site's heading font instead, because the poster lettering couldn't be separated from its background
+- [ ] Confirm the announcement-bar text ("Delivery anywhere in South Africa") and add the flat shipping fee when decided (`content/site.ts`)
+- [ ] Approve the new homepage wording in `content/home.ts` (hero line, story, three "Why Kunta Nia" cards, how-to-use steps)

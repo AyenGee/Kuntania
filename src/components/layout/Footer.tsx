@@ -2,17 +2,20 @@ import Link from "next/link";
 import { business, nav, site, social } from "@content/site";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
 
+/** Maroon footer. The newsletter sits in a cream panel so the form stays readable. */
 export function Footer() {
   const socials = Object.entries(social).filter(([, url]) => url);
 
   return (
-    <footer className="mt-16 border-t border-line bg-surface-muted">
-      <div className="mx-auto grid max-w-site gap-8 px-4 py-10 text-sm md:grid-cols-3">
+    <footer className="mt-16 bg-brand text-brand-contrast">
+      <div className="mx-auto grid max-w-site gap-10 px-4 py-12 text-sm md:grid-cols-[1.2fr_1fr_1fr_1.2fr]">
         <div>
-          <p className="font-heading text-lg font-semibold">{site.name}</p>
-          <p className="mt-2 text-ink-muted">{site.tagline}</p>
+          <p className="font-heading text-xl tracking-[0.2em] text-gold uppercase">
+            {site.name}
+          </p>
+          <p className="mt-2 text-brand-contrast/90">{site.tagline}</p>
           {socials.length > 0 && (
-            <ul className="mt-3 flex gap-4">
+            <ul className="mt-4 flex gap-4">
               {socials.map(([name, url]) => (
                 <li key={name}>
                   <a
@@ -28,9 +31,22 @@ export function Footer() {
           )}
         </div>
 
+        <nav aria-label="Shop">
+          <p className="font-semibold text-gold">Shop</p>
+          <ul className="mt-3 space-y-2">
+            {nav.main.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className="hover:underline">
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
         <nav aria-label="Policies">
-          <p className="font-semibold">Information</p>
-          <ul className="mt-2 space-y-1">
+          <p className="font-semibold text-gold">Information</p>
+          <ul className="mt-3 space-y-2">
             {nav.footerPolicies.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="hover:underline">
@@ -41,33 +57,28 @@ export function Footer() {
           </ul>
         </nav>
 
-        {/* ECT Act s43 business disclosures */}
-        <address className="text-ink-muted not-italic">
-          <p className="font-semibold text-ink">Business details</p>
-          <p className="mt-2">
-            {business.registeredName} ({business.legalForm})
-          </p>
-          <p>Reg. no. {business.registrationNumber}</p>
-          {business.vatNumber && <p>VAT no. {business.vatNumber}</p>}
-          <p>{business.physicalAddress}</p>
-          <p>{business.email}</p>
-          <p>{business.phone}</p>
-        </address>
+        <section aria-labelledby="footer-newsletter-heading">
+          <h2 id="footer-newsletter-heading" className="font-semibold text-gold">
+            Newsletter
+          </h2>
+          <div className="mt-3 rounded-card bg-surface p-4 text-ink">
+            <NewsletterForm source="footer" />
+          </div>
+        </section>
       </div>
-      <section
-        aria-labelledby="footer-newsletter-heading"
-        className="mx-auto max-w-site border-t border-line px-4 py-8"
-      >
-        <h2 id="footer-newsletter-heading" className="text-lg font-semibold">
-          Newsletter
-        </h2>
-        <div className="mt-3 max-w-md">
-          <NewsletterForm source="footer" />
-        </div>
-      </section>
-      <p className="border-t border-line py-4 text-center text-xs text-ink-muted">
-        &copy; {new Date().getFullYear()} {site.name}. All rights reserved.
-      </p>
+
+      {/* ECT Act s43 business disclosures */}
+      <div className="border-t border-brand-contrast/20">
+        <address className="mx-auto max-w-site px-4 py-6 text-xs leading-relaxed text-brand-contrast/80 not-italic">
+          {business.registeredName} ({business.legalForm}) · Reg. no.{" "}
+          {business.registrationNumber}
+          {business.vatNumber && <> · VAT no. {business.vatNumber}</>} ·{" "}
+          {business.physicalAddress} · {business.email} · {business.phone}
+        </address>
+        <p className="mx-auto max-w-site px-4 pb-6 text-xs text-brand-contrast/80">
+          &copy; {new Date().getFullYear()} {site.name}. All rights reserved.
+        </p>
+      </div>
     </footer>
   );
 }

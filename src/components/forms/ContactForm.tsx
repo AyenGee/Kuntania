@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { submitContact } from "@/app/(site)/contact/actions";
+import { submitContact } from "@/app/(site)/(narrow)/contact/actions";
 import type { FormState } from "@/lib/validation/forms";
 import { Field, Honeypot, SubmitButton } from "./Field";
 import { FormAlert } from "./FormAlert";

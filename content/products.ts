@@ -105,12 +105,12 @@ export const seedProducts: SeedProduct[] = [
     sortOrder: 1,
     images: [
       {
-        src: "/images/products/oil-1.svg",
-        alt: "Kunta Nia Hair Growth Oil bottle (placeholder image)",
+        src: "/images/products/oil-1.webp",
+        alt: "Three bottles of Kunta Nia Hair Growth Oil, Rosemary & Vitamin E, 100 ml, on cream cloth with dried flowers",
       },
       {
-        src: "/images/products/oil-2.svg",
-        alt: "Kunta Nia Hair Growth Oil bottle, second view (placeholder image)",
+        src: "/images/products/oil-2.webp",
+        alt: "Close view of three Kunta Nia Hair Growth Oil bottles showing the maroon label and golden oil",
       },
     ],
     seoTitle: "Hair Growth Oil", // TODO(CLIENT): review
@@ -178,12 +178,12 @@ export const seedProducts: SeedProduct[] = [
     sortOrder: 2,
     images: [
       {
-        src: "/images/products/mask-1.svg",
-        alt: "Kunta Nia Pre-wash Conditioning Mask jar (placeholder image)",
+        src: "/images/products/mask-1.webp",
+        alt: "Kunta Nia Pre-wash Conditioning Mask, Hibiscus & Fenugreek, 100 ml: two closed jars and one open jar showing the pink mask",
       },
       {
-        src: "/images/products/mask-2.svg",
-        alt: "Kunta Nia Pre-wash Conditioning Mask jar, second view (placeholder image)",
+        src: "/images/products/mask-2.webp",
+        alt: "Two jars of Kunta Nia Pre-wash Conditioning Mask and an open jar showing its deep pink texture",
       },
     ],
     seoTitle: "Pre-wash Conditioning Mask", // TODO(CLIENT): review
