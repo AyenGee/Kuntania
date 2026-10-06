@@ -11,16 +11,19 @@ export async function getClientIp(): Promise<string> {
 }
 
 /**
- * Fixed-window per-IP rate limit stored in Postgres.
- * Returns true if the request is allowed. The IP is stored only as a SHA-256 hash.
+ * Fixed-window rate limit stored in Postgres, per client IP by default.
+ * Pass `subject` to limit per something else instead (for example a login email), so one
+ * attacker can't lock out everyone and many IPs can't hammer one account.
+ * Returns true if the request is allowed. Only a SHA-256 hash of the IP/subject is stored.
  */
 export async function checkRateLimit(
   action: string,
   limit: number,
   windowSeconds: number,
+  subject?: string,
 ): Promise<boolean> {
-  const ip = await getClientIp();
-  const key = `${action}:${createHash("sha256").update(ip).digest("hex")}`;
+  const who = subject ?? (await getClientIp());
+  const key = `${action}:${createHash("sha256").update(who).digest("hex")}`;
   const windowMs = windowSeconds * 1000;
   const windowStart = new Date(Math.floor(Date.now() / windowMs) * windowMs);
 

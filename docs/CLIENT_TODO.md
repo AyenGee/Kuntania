@@ -128,3 +128,10 @@ All wording is in `content/emails.ts`. Review each email before launch:
 - [ ] Sender address (`EMAIL_FROM`) and `OWNER_EMAIL` (receives new-order alerts and contact messages)
 - [ ] SMTP provider details; SPF, DKIM and DMARC records on the sending domain
 - [ ] Email branding (logo, colours): `src/lib/email/layout.ts`
+
+## 13. Admin (Phase 7)
+
+- [ ] Owner's admin email and a strong password (12+ characters). Create with `npm run admin:create -- --email <email> --name "<name>"`
+- [ ] Admin sessions last 8 hours, then the owner signs in again. Confirm that's acceptable
+- [ ] Owner to review the order actions: cancelling a **paid, unshipped** order puts its stock back; refunds are _records only_ (the actual refund is made in the PayFast dashboard)
+- [ ] Product photos are still file-based (`public/images/products`): the owner can't upload photos in v1

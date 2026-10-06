@@ -81,9 +81,11 @@ export function Honeypot() {
 export function SubmitButton({
   pending,
   children,
+  pendingLabel = "Sending…",
 }: {
   pending: boolean;
   children: string;
+  pendingLabel?: string;
 }) {
   return (
     <button
@@ -91,7 +93,7 @@ export function SubmitButton({
       disabled={pending}
       className="rounded-control bg-brand px-5 py-2.5 font-medium text-brand-contrast disabled:opacity-60"
     >
-      {pending ? "Sending…" : children}
+      {pending ? pendingLabel : children}
     </button>
   );
 }

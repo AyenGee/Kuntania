@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { lookupOrder, type OrderStatusState } from "@/app/order-status/actions";
+import { lookupOrder, type OrderStatusState } from "@/app/(site)/order-status/actions";
 import { Field, Honeypot, SubmitButton } from "./Field";
 
 const initial: OrderStatusState = { ok: false };

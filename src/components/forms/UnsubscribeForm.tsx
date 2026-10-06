@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { unsubscribeFromNewsletter } from "@/app/newsletter/actions";
+import { unsubscribeFromNewsletter } from "@/app/(site)/newsletter/actions";
 import type { FormState } from "@/lib/validation/forms";
 
 const initial: FormState = { ok: false };
