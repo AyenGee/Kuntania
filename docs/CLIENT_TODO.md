@@ -54,7 +54,7 @@ client copy arrives). Each needs `TODO(CLIENT): approve claim wording`.
 ## 5. Site copy _(copy)_
 
 - [ ] Hero headline and text, trust badges, "how to use together" routine
-- [ ] Our Story, Our Philosophy, Our Commitment
+- ~~Our Story, Our Philosophy, Our Commitment~~ (the Our Story page was removed at the client's request)
 - [ ] FAQ answers reviewed (including pregnancy / children — "consult your doctor")
 - [ ] Brand tagline and SEO description
 - [ ] Logo, brand colours, fonts (designer to restyle via `src/styles/tokens.css`)
@@ -68,7 +68,7 @@ client copy arrives). Each needs `TODO(CLIENT): approve claim wording`.
 
 ## 7. Accounts and credentials (client or developer to provide)
 
-- [ ] PayFast merchant ID, merchant key, passphrase (sandbox first, then live)
+- [ ] Yoco account: Checkout API **test** secret key first, then the **live** secret key (app.yoco.com > Yoco Connect > Checkout API)
 - [ ] SMTP / business email sender details; SPF, DKIM, DMARC on the domain
 - [ ] Domain name and DNS access
 - [ ] Analytics choice (Plausible or Umami) or none
@@ -80,7 +80,7 @@ client copy arrives). Each needs `TODO(CLIENT): approve claim wording`.
 - [ ] Policy drafts in `content/policies/` (`shipping-returns.md`, `terms.md`, `privacy.md`): fill every `TODO(CLIENT)`, then have a legal professional review. A red DRAFT banner shows until `POLICIES_APPROVED=true` in production.
 - [ ] Privacy policy: name the courier, email, hosting and analytics providers and where data is stored; confirm retention periods.
 - [ ] Newsletter consent wording and welcome email text (`src/lib/email/templates.ts`)
-- [ ] Hero headline/body (`content/home.ts`), About copy (`content/about.ts`), page SEO titles/descriptions (`content/pages.ts`)
+- [ ] Hero headline/body (`content/home.ts`), page SEO titles/descriptions (`content/pages.ts`)
 - [ ] OWNER_EMAIL: where contact messages are sent
 
 ## 9. Added in Phase 3 (catalogue)
@@ -113,9 +113,9 @@ Read from the two brochure images supplied in chat. Treat as likely answers to c
 
 ## 11. Payments (Phase 5)
 
-- [ ] PayFast merchant account approved (live) with merchant ID, merchant key and a **passphrase** set in the PayFast dashboard (must match `PAYFAST_PASSPHRASE`)
-- [ ] In the PayFast dashboard, enable ITN (Instant Transaction Notifications) for the live account
-- [ ] Decide who handles refunds in the PayFast dashboard (the admin only records them)
+- [ ] Yoco account verified for online payments, with the Checkout API live secret key (`sk_live_...`) available
+- [ ] Client's website domain added and verified in Yoco (live keys need it; test keys do not)
+- [ ] Decide who handles refunds in the Yoco portal (the admin only records them)
 - [ ] Confirm the 48-hour unpaid-order expiry (`content/site.ts`, `store.pendingOrderExpiryHours`)
 - [ ] `CRON_SECRET` set in Vercel so the daily cleanup job can run
 
@@ -131,9 +131,9 @@ All wording is in `content/emails.ts`. Review each email before launch:
 
 ## 13. Admin (Phase 7)
 
-- [ ] Owner's admin email and a strong password (12+ characters). Create with `npm run admin:create -- --email <email> --name "<name>"`
+- [ ] Owner's admin email and a strong password (12+ characters). Create with `npm run admin:create -- <email> "<name>"`
 - [ ] Admin sessions last 8 hours, then the owner signs in again. Confirm that's acceptable
-- [ ] Owner to review the order actions: cancelling a **paid, unshipped** order puts its stock back; refunds are _records only_ (the actual refund is made in the PayFast dashboard)
+- [ ] Owner to review the order actions: cancelling a **paid, unshipped** order puts its stock back; refunds are _records only_ (the actual refund is made in the Yoco portal)
 - [ ] Product photos are still file-based (`public/images/products`): the owner can't upload photos in v1
 
 ## 14. Hardening (Phase 8)
@@ -146,7 +146,7 @@ All wording is in `content/emails.ts`. Review each email before launch:
 
 - [ ] **Legal check on returns:** have a legal professional confirm how the ECT Act s44 cooling-off right and the Consumer Protection Act apply to opened cosmetics, and align the Shipping & Returns policy and Terms with it. The current draft (opened products not returnable unless defective) must not go live unchecked
 - [ ] Ask the legal adviser whether the Information Officer must be registered with the Information Regulator (POPIA)
-- [ ] Decide who owns each account (domain, hosting, database, PayFast, email, analytics): they should be in the client's name
+- [ ] Decide who owns each account (domain, hosting, database, Yoco, email, analytics): they should be in the client's name
 - [ ] Real product photo files delivered to the developer (the owner then selects them in the admin)
 - [ ] Work through [`LAUNCH_CHECKLIST.md`](LAUNCH_CHECKLIST.md)
 
@@ -162,13 +162,13 @@ Source: 14 phone images supplied by the client. Prepared for the web by `scripts
 
 ## 17. Answers received (October 2026) and what is still open
 
-Applied to the site from the client's reply: business details, sizes (oil 100 ml, mask 250 ml), prices (oil R110, mask R150, combo R230), stock (20 / 20 / 5), shelf life, flat R86 delivery (free over R450), door-to-door only, 1 day to pack, 2 to 4 days delivery, customer pays return shipping, announcement bar text, "cruelty-free" removed, castor oil confirmed, seal-in-moisture wording.
+Applied to the site from the client's reply: business details, sizes (oil 100 ml, mask 100 ml), prices (oil R110, mask R150, combo R230), stock (20 / 20 / 5), shelf life, flat R86 delivery (free over R450), door-to-door only, 1 day to pack, 2 to 4 days delivery, customer pays return shipping, announcement bar text, "cruelty-free" removed, castor oil confirmed, seal-in-moisture wording.
 
 Still open:
 
 - [ ] **BobGo integration** (orders synced to the BobGo dashboard): needs the BobGo API access and a build step; not started
 - [ ] **Delivery-area list**: which towns or postal codes count as "major cities and metropolitan areas". The restriction is built (`deliveryArea` in `content/site.ts`) but OFF until the list exists
-- [ ] **Mask label says 100ml** in the photos but the jar is 250 ml: label and website must match
+- ~~Mask size~~: confirmed 100 ml, matches the label
 - [ ] **Combo**: confirm the name ("Kunta Nia Combo"), supply a photo, shelf life, and whether to show the R260 "was" price
 - [ ] **VAT**: registered or not (and the VAT number)
 - [ ] **Registration number**: confirm a sole proprietor has none to show

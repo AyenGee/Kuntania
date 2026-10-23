@@ -1,11 +1,6 @@
 /** Page-level titles and meta descriptions (SEO). TODO(CLIENT): review wording. */
 
 export const pageMeta = {
-  about: {
-    title: "Our Story",
-    description:
-      "The story, philosophy and commitment behind Kunta Nia, a South African natural hair care brand.",
-  },
   faq: {
     title: "FAQ",
     description:

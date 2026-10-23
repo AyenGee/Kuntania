@@ -19,7 +19,7 @@ export function formatZar(cents: number): string {
   return zarFormatter.format(cents / 100).replace(/ /g, " ");
 }
 
-/** Decimal string with two places, as PayFast expects, e.g. 12345 -> "123.45". */
+/** Decimal string with two places, e.g. 12345 -> "123.45". */
 export function centsToDecimalString(cents: number): string {
   assertCents(cents);
   const sign = cents < 0 ? "-" : "";

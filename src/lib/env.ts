@@ -19,12 +19,12 @@ const schema = z.object({
   VAT_REGISTERED: bool,
   POLICIES_APPROVED: bool,
 
-  PAYFAST_MODE: z.enum(["sandbox", "live"]).default("sandbox"),
-  PAYFAST_MERCHANT_ID: optionalString,
-  PAYFAST_MERCHANT_KEY: optionalString,
-  PAYFAST_PASSPHRASE: optionalString,
-  /** TEST ONLY: replaces PayFast's validate URL, and only ever honoured in sandbox mode. */
-  PAYFAST_VALIDATE_URL: optionalString,
+  /** Yoco secret key: sk_test_... for testing, sk_live_... for real payments. */
+  YOCO_SECRET_KEY: optionalString,
+  /** Signing secret (whsec_...) returned when the webhook is registered. */
+  YOCO_WEBHOOK_SECRET: optionalString,
+  /** TEST ONLY: replaces Yoco's API address, and only ever honoured with a sk_test_ key. */
+  YOCO_API_URL: optionalString,
 
   SMTP_HOST: optionalString,
   SMTP_PORT: z.coerce.number().int().positive().default(587),
@@ -57,8 +57,10 @@ export function getEnv(): Env {
       .join("; ");
     throw new Error(`Invalid environment configuration: ${details}`);
   }
-  if (result.data.PAYFAST_MODE === "live" && !result.data.PAYFAST_PASSPHRASE) {
-    throw new Error("PAYFAST_PASSPHRASE is required when PAYFAST_MODE=live");
+  if (result.data.YOCO_SECRET_KEY && !result.data.YOCO_WEBHOOK_SECRET) {
+    throw new Error(
+      "YOCO_WEBHOOK_SECRET is required with YOCO_SECRET_KEY: without it payments could never be confirmed",
+    );
   }
   cached = result.data;
   return cached;

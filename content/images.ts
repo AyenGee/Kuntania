@@ -20,12 +20,12 @@ export type SiteImage = {
 };
 
 export const images = {
-  /** Wide banner: the whole range, with dried flowers. */
+  /** Wide banner: the gold line-art logo on burgundy satin (supplied by the client). */
   hero: {
-    src: "/images/site/hero-range.webp",
-    width: 2200,
-    height: 1318,
-    alt: "The Kunta Nia range: Pre-wash Conditioning Mask jars and Hair Growth Oil bottles stacked in front of dried flowers",
+    src: "/images/site/hero-banner.webp",
+    width: 1380,
+    height: 752,
+    alt: "Kunta Nia logo: gold line-art profiles with curly hair on burgundy satin",
     kind: "real",
   },
   /** The range again, closer, for the brand story band. */

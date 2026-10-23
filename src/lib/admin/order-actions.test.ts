@@ -135,7 +135,7 @@ describe("transitionOrder", () => {
     expect(r).toEqual({ ok: true, email: "sent", restocked: true });
     expect(state.stock).toEqual({ p1: 7, p2: 6 });
     expect(sendCancelledOrRefundedEmail).toHaveBeenCalledWith("o1", "cancelled");
-    expect(state.events[0].message).toMatch(/refund them in the PayFast dashboard/);
+    expect(state.events[0].message).toMatch(/refund them in the Yoco portal/);
   });
 
   it("cancels an unpaid order without restocking or emailing", async () => {
@@ -146,13 +146,13 @@ describe("transitionOrder", () => {
     expect(sendCancelledOrRefundedEmail).not.toHaveBeenCalled();
   });
 
-  it("records a refund without restocking, notes the PayFast step, and emails", async () => {
+  it("records a refund without restocking, notes the Yoco step, and emails", async () => {
     setOrder("SHIPPED");
     const r = await run("REFUNDED");
     expect(r).toEqual({ ok: true, email: "sent", restocked: false });
     expect(state.stock).toEqual({ p1: 5, p2: 5 });
     expect(sendCancelledOrRefundedEmail).toHaveBeenCalledWith("o1", "refunded");
-    expect(state.events[0].message).toMatch(/PayFast dashboard/);
+    expect(state.events[0].message).toMatch(/Yoco portal/);
   });
 
   it("keeps the status change and reports when the email fails", async () => {

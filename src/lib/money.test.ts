@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { centsToDecimalString, formatZar, vatIncludedCents } from "./money";
 
 describe("money", () => {
-  it("formats cents as decimal strings for PayFast", () => {
+  it("formats cents as decimal strings", () => {
     expect(centsToDecimalString(12345)).toBe("123.45");
     expect(centsToDecimalString(5)).toBe("0.05");
     expect(centsToDecimalString(10000)).toBe("100.00");

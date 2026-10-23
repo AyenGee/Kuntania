@@ -7,19 +7,16 @@ export type PayableOrder = {
   lastName: string;
 };
 
-/**
- * How to send the customer to the provider's payment page. PayFast needs a form POST;
- * a provider such as Yoco could instead return a plain redirect (method "GET", no fields).
- */
+/** Where to send the customer to pay, and the provider's id for this payment attempt. */
 export type PaymentRedirect = {
-  method: "POST" | "GET";
   url: string;
-  fields: Record<string, string>;
+  /** The provider's checkout id, stored on the order so the payment notification can find it. */
+  checkoutId: string;
 };
 
 /** Keep payment code behind this interface so another provider can be added later. */
 export interface PaymentProvider {
   readonly id: string;
-  /** Build the redirect for a freshly created order. Throws if the provider isn't configured. */
-  createPayment(order: PayableOrder): PaymentRedirect;
+  /** Create a hosted checkout for a freshly created order. Throws if the provider rejects it. */
+  createPayment(order: PayableOrder): Promise<PaymentRedirect>;
 }

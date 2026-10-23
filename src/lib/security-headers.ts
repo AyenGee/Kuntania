@@ -43,12 +43,8 @@ export function buildCsp(opts: HeaderOptions): string {
     "connect-src": ["'self'", ...(analyticsOrigin ? [analyticsOrigin] : [])],
     "object-src": ["'none'"],
     "base-uri": ["'self'"],
-    // The checkout hands the browser to PayFast with a form POST (and PayFast sends it back).
-    "form-action": [
-      "'self'",
-      "https://www.payfast.co.za",
-      "https://sandbox.payfast.co.za",
-    ],
+    // Customers reach Yoco's payment page by a plain redirect, so forms only post to us.
+    "form-action": ["'self'"],
     "frame-ancestors": ["'none'"],
   };
 

@@ -3,7 +3,7 @@
 This guide is for you, not for a developer. You don't need to know anything technical. Everything
 you do day to day happens in the **admin area**, which works well on your phone.
 
-> **Your developer sets this up for you:** your admin email and password, the PayFast and email
+> **Your developer sets this up for you:** your admin email and password, the Yoco and email
 > connections. After that, this guide is all you need.
 
 ---
@@ -87,7 +87,7 @@ When the parcel arrives, open the order and tap **Mark as delivered**. (No email
 | **Cancelled**        | Cancelled. Nothing more to do.                                                                                                     |
 | **Refunded**         | Money was returned to the customer.                                                                                                |
 
-**Important:** the shop decides an order is paid automatically, when PayFast confirms the payment.
+**Important:** the shop decides an order is paid automatically, when Yoco confirms the payment.
 You can never mark an order as paid by hand, and you shouldn't need to. If a customer says they
 paid but the order says **Awaiting payment**, see section 9.
 
@@ -111,16 +111,16 @@ Open the order and tap **Cancel order**. You'll be asked to confirm. This can't 
 - If the order was **not yet paid**: it's simply cancelled.
 - If the customer **had paid** and you hadn't shipped: the items go **back into your stock
   automatically**, the customer is emailed, and the order's history reminds you that you must
-  **refund them in PayFast** (see below).
+  **refund them in Yoco** (see below).
 
 ### Refund an order
 
-1. **First make the refund in your PayFast account.** Log in to PayFast, find the payment and
+1. **First make the refund in your Yoco account.** Log in to Yoco, find the payment and
    refund it.
 2. **Then** open the order in your shop admin and tap **Mark as refunded**. The customer is
    emailed.
 
-> **Why two steps?** The shop admin can only _record_ a refund. The money is returned by PayFast.
+> **Why two steps?** The shop admin can only _record_ a refund. The money is returned by Yoco.
 > If you only tap the button here, the customer does **not** get their money.
 
 ---
@@ -193,7 +193,7 @@ A code counts as "used" once an order that used it has been **paid**.
   email people who unsubscribed.
 - **Orders for your bookkeeper:** on the **Orders** page, tap **Export orders to CSV (for the
   bookkeeper)**, choose the dates, and tap **Download CSV**. It opens in Excel or Google Sheets
-  and includes totals, VAT, discounts, shipping and the PayFast reference.
+  and includes totals, VAT, discounts, shipping and the Yoco reference.
 
 ---
 
@@ -201,13 +201,13 @@ A code counts as "used" once an order that used it has been **paid**.
 
 **"A customer says they paid but the order says Awaiting payment."**
 Wait a few minutes first; confirmation usually takes less than a minute. If it's still
-_Awaiting payment_, check your **PayFast account**: if PayFast shows the payment as complete,
+_Awaiting payment_, check your **Yoco account**: if Yoco shows the payment as complete,
 contact your developer and give them the order number: the connection that tells the shop about
-payments may be broken. **Don't ship until PayFast shows the money.**
+payments may be broken. **Don't ship until Yoco shows the money.**
 
 **"An order's history says 'Payment notification rejected'."**
 Something about that payment didn't match what was expected (for example the amount). **Check it
-in PayFast before you ship anything**, and tell your developer.
+in Yoco before you ship anything**, and tell your developer.
 
 **"Customers aren't getting emails" or "the history says 'Email FAILED'".**
 The email connection may be broken. The order itself is fine. On the order page tap **Resend
@@ -248,4 +248,4 @@ their order number and email).
 | Make a discount code        | Discount codes, **Create a new code**                      |
 | Answer a customer           | Messages, **Reply by email**                               |
 | Get a spreadsheet of orders | Orders, **Export orders to CSV**                           |
-| Refund a customer           | Do it in **PayFast** first, then **Mark as refunded** here |
+| Refund a customer           | Do it in **Yoco** first, then **Mark as refunded** here    |

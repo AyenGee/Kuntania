@@ -1,6 +1,7 @@
 "use server";
 
 import { placeOrder } from "@/lib/checkout";
+import { getDb } from "@/lib/db";
 import { getPaymentProvider, PaymentsNotConfiguredError } from "@/lib/payments";
 import type { PaymentRedirect } from "@/lib/payments/types";
 import { checkRateLimit } from "@/lib/rate-limit";
@@ -12,12 +13,9 @@ const GENERIC_ERROR = "Sorry, something went wrong placing your order. Please tr
 export type CheckoutState = FormState & { payment?: PaymentRedirect };
 
 /**
- * Validate the checkout form, create the PENDING_PAYMENT order, and return the signed
- * payment redirect for the browser to submit. The order is never marked paid here:
- * only the verified payment notification (ITN) does that.
- *
- * The redirect is returned to the caller (not put behind a URL) so the signed fields,
- * which include the customer's name and email, can't be fetched by guessing an order number.
+ * Validate the checkout form, create the PENDING_PAYMENT order, create the Yoco checkout and
+ * return its payment page address. The order is never marked paid here: only the verified
+ * payment webhook does that.
  */
 export async function placeOrderAction(
   _prev: CheckoutState,
@@ -51,12 +49,17 @@ export async function placeOrderAction(
     const result = await placeOrder(parsed.data);
     if (!result.ok) return { ...result, values: valuesFrom(formData) };
 
-    const payment = provider.createPayment({
+    const payment = await provider.createPayment({
       orderNumber: result.orderNumber,
       totalCents: result.totalCents,
       email: result.email,
       firstName: result.firstName,
       lastName: result.lastName,
+    });
+    // Remember Yoco's checkout id so the payment webhook can find this order.
+    await getDb().order.update({
+      where: { orderNumber: result.orderNumber },
+      data: { paymentCheckoutId: payment.checkoutId },
     });
     return { ok: true, payment };
   } catch (error) {

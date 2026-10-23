@@ -109,10 +109,10 @@ export async function transitionOrder(input: {
             : "") +
           (restocked ? " Stock returned to the shelf." : "") +
           (to === "REFUNDED"
-            ? " Record only: the refund itself must be made in the PayFast dashboard."
+            ? " Record only: the refund itself must be made in the Yoco portal."
             : "") +
           (to === "CANCELLED" && UNSHIPPED_PAID_STATUSES.includes(from)
-            ? " The customer paid: refund them in the PayFast dashboard."
+            ? " The customer paid: refund them in the Yoco portal."
             : ""),
       },
     });

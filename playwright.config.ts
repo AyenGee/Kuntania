@@ -14,7 +14,10 @@ import { defineConfig } from "@playwright/test";
 const PORT = 3100;
 const BASE_URL = `http://localhost:${PORT}`;
 export const E2E_DATABASE_URL = process.env.E2E_DATABASE_URL;
-export const MOCK_PAYFAST_PORT = 3101;
+export const MOCK_YOCO_PORT = 3101;
+/** Signing secret the e2e test uses to sign webhooks (base64 of a throwaway key). */
+export const E2E_WEBHOOK_SECRET =
+  "whsec_" + Buffer.from("e2e-webhook-key-0123456789").toString("base64");
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -42,12 +45,10 @@ export default defineConfig({
       DATABASE_URL: E2E_DATABASE_URL ?? "postgresql://x:x@127.0.0.1:1/x",
       SESSION_SECRET: "e2e-session-secret-e2e-session-secret-0123456789",
       CRON_SECRET: "e2e-cron-secret",
-      PAYFAST_MODE: "sandbox",
-      PAYFAST_MERCHANT_ID: "10000100",
-      PAYFAST_MERCHANT_KEY: "e2e-merchant-key",
-      PAYFAST_PASSPHRASE: "e2e-passphrase",
-      // Stand-in for PayFast's validation endpoint (only honoured in sandbox mode).
-      PAYFAST_VALIDATE_URL: `http://127.0.0.1:${MOCK_PAYFAST_PORT}/validate`,
+      YOCO_SECRET_KEY: "sk_test_e2e",
+      YOCO_WEBHOOK_SECRET: E2E_WEBHOOK_SECRET,
+      // Stand-in for Yoco's API (only honoured with a sk_test_ key).
+      YOCO_API_URL: `http://127.0.0.1:${MOCK_YOCO_PORT}/api`,
       OWNER_EMAIL: "owner@example.test",
       VAT_REGISTERED: "false",
     },

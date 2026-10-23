@@ -38,7 +38,7 @@ export const emailCopy = {
     subject: (orderNumber: string) => `Your Kunta Nia order ${orderNumber} was refunded`,
     heading: "Your order has been refunded",
     intro: "We've refunded your order.",
-    // TODO(CLIENT): confirm refund timing (PayFast refunds can take several business days)
+    // TODO(CLIENT): confirm refund timing (Yoco refunds can take several business days)
     refundNote:
       "The refund goes back to your original payment method. Your bank may take several business days to show it.",
   },

@@ -34,7 +34,7 @@ If your order arrives damaged, or a product is defective, **we cover the cost of
 
 ## Refunds
 
-Approved refunds are paid back to the original payment method (via PayFast) within TODO(CLIENT): number business days. Your bank may take additional time to show the refund.
+Approved refunds are paid back to the original payment method (via Yoco) within TODO(CLIENT): number business days. Your bank may take additional time to show the refund.
 
 ## Contact
 

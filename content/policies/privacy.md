@@ -14,13 +14,13 @@ The responsible party is Kunta Nia, a sole proprietor, of 46 Nielson Drive, Blai
 - **Contact messages:** name, email, optional phone number and your message. We use these to reply to you.
 - **Newsletter:** your email address and the time you agreed. We use this only to send you marketing emails you have opted in to. Every marketing email has an unsubscribe link.
 
-We only collect what we need. We do not create customer accounts, and we do not store your card details; payments are handled by PayFast.
+We only collect what we need. We do not create customer accounts, and we do not store your card details; payments are handled by Yoco.
 
 ## Who we share it with
 
 We share information only with service providers who help us run the shop, and only as needed:
 
-- **PayFast** — to process your payment.
+- **Yoco** — to process your payment.
 - **BobGo (our shipping platform) and couriers** — your name, address and phone number, so your order can be booked and delivered. Couriers used are The Courier Guy, and Fastway or RAM where they are quicker or cheaper for your address.
 - **Email provider** — to send order and service emails. TODO(CLIENT): name the provider.
 - **Hosting and database providers** — to run the website and store data. TODO(CLIENT): name the providers and where data is stored.

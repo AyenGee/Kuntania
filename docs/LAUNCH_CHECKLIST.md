@@ -49,17 +49,19 @@ Legend: _Dev_ = developer · _Client_ = business owner.
 - [ ] No cookie banner needed: confirm nothing that sets cookies has been added (see README,
       "Cookies and consent"). _Dev_
 
-## 3. Payments (PayFast)
+## 3. Payments (Yoco)
 
-- [ ] **(blocker)** Live PayFast account approved. Live merchant ID, merchant key and a
-      **passphrase** set in the PayFast dashboard; the same values entered in Vercel
-      (`PAYFAST_MERCHANT_ID`, `PAYFAST_MERCHANT_KEY`, `PAYFAST_PASSPHRASE`). ITN (notifications)
-      enabled on the live account. _Client + Dev_
-- [ ] **(blocker)** `PAYFAST_MODE=live` in production, and `PAYFAST_VALIDATE_URL` is **blank**. _Dev_
-- [ ] **(blocker)** Sandbox test passed first: order placed, paid in the sandbox, order shows
+- [ ] **(blocker)** Yoco account verified for online payments and the site's domain verified in
+      Yoco. Live secret key (`sk_live_...`) entered in Vercel as `YOCO_SECRET_KEY`. _Client + Dev_
+- [ ] **(blocker)** Webhook registered **against the live key and the live domain** with
+      `npm run yoco:webhook` (Yoco shows the signing secret once), and the printed `whsec_...`
+      value entered in Vercel as `YOCO_WEBHOOK_SECRET`. Yoco allows one webhook, so register it
+      last, after any test-mode trials. _Dev_
+- [ ] **(blocker)** `YOCO_API_URL` is **blank** in production. _Dev_
+- [ ] **(blocker)** Test-key run passed first: order placed, paid with a Yoco test card, order shows
       **Payment received**, stock reduced, both emails arrived, a repeat notification changed nothing. _Dev_
 - [ ] **(blocker)** **Full real-money test order** (small amount) placed on the live site: order
-      shows paid in the admin, emails arrive, then **refunded in the PayFast dashboard** and marked
+      shows paid in the admin, emails arrive, then **refunded in the Yoco portal** and marked
       refunded in the admin. Confirm the money actually came back. _Client + Dev_
 - [ ] Test orders and test discount codes removed or clearly cancelled, so reports are clean. _Dev_
 - [ ] Prices include VAT as intended and `VAT_REGISTERED` is correct (`true` only if VAT registered;
@@ -85,14 +87,25 @@ Legend: _Dev_ = developer · _Client_ = business owner.
       been run against it. _Dev_
 - [ ] `/admin` redirects to the login page when signed out, and a wrong password is refused. _Dev_
 - [ ] Vercel project access limited to the people who need it; two-factor authentication on the
-      Vercel, GitHub, database, PayFast and email provider accounts. _Client + Dev_
+      Vercel, GitHub, database, Yoco and email provider accounts. _Client + Dev_
 
 ## 6. Infrastructure
 
-- [ ] **(blocker)** **Database backups are on and tested**: confirm the plan's backup/restore
-      window, take a manual `pg_dump`, and restore it once into an empty database. _Dev_
+- [ ] **(blocker)** **Supabase is on the Pro plan** (the Free plan has no automatic backups and can
+      pause an inactive project, which would take the shop offline). Daily backups are on, a manual
+      `pg_dump` has been taken, and it has been restored once into an empty database. _Client + Dev_
+- [ ] **(blocker)** **Supabase's public API is locked**: row level security is enabled on every table
+      (the `enable_row_level_security` migration has been applied; `npm test` checks new tables), and
+      no Supabase anon or service key is used or published anywhere. Optionally turn the Data API off
+      in the project settings. _Dev_
+- [ ] Supabase project is in **Frankfurt or London** (no Africa region exists), Vercel's function
+      region matches it (`fra1` or `lhr1`), and the Privacy Policy states that data is stored outside
+      South Africa. _Dev_
+- [ ] The two connection strings are the **pooler** ones (Transaction pooler 6543 for
+      `DATABASE_URL`, Session pooler 5432 for `DIRECT_DATABASE_URL`), `DATABASE_URL` ends in
+      `?sslmode=require&uselibpqcompat=true`, and the logs show no `db.config_warning`. _Dev_
 - [ ] Migrations applied in production (`npx prisma migrate deploy` ran as part of the build) and
-      the two products seeded. _Dev_
+      the products seeded. _Dev_
 - [ ] Domain connected, **HTTPS** working, `www`/non-`www` redirect chosen, `SITE_URL` set to the
       final address and redeployed. _Dev_
 - [ ] `/api/health` returns `{"status":"ok","db":"up"}` and is monitored by an uptime service that
@@ -124,8 +137,8 @@ Legend: _Dev_ = developer · _Client_ = business owner.
 - [ ] The owner has read [`OWNER_GUIDE.md`](OWNER_GUIDE.md) and has done a practice order from
       "Orders to ship" through **Mark as shipped** (using a test order, then cancel it). _Client_
 - [ ] The owner knows who to contact for each problem (website down, emails missing, payment
-      stuck) and where the PayFast, hosting, database and email accounts are. _Dev_
-- [ ] Account ownership is in the **client's** name (domain, hosting, database, PayFast, email,
+      stuck) and where Yoco, hosting, database and email accounts are. _Dev_
+- [ ] Account ownership is in the **client's** name (domain, hosting, database, Yoco, email,
       analytics), with the developer added as a collaborator. _Client_
 - [ ] After go-live: watch the first real orders closely for the first week (emails arriving,
-      orders marked paid, stock reducing), and check the logs for `itn.rejected` or `email.failed`. _Dev_
+      orders marked paid, stock reducing), and check the logs for `yoco.rejected` or `email.failed`. _Dev_

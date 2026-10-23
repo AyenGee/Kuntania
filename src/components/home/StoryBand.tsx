@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { images } from "@content/images";
 import { home } from "@content/home";
 
@@ -26,12 +25,6 @@ export function StoryBand() {
               {p}
             </p>
           ))}
-          <Link
-            href={home.story.cta.href}
-            className="mt-6 inline-block rounded-control border border-brand px-6 py-3 font-medium text-brand"
-          >
-            {home.story.cta.label}
-          </Link>
         </div>
       </div>
     </section>

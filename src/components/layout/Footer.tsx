@@ -75,8 +75,14 @@ export function Footer() {
           {business.vatNumber && <> · VAT no. {business.vatNumber}</>} ·{" "}
           {business.physicalAddress} · {business.email} · {business.phone}
         </address>
-        <p className="mx-auto max-w-site px-4 pb-6 text-xs text-brand-contrast/80">
-          &copy; {new Date().getFullYear()} {site.name}. All rights reserved.
+        <p className="mx-auto flex max-w-site flex-wrap items-center justify-between gap-2 px-4 pb-6 text-xs text-brand-contrast/80">
+          <span>
+            &copy; {new Date().getFullYear()} {site.name}. All rights reserved.
+          </span>
+          {/* Owner shortcut. The page behind it is protected by the admin password. */}
+          <Link href="/admin" rel="nofollow" className="underline">
+            Admin login
+          </Link>
         </p>
       </div>
     </footer>

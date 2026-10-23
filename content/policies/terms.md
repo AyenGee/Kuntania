@@ -22,7 +22,7 @@ We take care to display correct prices. If a price is clearly wrong, we may canc
 
 ## Payment
 
-Payments are processed securely by PayFast. We do not see or store your card details. Your order is only confirmed once PayFast confirms your payment to us.
+Payments are processed securely by Yoco. We do not see or store your card details. Your order is only confirmed once Yoco confirms your payment to us.
 
 ## Delivery
 

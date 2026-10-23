@@ -129,7 +129,7 @@ describe("applyCompletedPayment", () => {
     expect(notify).toHaveBeenCalledTimes(1);
   });
 
-  it("is idempotent: a repeated ITN changes nothing", async () => {
+  it("is idempotent: a repeated webhook changes nothing", async () => {
     await pay();
     const again = await pay();
     expect(again).toEqual({ applied: false, reason: "already_processed" });

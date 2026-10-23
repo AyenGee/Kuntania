@@ -8,7 +8,6 @@ export const dynamic = "force-dynamic";
 const STATIC_PATHS = [
   "/",
   "/shop",
-  "/about",
   "/faq",
   "/contact",
   "/shipping-returns",

@@ -1,7 +1,7 @@
 # Kunta Nia online shop
 
 A small, secure e-commerce site for **Kunta Nia**, a South African natural hair care brand. Guest
-checkout, payments through **PayFast**, and a simple admin area for the owner (orders, stock,
+checkout, payments through **Yoco**, and a simple admin area for the owner (orders, stock,
 prices, discount codes). All money is **ZAR, stored as integer cents**.
 
 - Priorities, in order: correct and secure checkout, easy for the owner to run, legally
@@ -15,8 +15,8 @@ prices, discount codes). All money is **ZAR, stored as integer cents**.
 ## Stack
 
 Next.js (App Router) + TypeScript (strict) · Tailwind CSS · PostgreSQL + Prisma · Zod ·
-PayFast · Nodemailer (SMTP) · iron-session + bcrypt (admin login) · Vitest + Playwright.
-Hosting target: Vercel (app) + a managed Postgres (Neon or Supabase).
+Yoco · Nodemailer (SMTP) · iron-session + bcrypt (admin login) · Vitest + Playwright.
+Hosting target: Vercel (app) + Supabase (managed Postgres).
 
 > **Next.js 16 note:** this is a recent Next.js. Middleware is called **Proxy** (`src/proxy.ts`).
 > `node_modules/next/dist/docs/` has the docs for the exact installed version.
@@ -33,14 +33,14 @@ cp .env.example .env             # then edit .env (see "Environment variables")
 npm run db:up                    # starts Postgres in Docker (docker-compose.yml)
 npm run db:migrate               # creates the tables
 npm run db:seed                  # creates the two products and (if ADMIN_* are set) an admin
-npm run admin:create -- --email you@example.com --name "Your Name"   # or create/reset an admin
+npm run admin:create -- you@example.com "Your Name"   # or create/reset an admin
 npm run dev                      # http://localhost:3000
 ```
 
 The minimum `.env` for local work is `DATABASE_URL` (the default in `.env.example` matches
 `docker-compose.yml`) and `SESSION_SECRET` (generate one:
 `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`).
-Without SMTP settings emails are skipped (a warning is logged); without PayFast keys checkout
+Without SMTP settings emails are skipped (a warning is logged); without Yoco keys checkout
 stops with a friendly message instead of creating an order.
 
 The admin is at `/admin`.
@@ -70,17 +70,16 @@ Documented line by line in [`.env.example`](.env.example). Validated at runtime 
 
 | Variable                                                           | Required            | Purpose                                                                                                             |
 | ------------------------------------------------------------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `SITE_URL`                                                         | yes                 | Public base URL, no trailing slash. Used for canonical URLs, emails and PayFast callbacks.                          |
+| `SITE_URL`                                                         | yes                 | Public base URL, no trailing slash. Used for canonical URLs, emails and Yoco callbacks.                             |
 | `DATABASE_URL`                                                     | yes                 | PostgreSQL connection string used by the running app.                                                               |
-| `DIRECT_DATABASE_URL`                                              | optional            | Direct (non-pooled) connection used only for migrations. Set it if your host gives you a pooled `DATABASE_URL`.     |
+| `DIRECT_DATABASE_URL`                                              | for migrations      | Used only by `prisma migrate`. On Supabase: the **Session pooler** string (port 5432).                              |
 | `SESSION_SECRET`                                                   | yes                 | 32+ random characters; signs the admin session cookie.                                                              |
 | `CRON_SECRET`                                                      | yes in production   | Authorises the daily clean-up job (`Authorization: Bearer ...`). Vercel Cron sends it automatically once set.       |
 | `VAT_REGISTERED`                                                   | yes                 | `true` if VAT registered (prices are VAT-inclusive, 15%). Shows "VAT included" lines and stores the VAT amount.     |
 | `POLICIES_APPROVED`                                                | yes                 | `true` **only** once the client has approved the policy pages. Until then a red "DRAFT" banner shows in production. |
-| `PAYFAST_MODE`                                                     | yes                 | `sandbox` or `live`.                                                                                                |
-| `PAYFAST_MERCHANT_ID`, `PAYFAST_MERCHANT_KEY`                      | yes                 | From your PayFast account (use sandbox credentials in sandbox mode).                                                |
-| `PAYFAST_PASSPHRASE`                                               | live: yes           | Must match the passphrase set in the PayFast dashboard.                                                             |
-| `PAYFAST_VALIDATE_URL`                                             | never in production | Test-only stand-in for PayFast's validation endpoint. Ignored unless `PAYFAST_MODE=sandbox`. Leave blank.           |
+| `YOCO_SECRET_KEY`                                                  | yes                 | Yoco Checkout API secret key: `sk_test_...` while testing, `sk_live_...` for real payments.                         |
+| `YOCO_WEBHOOK_SECRET`                                              | yes                 | The `whsec_...` value printed by `npm run yoco:webhook` (shown once).                                               |
+| `YOCO_API_URL`                                                     | never in production | Test-only stand-in for Yoco's API. Ignored unless the key starts with `sk_test_`. Leave blank.                      |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`  | for email           | Any SMTP provider (the client's business email works).                                                              |
 | `EMAIL_FROM`                                                       | for email           | e.g. `Kunta Nia <orders@yourdomain.co.za>`.                                                                         |
 | `OWNER_EMAIL`                                                      | for email           | Receives new-order alerts and contact messages; also used as Reply-To on customer emails.                           |
@@ -95,13 +94,13 @@ Documented line by line in [`.env.example`](.env.example). Validated at runtime 
 ```
 content/            All editable copy and business settings (no code changes needed)
   site.ts             Business details (footer, ECT Act), shipping rates, stock settings
-  home.ts about.ts faq.ts pages.ts emails.ts   Page and email wording
+  home.ts faq.ts pages.ts emails.ts   Page and email wording
   products.ts         Seed data for the two products (the database is the source of truth afterwards)
   policies/*.md       Terms, Privacy (POPIA), Shipping & Returns drafts
 prisma/             Schema, migrations, seed
 src/app/(site)/     Public pages (home, shop, product, cart, checkout, content pages, order lookup)
 src/app/admin/      Admin: login, dashboard, orders, products, discounts, messages, subscribers
-src/app/api/        PayFast notification, cron clean-up, health check
+src/app/api/        Yoco payment webhook, cron clean-up, health check
 src/lib/            Business logic: pricing, shipping, discounts, cart, payments/, email/, admin/
 src/components/     UI components
 src/styles/tokens.css   The ONLY place colours, fonts and radii are defined
@@ -144,15 +143,16 @@ before launch.
    ([`src/lib/cart-resolve.ts`](src/lib/cart-resolve.ts) is shared by the cart preview and order
    creation, so what the customer sees is exactly what is charged).
 3. A `PENDING_PAYMENT` order is created in a transaction (with price/name snapshots and a
-   `KN-` number from a database sequence), and the browser is sent to PayFast with a signed form.
-4. **PayFast calls back** (`/api/payments/payfast/notify`, the "ITN"). This is the **only** thing
-   that marks an order paid. It logs the raw notification, then checks the **signature**, that it
-   came from a **PayFast address** (live mode), that the **amount matches to the cent**, and asks
-   PayFast's own server to **confirm** it. Only then, and only for `COMPLETE`, it marks the order
-   `PAID`, reduces stock, counts the discount use and sends the emails: all in one idempotent
-   step, so a repeated notification does nothing.
+   `KN-` number from a database sequence), and a Yoco checkout is created for the exact total and the browser is sent to its payment page.
+4. **Yoco calls back** (`/api/payments/yoco/webhook`). This is the **only** thing that marks an
+   order paid. It first checks the webhook's **signature** (HMAC with the signing secret, and a
+   timestamp no more than 3 minutes old, so replays fail). Then it logs the notification, finds the
+   order by Yoco's checkout id, and checks that the **amount matches to the cent**, the currency is
+   ZAR and the payment is in the **same mode** as our key (a test payment can never pay a real
+   order). Only then, for `payment.succeeded`, it marks the order `PAID`, reduces stock, counts the
+   discount use and sends the emails: all in one idempotent step, so a repeated webhook does nothing.
 5. The success page never marks anything paid; it shows "confirming your payment" until the
-   notification has landed.
+   webhook has landed.
 6. Unpaid orders are cancelled after 48 hours by a daily job (`/api/cron/cancel-pending`,
    scheduled in [`vercel.json`](vercel.json)). A late payment on a cancelled order reinstates it.
 7. If stock ran out between checkout and payment, the order is still marked paid, and flagged
@@ -160,11 +160,57 @@ before launch.
 
 ---
 
-## 5. Deploying to Vercel
+## 5. Database (Supabase) and deploying to Vercel
 
-1. **Postgres.** Create a database with Neon or Supabase. Copy the connection string(s).
-   If the host offers both a pooled and a direct URL, use the pooled one as `DATABASE_URL` and
-   the direct one as `DIRECT_DATABASE_URL`.
+### Supabase database setup
+
+The app uses plain PostgreSQL, so any Postgres works. Supabase is the chosen host.
+
+1. **Create the project** at supabase.com. Name it `kunta-nia`, set a strong database password
+   (save it in a password manager), and pick the region **closest to South Africa**. Supabase has
+   no Africa region; use **Central EU (Frankfurt, `eu-central-1`)** or **West Europe (London,
+   `eu-west-2`)**. Then set Vercel's function region to the matching one (Frankfurt `fra1` or
+   London `lhr1`) so the app and database sit close together. Because customer data is stored
+   outside South Africa, the Privacy Policy must say so (POPIA).
+2. **Get two connection strings** from the project's **Connect** dialog:
+
+   | Use                           | Which one              | Port | Goes in               |
+   | ----------------------------- | ---------------------- | ---- | --------------------- |
+   | The running website           | **Transaction pooler** | 6543 | `DATABASE_URL`        |
+   | Migrations (`prisma migrate`) | **Session pooler**     | 5432 | `DIRECT_DATABASE_URL` |
+
+   Both use the host `aws-<n>-<region>.pooler.supabase.com` and the username
+   `postgres.<project-ref>`. Do **not** use the "Direct connection" string: that host is
+   IPv6-only on most plans, so Vercel and many home networks can't reach it.
+
+3. **Finish the strings.** Add `?sslmode=require&uselibpqcompat=true` to `DATABASE_URL` and
+   `?sslmode=require&sslaccept=accept_invalid_certs` to `DIRECT_DATABASE_URL` (the extra part is for the Prisma CLI: without it `prisma migrate` can fail with "P1001 Can't reach database server" on Windows even though the network is fine). Without `uselibpqcompat=true` the connection fails
+   with "self-signed certificate in certificate chain". If the password contains `@`, `/`, `#` or
+   similar, URL-encode it (`@` becomes `%40`). The app logs a warning (`db.config_warning`) if it
+   spots these mistakes.
+4. **Create the tables and data** (from your computer, with those two strings in `.env`):
+
+   ```bash
+   npm run db:deploy      # creates the tables (applies the migrations)
+   npm run db:seed        # adds the three products
+   npm run admin:create -- you@example.com "Your Name"
+   ```
+
+5. **Security: the public API.** Supabase publishes tables in the `public` schema through an
+   automatic REST API, and new tables are not protected by default. This app never uses that API
+   (it connects directly as the table owner), so a migration turns on row level security for every
+   table with no policies, which locks the API out. A test fails if a new table is added without
+   it. As a second layer you can also turn the Data API off in the project's API settings.
+6. **Backups.** Supabase's **Free plan has no automatic backups**; the **Pro plan** keeps daily
+   backups for the last 7 days (Point-in-Time Recovery is a separate, costly add-on and is not
+   needed for a shop this size). Move to Pro before taking real orders, and see "Backups" below.
+   Free projects can also pause when inactive, which would take the shop offline: check Supabase's
+   current terms.
+
+### Deploying
+
+1. **Database.** Done above. In Vercel you'll paste the same `DATABASE_URL` and
+   `DIRECT_DATABASE_URL`.
 2. **Push the code** to a Git repository and **import it in Vercel** (framework: Next.js).
 3. **Environment variables.** In Vercel, Project Settings, Environment Variables, add everything
    from the table above for _Production_ (and _Preview_ if you want preview deployments to work).
@@ -175,7 +221,7 @@ before launch.
 
    ```bash
    DATABASE_URL="<production url>" npm run db:seed          # creates the two products
-   DATABASE_URL="<production url>" npm run admin:create -- --email owner@yourdomain.co.za --name "Owner"
+   DATABASE_URL="<production url>" npm run admin:create -- owner@yourdomain.co.za "Owner"
    ```
 
    (On Windows PowerShell use `$env:DATABASE_URL="<production url>"; npm run db:seed`.)
@@ -193,32 +239,35 @@ Use a real SMTP account on the client's domain. On the sending domain set up **S
 DMARC** records (your email provider shows the exact values), otherwise order emails land in spam.
 Send yourself a test order and check inbox placement in Gmail and Outlook.
 
-### PayFast: sandbox to live
+### Yoco: test to live
 
-1. **Sandbox first.** Create a PayFast _sandbox_ account (see PayFast's developer documentation),
-   set `PAYFAST_MODE=sandbox` and the sandbox merchant ID, key and passphrase. PayFast must be able
-   to reach `SITE_URL/api/payments/payfast/notify`, so test on a Vercel preview/production URL or
-   through a tunnel (such as ngrok), **not** `localhost`.
-2. Place a test order and pay with the sandbox. Confirm the order turns **Payment received** and
-   the emails arrive.
-3. **Go live.** In Vercel set `PAYFAST_MODE=live` and the **live** merchant ID, key and passphrase
-   (the passphrase must be set in the PayFast dashboard _and_ match `PAYFAST_PASSPHRASE`). Make
-   sure ITN is enabled on the live account. Redeploy.
-4. Do one **real-money test order** (a small amount), confirm it shows as paid, then **refund** it
-   in the PayFast dashboard and mark the order refunded in the admin.
+1. **Test first.** In the client's Yoco account open _Yoco Connect > Checkout API_ and copy the
+   **test** secret key (`sk_test_...`; test keys need no domain verification, and payments under
+   R2.00 are refused). Put it in `YOCO_SECRET_KEY`.
+2. **Register the webhook.** Yoco must be able to reach `SITE_URL/api/payments/yoco/webhook`, so
+   do this on the deployed https address, **not** `localhost`. With `SITE_URL` and
+   `YOCO_SECRET_KEY` set, run `npm run yoco:webhook`. It prints a `whsec_...` signing secret **once**:
+   save it as `YOCO_WEBHOOK_SECRET` and redeploy. Yoco allows one webhook per account.
+3. Place a test order and pay with a Yoco test card (the _Test card details_ page in the Yoco
+   app). Confirm the order turns **Payment received** and the emails arrive.
+4. **Go live.** Verify the domain in Yoco, replace `YOCO_SECRET_KEY` with the **live** key
+   (`sk_live_...`), delete the old webhook and run `npm run yoco:webhook` again against the live
+   key to get the live signing secret, update `YOCO_WEBHOOK_SECRET`, and redeploy.
+5. Do one **real-money test order** (a small amount), confirm it shows as paid, then **refund** it
+   in the Yoco portal and mark the order refunded in the admin.
 
 ### Backups
 
 Turn on and verify automated backups **before launch**; orders and customers live only in this
 database.
 
-- **Neon:** uses point-in-time restore; how far back you can restore depends on your plan.
-- **Supabase:** daily backups depend on your plan.
-- Whatever the host offers, also take a **manual export** regularly as a second copy (monthly at
-  minimum, and before any risky change):
+- **Supabase Pro:** daily backups, kept for 7 days. Restore from Dashboard, Database, Backups (the
+  project is unavailable while it restores). The **Free plan has no automatic backups**.
+- Whatever the plan, also take a **manual export** regularly as a second copy (monthly at
+  minimum, and before any risky change), using the **session pooler** string:
 
   ```bash
-  pg_dump "<production url>" --format=custom --file=kuntania-$(date +%F).dump
+  pg_dump "<DIRECT_DATABASE_URL>" --format=custom --file=kuntania-$(date +%F).dump
   ```
 
   Store the file somewhere safe and off the hosting account. Restoring is tested with
@@ -240,11 +289,11 @@ database.
   a strict referrer policy and permissions policy ([`src/lib/security-headers.ts`](src/lib/security-headers.ts)).
   _Trade-off:_ the CSP allows inline scripts, because Next.js needs them and a per-request nonce
   would make every page render dynamically. Everything else in the policy is strict, and forms may
-  only be posted to the site itself and PayFast.
+  only be posted to the site itself (customers reach Yoco by a plain redirect).
 - **Abuse:** honeypot fields and Postgres-backed per-IP rate limits on checkout, contact,
   newsletter, order lookup, discount codes and login. Only a hash of the IP is stored.
-- **Payments:** the ITN checks listed above; prices and totals never come from the browser.
-- **Logs:** structured JSON events (`checkout.*`, `itn.*`, `payment.*`, `email.*`, `admin.*`,
+- **Payments:** the webhook checks listed above; prices and totals never come from the browser.
+- **Logs:** structured JSON events (`checkout.*`, `yoco.*`, `payment.*`, `email.*`, `admin.*`,
   `cron.*`) with no card data, passwords, message bodies or customer email addresses.
 
 ### Cookies and consent (POPIA)
@@ -260,14 +309,14 @@ forms already use, and every marketing email needs a working unsubscribe link (`
 
 ## 7. Testing
 
-- **Unit tests (`npm test`):** pricing, shipping, discounts, VAT, cart resolution, PayFast
-  signatures and ITN verification (with fixtures computed independently), idempotency, order
+- **Unit tests (`npm test`):** pricing, shipping, discounts, VAT, cart resolution, Yoco
+  webhook signatures and payment checks, the checkout request, idempotency, order
   status rules, emails, CSV safety, validation, security headers.
 - **Smoke tests (`npm run test:smoke`):** drive a real production build in Chrome, **no database
   needed**: pages render, accessibility basics, security headers, SEO files, admin lock-out, the
   payment endpoint's guards.
-- **Full checkout test (`npm run test:e2e`):** browse, add to cart, check out, signed PayFast
-  hand-off, forged notifications ignored, a genuine one marks the order paid, a replay does nothing,
+- **Full checkout test (`npm run test:e2e`):** browse, add to cart, check out, Yoco
+  hand-off, forged webhooks ignored, a genuine one marks the order paid, a replay does nothing,
   and the order shows as paid in the admin. It needs a **disposable** migrated database:
 
   ```bash
@@ -282,20 +331,20 @@ forms already use, and every marketing email needs a working unsubscribe link (`
 
 ## 8. Troubleshooting
 
-| Symptom                                                   | Likely cause                                                                                                                                                                                          |
-| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Orders stay "Awaiting payment" after paying               | PayFast couldn't reach `SITE_URL/api/payments/payfast/notify`, or the passphrase/merchant details don't match. Check the order's history and the `PaymentNotification` table (`failureReason`).       |
-| Order history shows "Payment notification rejected (...)" | `invalid_signature` (passphrase mismatch), `amount_mismatch`, `server_validation_failed`, `invalid_source_ip`, `merchant_mismatch`, `unknown_order`. Verify in the PayFast dashboard before shipping. |
-| No emails                                                 | SMTP variables missing or wrong (logged as `email.skipped` / `email.failed`); check SPF/DKIM/DMARC if they arrive in spam.                                                                            |
-| "Online payment isn't available" at checkout              | `PAYFAST_MERCHANT_ID` / `PAYFAST_MERCHANT_KEY` not set.                                                                                                                                               |
-| Can't sign in to the admin                                | Reset with `npm run admin:create -- --email <email>` (it resets the password if the user exists).                                                                                                     |
-| Migration fails on Neon/Supabase                          | Use the **direct** connection string as `DIRECT_DATABASE_URL`.                                                                                                                                        |
-| Shop page shows an error locally                          | Database not running or not migrated (`npm run db:up`, `npm run db:migrate`).                                                                                                                         |
+| Symptom                                                   | Likely cause                                                                                                                                                                                                                                                     |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Orders stay "Awaiting payment" after paying               | Yoco couldn't reach `SITE_URL/api/payments/yoco/webhook`, the webhook isn't registered, or `YOCO_WEBHOOK_SECRET` is wrong (Yoco gets a 401). Check the order's history, the Vercel logs (`yoco.rejected`) and the `PaymentNotification` table (`failureReason`). |
+| Order history shows "Payment notification rejected (...)" | `amount_mismatch`, `wrong_currency`, `mode_mismatch` (test payment against a live key or the reverse) or `status_not_succeeded`. Verify in the Yoco portal before shipping.                                                                                      |
+| No emails                                                 | SMTP variables missing or wrong (logged as `email.skipped` / `email.failed`); check SPF/DKIM/DMARC if they arrive in spam.                                                                                                                                       |
+| "Online payment isn't available" at checkout              | `YOCO_SECRET_KEY` / `YOCO_WEBHOOK_SECRET` not set.                                                                                                                                                                                                               |
+| Can't sign in to the admin                                | Reset with `npm run admin:create -- <email>` (it resets the password if the user exists).                                                                                                                                                                        |
+| Database connection fails with "self-signed certificate"  | `DATABASE_URL` must end with `?sslmode=require&uselibpqcompat=true`.                                                                                                                                                                                             |
+| Database connection fails or hangs on Supabase            | Use the **pooler** strings (host ends `.pooler.supabase.com`), not the IPv6-only "Direct connection". Migrations use the Session pooler (5432), the website the Transaction pooler (6543).                                                                       |
+| Shop page shows an error locally                          | Database not running or not migrated (`npm run db:up`, `npm run db:migrate`).                                                                                                                                                                                    |
 
 ## 9. Known limits (v1)
 
 Guest checkout only (no customer accounts) · couriers are booked by hand (no courier API) ·
-refunds are made in the PayFast dashboard and only _recorded_ in the admin · product photos are
-files in the repository (the admin edits the list, not the files) · one currency (ZAR) · PayFast
-is the only payment provider (the code is behind a `PaymentProvider` interface so Yoco can be
-added later).
+refunds are made in the Yoco portal and only _recorded_ in the admin · product photos are
+files in the repository (the admin edits the list, not the files) · one currency (ZAR) · Yoco
+is the only payment provider (the code is behind a `PaymentProvider` interface).

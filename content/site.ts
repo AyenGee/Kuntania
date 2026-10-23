@@ -47,7 +47,6 @@ export const social = {
 export const nav = {
   main: [
     { label: "Shop", href: "/shop" },
-    { label: "Our Story", href: "/about" },
     { label: "FAQ", href: "/faq" },
     { label: "Contact", href: "/contact" },
   ],

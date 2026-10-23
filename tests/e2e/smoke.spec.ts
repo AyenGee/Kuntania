@@ -3,7 +3,6 @@ import { expect, test } from "@playwright/test";
 /** Database-free checks: the site renders, is hardened, and the admin is locked. */
 
 const PUBLIC_PAGES: [string, RegExp][] = [
-  ["/about", /Our Story/i],
   ["/faq", /Frequently asked questions/i],
   ["/contact", /Contact us/i],
   ["/privacy", /Privacy Policy/i],
@@ -42,7 +41,7 @@ test.describe("accessibility basics", () => {
   test("the skip link is first in the tab order and jumps to the content", async ({
     page,
   }) => {
-    await page.goto("/about");
+    await page.goto("/faq");
     await page.keyboard.press("Tab");
     const skip = page.getByRole("link", { name: "Skip to content" });
     await expect(skip).toBeFocused();
@@ -87,15 +86,13 @@ test.describe("accessibility basics", () => {
 
 test.describe("security and SEO", () => {
   test("responses carry the security headers", async ({ request }) => {
-    const res = await request.get("/about");
+    const res = await request.get("/faq");
     const h = res.headers();
     expect(h["x-frame-options"]).toBe("DENY");
     expect(h["x-content-type-options"]).toBe("nosniff");
     expect(h["referrer-policy"]).toBe("strict-origin-when-cross-origin");
     expect(h["content-security-policy"]).toContain("frame-ancestors 'none'");
-    expect(h["content-security-policy"]).toContain(
-      "form-action 'self' https://www.payfast.co.za",
-    );
+    expect(h["content-security-policy"]).toContain("form-action 'self'");
     expect(h["x-powered-by"]).toBeUndefined();
   });
 
@@ -115,18 +112,15 @@ test.describe("security and SEO", () => {
     const res = await request.get("/sitemap.xml");
     expect(res.status()).toBe(200);
     const body = await res.text();
-    for (const path of ["/about", "/faq", "/contact", "/shop", "/privacy"]) {
+    for (const path of ["/faq", "/contact", "/shop", "/privacy"]) {
       expect(body).toContain(`${path}</loc>`);
     }
     expect(body).not.toContain("/admin");
   });
 
   test("pages have a canonical URL and Open Graph tags", async ({ page }) => {
-    await page.goto("/about");
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      /\/about$/,
-    );
+    await page.goto("/faq");
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/faq$/);
     await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute(
       "content",
       "Kunta Nia",
@@ -138,7 +132,7 @@ test.describe("security and SEO", () => {
   });
 
   test("Organization JSON-LD has no TODO placeholders", async ({ page }) => {
-    await page.goto("/about");
+    await page.goto("/faq");
     const json = await page
       .locator('script[type="application/ld+json"]')
       .first()
@@ -149,14 +143,14 @@ test.describe("security and SEO", () => {
   });
 
   test("no analytics script loads when none is configured", async ({ page }) => {
-    await page.goto("/about");
+    await page.goto("/faq");
     await expect(
       page.locator("script[data-domain], script[data-website-id]"),
     ).toHaveCount(0);
   });
 
   test("no cookies are set for anonymous visitors", async ({ page, context }) => {
-    await page.goto("/about");
+    await page.goto("/faq");
     await page.goto("/faq");
     expect(await context.cookies()).toEqual([]);
   });
@@ -224,11 +218,19 @@ test.describe("admin is locked", () => {
 
 test.describe("payment notification endpoint", () => {
   test("rejects oversized bodies", async ({ request }) => {
-    const res = await request.post("/api/payments/payfast/notify", {
-      headers: { "content-type": "application/x-www-form-urlencoded" },
+    const res = await request.post("/api/payments/yoco/webhook", {
+      headers: { "content-type": "application/json" },
       data: "x=" + "a".repeat(30_000),
     });
     expect(res.status()).toBe(413);
+  });
+
+  test("rejects unsigned webhooks", async ({ request }) => {
+    const res = await request.post("/api/payments/yoco/webhook", {
+      headers: { "content-type": "application/json" },
+      data: JSON.stringify({ type: "payment.succeeded" }),
+    });
+    expect(res.status()).toBe(401);
   });
 
   test("the cron route needs the secret", async ({ request }) => {

@@ -2,7 +2,7 @@
  * Seed data for the launch products. The database is the source of truth once
  * seeded (the owner edits products in /admin); re-running the seed never overwrites edits.
  *
- * Confirmed by the client (October 2026): product names, sizes (oil 100 ml, mask 250 ml),
+ * Confirmed by the client (October 2026): product names, sizes (oil 100 ml, mask 100 ml),
  * prices (oil R110, mask R150, combo R230), starting stock (20 / 20 / 5), shelf life
  * (oil 1 year, mask 9 months), allergen notice, storage, directions, and the softened
  * claim wording. Removed at her request: the "cruelty-free" claim (not certified).
@@ -144,7 +144,7 @@ export const seedProducts: SeedProduct[] = [
       MASK_WATER,
       "Shelf life: 9 months.",
     ].join("\n"),
-    sizeLabel: "250 ml", // client correction: the jar is 250 ml (the photographed label says 100ml)
+    sizeLabel: "100 ml", // client confirmed 100 ml (October 2026)
     priceCents: 15000,
     compareAtPriceCents: null, // the old price (R120) was lower, so there is no "was" price to show
     stock: 20,
@@ -170,15 +170,11 @@ export const seedProducts: SeedProduct[] = [
     shortName: "Combo",
     tagline: "Hair Growth Oil and Pre-wash Conditioning Mask together.",
     description:
-      "Both Kunta Nia products in one combo: the Hair Growth Oil (100 ml) and the Pre-wash Conditioning Mask (250 ml). Use the mask before you wash and the oil on your scalp. The mask contains hydrolysed wheat protein and coconut.",
+      "Both Kunta Nia products in one combo: the Hair Growth Oil (100 ml) and the Pre-wash Conditioning Mask (100 ml). Use the mask before you wash and the oil on your scalp. The mask contains hydrolysed wheat protein and coconut.",
     benefits: [
       {
         title: "Both products together",
-        body: "Hair Growth Oil (100 ml) and Pre-wash Conditioning Mask (250 ml).",
-      },
-      {
-        title: "Save R30",
-        body: "R230 for the combo, against R260 if bought separately.",
+        body: "Hair Growth Oil (100 ml) and Pre-wash Conditioning Mask (100 ml).",
       },
     ],
     howToUse: [
@@ -195,17 +191,17 @@ export const seedProducts: SeedProduct[] = [
       MASK_WATER,
       "Shelf life: Hair Growth Oil 1 year; Pre-wash Conditioning Mask 9 months.",
     ].join("\n"),
-    sizeLabel: "Oil 100 ml + mask 250 ml",
+    sizeLabel: "Oil 100 ml + mask 100 ml",
     priceCents: 23000,
-    compareAtPriceCents: 26000, // R110 + R150 bought separately
+    compareAtPriceCents: null, // client: the combo is simply R230, no struck-through price
     stock: 5,
     active: true,
     sortOrder: 3,
     images: [
       {
-        // TODO(CLIENT): a photo of the combo box itself. This is the range photo for now.
-        src: "/images/products/combo-1.webp",
-        alt: "Kunta Nia Hair Growth Oil bottles and Pre-wash Conditioning Mask jars together",
+        // Client-supplied photo of both products together.
+        src: "/images/products/combo-2.webp",
+        alt: "Kunta Nia Pre-wash Conditioning Mask jar and Hair Growth Oil bottle with fenugreek seeds, rosemary and a hibiscus petal",
       },
     ],
     seoTitle: "Kunta Nia Combo: Hair Growth Oil and Conditioning Mask",

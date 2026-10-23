@@ -12,10 +12,8 @@ describe("buildCsp", () => {
     expect(prod).toContain("upgrade-insecure-requests");
   });
 
-  it("allows PayFast form posts (and only PayFast) outside our own origin", () => {
-    expect(prod).toContain(
-      "form-action 'self' https://www.payfast.co.za https://sandbox.payfast.co.za",
-    );
+  it("only allows form posts to our own origin", () => {
+    expect(prod).toContain("form-action 'self'");
   });
 
   it("allows eval only in development", () => {

@@ -32,7 +32,7 @@ model NewsletterSubscriber {
 
 /// Fixed-window per-IP rate limiting stored in Postgres (no extra services).
 model RateLimit {
-  key         String   // "<action>:<sha256(ip)>"
+  key         String // "<action>:<sha256(ip)>"
   windowStart DateTime
   count       Int      @default(1)
 
@@ -109,42 +109,44 @@ enum DiscountType {
 }
 
 model Order {
-  id               String         @id @default(cuid())
+  id                String         @id @default(cuid())
   /// Human-friendly, e.g. KN-10042. Generated from the order_number_seq sequence.
-  orderNumber      String         @unique
-  status           OrderStatus    @default(PENDING_PAYMENT)
-  email            String
-  firstName        String
-  lastName         String
-  phone            String
-  addressLine1     String
-  addressLine2     String?
-  suburb           String
-  city             String
-  province         Province
-  postalCode       String
-  deliveryMethod   DeliveryMethod @default(COURIER)
-  deliveryNotes    String?
-  subtotalCents    Int
-  shippingCents    Int
-  discountCents    Int            @default(0)
-  totalCents       Int
-  vatIncludedCents Int            @default(0)
-  discountCodeId   String?
-  discountCode     DiscountCode?  @relation(fields: [discountCodeId], references: [id])
-  paymentProvider  String         @default("payfast")
-  paymentReference String?
-  paidAt           DateTime?
-  trackingNumber   String?
-  trackingUrl      String?
-  courierName      String?
-  marketingOptIn   Boolean        @default(false)
-  termsAcceptedAt  DateTime
+  orderNumber       String         @unique
+  status            OrderStatus    @default(PENDING_PAYMENT)
+  email             String
+  firstName         String
+  lastName          String
+  phone             String
+  addressLine1      String
+  addressLine2      String?
+  suburb            String
+  city              String
+  province          Province
+  postalCode        String
+  deliveryMethod    DeliveryMethod @default(COURIER)
+  deliveryNotes     String?
+  subtotalCents     Int
+  shippingCents     Int
+  discountCents     Int            @default(0)
+  totalCents        Int
+  vatIncludedCents  Int            @default(0)
+  discountCodeId    String?
+  discountCode      DiscountCode?  @relation(fields: [discountCodeId], references: [id])
+  paymentProvider   String         @default("yoco")
+  /// Yoco checkout id, set when the customer is sent to pay.
+  paymentCheckoutId String?
+  paymentReference  String?
+  paidAt            DateTime?
+  trackingNumber    String?
+  trackingUrl       String?
+  courierName       String?
+  marketingOptIn    Boolean        @default(false)
+  termsAcceptedAt   DateTime
   /// True if stock ran out between checkout and payment: owner must act.
-  stockShortfall   Boolean        @default(false)
-  adminNotes       String?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  stockShortfall    Boolean        @default(false)
+  adminNotes        String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
 
   items         OrderItem[]
   events        OrderEvent[]
@@ -152,6 +154,7 @@ model Order {
 
   @@index([status, createdAt])
   @@index([email])
+  @@index([paymentCheckoutId])
 }
 
 model OrderItem {

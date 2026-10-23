@@ -6,10 +6,10 @@ export type ApplyPaymentResult =
   | { applied: false; reason: "already_processed" | "not_found" };
 
 /**
- * Mark an order paid after a fully verified COMPLETE notification.
+ * Mark an order paid after a fully verified payment.succeeded notification.
  *
  * Idempotent: the status change is a single conditional UPDATE
- * (... WHERE status IN ('PENDING_PAYMENT','CANCELLED')), so a repeated or concurrent ITN
+ * (... WHERE status IN ('PENDING_PAYMENT','CANCELLED')), so a repeated or concurrent webhook
  * finds nothing to update and does nothing: no double stock decrement, no double
  * discount use, no duplicate emails.
  *
@@ -75,7 +75,7 @@ export async function applyCompletedPayment(input: {
         orderId: order.id,
         type: "payment_received",
         message:
-          `Payment received (PayFast ref ${input.paymentReference}).` +
+          `Payment received (Yoco payment ${input.paymentReference}).` +
           (previousStatus === "CANCELLED"
             ? " Order had been cancelled; reinstated because payment arrived."
             : "") +

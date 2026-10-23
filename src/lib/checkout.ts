@@ -154,7 +154,7 @@ export async function placeOrder(input: CheckoutInput): Promise<PlaceOrderResult
         totalCents: totals.totalCents,
         vatIncludedCents: totals.vatIncludedCents,
         discountCodeId: resolution.discount?.id,
-        paymentProvider: "payfast",
+        paymentProvider: "yoco",
         marketingOptIn: input.marketingOptIn,
         termsAcceptedAt: new Date(),
         items: {

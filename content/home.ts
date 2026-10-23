@@ -25,7 +25,6 @@ export const home = {
       "Kunta Nia was born out of a passion for authentic natural hair care.",
       "Understanding the unique needs of textured hair, from moisture retention to length preservation, we set out to create thoughtfully formulated products you can build a wash day around.",
     ],
-    cta: { label: "Our story", href: "/about" },
   },
 
   /** Short reasons to choose the brand. Facts only: all from the brochure and product labels. */
@@ -84,7 +83,7 @@ export const home = {
     },
     {
       title: "Secure payment",
-      body: "Pay safely online through PayFast.",
+      body: "Pay safely online through Yoco.",
       icon: "lock",
     },
     {
@@ -108,5 +107,5 @@ export const home = {
 export const shopPage = {
   heading: "Shop",
   // TODO(CLIENT): approve wording
-  intro: "Made for natural hair. Choose a product below, or save with the combo of both.",
+  intro: "Made for natural hair. Choose a product below, or get both in the combo.",
 } as const;

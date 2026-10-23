@@ -98,7 +98,7 @@ export function OrderActions({
               intent="refund"
               label="Mark as refunded"
               className={dangerButtonClass}
-              confirm="Record this order as refunded and email the customer? This only records it: you still have to make the refund in the PayFast dashboard."
+              confirm="Record this order as refunded and email the customer? This only records it: you still have to make the refund in the Yoco portal."
               pending={pending}
             />
           )}
