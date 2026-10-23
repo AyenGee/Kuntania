@@ -64,6 +64,7 @@ export default async function AdminProductPage({
             description: p.description,
             benefits: titled.parse(p.benefits),
             howToUse: titled.parse(p.howToUse),
+            images: images.parse(p.images),
             ingredientsInci: p.ingredientsInci,
             warnings: p.warnings,
             sizeLabel: p.sizeLabel,
@@ -78,28 +79,6 @@ export default async function AdminProductPage({
             seoDescription: p.seoDescription,
           }}
         />
-      </Card>
-
-      <Card title="Photos">
-        <p className="mb-3 text-sm text-ink-muted">
-          Photos are managed by your developer (files in{" "}
-          <code>public/images/products</code>).
-        </p>
-        <ul className="flex flex-wrap gap-3">
-          {images.parse(p.images).map((img) => (
-            <li key={img.src} className="text-sm">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={img.src}
-                alt={img.alt}
-                className="h-24 w-24 rounded-control object-cover"
-              />
-              <span className="block max-w-24 truncate text-ink-muted">
-                {img.src.split("/").pop()}
-              </span>
-            </li>
-          ))}
-        </ul>
       </Card>
     </div>
   );

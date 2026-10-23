@@ -25,6 +25,7 @@
   --kn-brand: #592c29; /* maroon */
   --kn-brand-contrast: #fff9f1;
   --kn-accent: #8a5240; /* text-safe rose/terracotta on cream */
+  --kn-gold: #e8c48c; /* logo gold: only on the maroon brand colour (about 7:1) */
 
   /* Lines */
   --kn-line: #e3d0c6; /* decorative dividers */

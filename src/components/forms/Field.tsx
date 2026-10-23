@@ -12,7 +12,7 @@ type CommonProps = {
 };
 
 const controlClass =
-  "border-control bg-surface w-full rounded-control border px-3 py-2 text-base aria-[invalid=true]:border-danger";
+  "border-control bg-surface text-ink w-full rounded-control border px-3 py-2 text-base aria-[invalid=true]:border-danger";
 
 /** Labelled input/textarea with error + hint tied to the control (WCAG 1.3.1, 3.3.1). */
 export function Field({

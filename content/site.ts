@@ -6,7 +6,7 @@
 
 export const site = {
   name: "Kunta Nia",
-  /** From the client brochure. TODO(CLIENT): confirm */
+  /** From the client brochure: "Growth with purpose". */
   tagline: "Growth with purpose",
   /** TODO(CLIENT): confirm description (used for SEO default) */
   description:
@@ -15,30 +15,29 @@ export const site = {
   currency: "ZAR",
 } as const;
 
-/** Legal disclosures shown in the footer (ECT Act s43). All TODO(CLIENT). */
+/** Thin bar above the header (the reference site has one for shipping). Set to null to hide it. */
+export const announcement: string | null =
+  "Nationwide delivery to major cities and metropolitan areas";
+
+/** Legal disclosures shown in the footer (ECT Act s43). Supplied by the client, October 2026. */
 export const business = {
-  /** TODO(CLIENT): registered business name */
-  registeredName: "TODO(CLIENT): registered business name",
-  /** TODO(CLIENT): legal form, e.g. (Pty) Ltd, sole proprietor, CC */
-  legalForm: "TODO(CLIENT): legal form",
-  /** TODO(CLIENT): company / CIPC registration number */
-  registrationNumber: "TODO(CLIENT): registration number",
-  /** TODO(CLIENT): VAT number, or null if not VAT registered */
+  registeredName: "Kunta Nia",
+  legalForm: "Sole proprietor",
+  /** TODO(CLIENT): confirm there is no registration number (null hides it from the footer). */
+  registrationNumber: null as string | null,
+  /** TODO(CLIENT): VAT number, or null if not VAT registered (client has not answered yet). */
   vatNumber: null as string | null,
-  /** TODO(CLIENT): physical (street) address */
-  physicalAddress: "TODO(CLIENT): physical address",
-  /** TODO(CLIENT): customer-facing email */
-  email: "TODO(CLIENT): hello@example.co.za",
-  /** TODO(CLIENT): phone number */
-  phone: "TODO(CLIENT): phone number",
-  /** TODO(CLIENT): Information Officer (POPIA) */
+  physicalAddress: "46 Nielson Drive, Blairgowrie, 2194, Johannesburg",
+  email: "contact@kuntania.com",
+  phone: "062 176 2631",
   informationOfficer: {
-    name: "TODO(CLIENT): Information Officer name",
-    email: "TODO(CLIENT): Information Officer email",
+    name: "Beene Milambo",
+    /** TODO(CLIENT): the client gave no separate email; the business email is used. */
+    email: "contact@kuntania.com",
   },
 } as const;
 
-/** Handles from the client brochure (@kunta.nia). TODO(CLIENT): confirm. Empty string hides a link. */
+/** @kunta.nia on both Instagram and TikTok (confirmed by the client). Empty string hides a link. */
 export const social = {
   instagram: "https://www.instagram.com/kunta.nia",
   facebook: "",
@@ -60,16 +59,39 @@ export const nav = {
   ],
 } as const;
 
-/** Shipping options. All amounts TODO(CLIENT). The owner books couriers manually in v1. */
+/**
+ * Shipping (confirmed by the client, October 2026): flat R86, free over R450, door-to-door
+ * courier delivery only (The Courier Guy via BobGo; Fastway or RAM when cheaper). No pick-up
+ * points and no collection. Couriers are booked through BobGo (integration still to be built).
+ */
 export const shipping = {
-  /** TODO(CLIENT): flat-rate courier fee (cents) */
-  courierFlatRateCents: 0,
-  /** TODO(CLIENT): subtotal (cents) at or above which shipping is free. null = never free. */
-  freeShippingThresholdCents: null as number | null,
-  /** TODO(CLIENT): optional pick-up point option (PUDO / Pargo). null to disable. */
+  /** Flat courier fee: R86.00 */
+  courierFlatRateCents: 8600,
+  /** Orders at or above R450.00 (after any discount) ship free. */
+  freeShippingThresholdCents: 45000 as number | null,
   pickupPoint: null as { label: string; flatRateCents: number } | null,
-  /** TODO(CLIENT): optional local collection. null to disable. */
   localCollection: null as { label: string; instructions: string } | null,
+} as const;
+
+/**
+ * Delivery area. The client delivers nationwide but only to major cities and metropolitan
+ * areas, not deep rural or outlying postal codes. Set `restrictToPostalCodes: true` and fill
+ * `postalCodeRanges` (inclusive [from, to] pairs of 4-digit codes) to enforce it at checkout.
+ *
+ * TODO(CLIENT): supply the list of serviceable areas (or agree to use BobGo's coverage).
+ * It is OFF until then, because an empty allow-list would block every order.
+ */
+export const deliveryArea = {
+  restrictToPostalCodes: false,
+  postalCodeRanges: [] as [number, number][],
+  message:
+    "Sorry, we don't deliver to this area yet. We deliver to major cities and metropolitan areas.",
+} as const;
+
+/** How long things take (shown in the FAQ, policy and emails). */
+export const fulfilment = {
+  packingTime: "1 business day",
+  deliveryTime: "2 to 4 business days",
 } as const;
 
 /** Store behaviour. */

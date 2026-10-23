@@ -1,11 +1,14 @@
 /**
- * Seed data for the two launch products. The database is the source of truth once
+ * Seed data for the launch products. The database is the source of truth once
  * seeded (the owner edits products in /admin); re-running the seed never overwrites edits.
  *
- * Names, sizes, key ingredients and the mask/oil scalp directions come from the client's
- * brochure. Everything is still flagged for client confirmation (docs/CLIENT_TODO.md).
- * Claim wording follows the cosmetic-claims rules in the build brief: TODO(CLIENT): approve
- * claim wording. Prices, stock and full INCI lists are placeholders: TODO(CLIENT).
+ * Confirmed by the client (October 2026): product names, sizes (oil 100 ml, mask 250 ml),
+ * prices (oil R110, mask R150, combo R230), starting stock (20 / 20 / 5), shelf life
+ * (oil 1 year, mask 9 months), allergen notice, storage, directions, and the softened
+ * claim wording. Removed at her request: the "cruelty-free" claim (not certified).
+ *
+ * Still open: the complete INCI ingredient lists (TODO(CLIENT)), and the combo's name and
+ * photo. See docs/CLIENT_TODO.md.
  */
 
 export type TitledText = { title: string; body: string };
@@ -40,93 +43,80 @@ const COMMON_WARNINGS = [
   "Keep out of reach of children.",
 ];
 
-// Care and storage (from the client's brochure). TODO(CLIENT): confirm
 const STORAGE = "Store in a cool, dry place away from direct sunlight.";
+const MASK_ALLERGEN =
+  "Allergen notice: contains hydrolysed wheat protein (gluten) and coconut. Do not use if you are allergic to wheat, gluten or coconut.";
+const MASK_WATER = "Avoid getting water directly into the jar, to preserve freshness.";
+
+const OIL_SCALP_STEP =
+  "Apply a few drops directly to the scalp using the dropper. Gently massage with your fingertips for 3 to 5 minutes.";
+const MASK_STEPS: TitledText[] = [
+  { title: "Rinse", body: "Rinse hair." },
+  { title: "Apply", body: "Apply the mask and distribute evenly from root to tips." },
+  { title: "Leave in", body: "Leave in for 20 minutes, then rinse out thoroughly." },
+  {
+    title: "Complete your wash day",
+    body: "Shampoo thoroughly and rinse well, then condition and finish your wash day as usual.",
+  },
+  { title: "How often", body: "Use every 2 to 3 weeks." },
+];
 
 export const seedProducts: SeedProduct[] = [
   {
-    slug: "hair-growth-oil", // TODO(CLIENT): confirm name; "Hair Growth" wording needs claims approval
-    name: "Hair Growth Oil", // label reads "Hair Growth Oil, Rosemary & Vitamin E, 100ml"
+    slug: "hair-growth-oil",
+    // Name confirmed by the client. She holds that the ingredients stimulate hair growth;
+    // the on-page wording stays at the approved softer claims (the name is her decision).
+    name: "Hair Growth Oil",
     shortName: "Hair Growth Oil",
     tagline: "Rosemary & Vitamin E scalp oil.",
     description:
-      // TODO(CLIENT): approve claim wording
-      "A botanical-rich oil with rosemary and vitamin E. Rosemary and castor oil help nourish the scalp for a healthy-feeling foundation for your hair. Apply a few drops directly to the scalp with the dropper.", // TODO(CLIENT): confirm castor oil is in the formula
+      "A botanical-rich oil with rosemary, castor oil and vitamin E. Rosemary and castor oil help nourish the scalp for a healthy-feeling foundation for your hair. Apply a few drops directly to the scalp with the dropper.",
     benefits: [
-      // TODO(CLIENT): approve claim wording
       {
         title: "Scalp care",
         body: "Rosemary and castor oil help nourish the scalp for a healthy-feeling foundation for your hair.",
       },
-      {
-        title: "Pre-poo", // TODO(CLIENT): confirm this use (not on the brochure)
-        body: "Apply before washing to help protect strands and soften hair ahead of cleansing.",
-      },
-      {
-        title: "Hot oil treatment", // TODO(CLIENT): confirm this use (not on the brochure)
-        body: "Warm and apply for a deeply conditioning, softening treatment.",
-      },
-      {
-        title: "Sealing and protective styles", // TODO(CLIENT): confirm this use (not on the brochure)
-        body: "Seal in moisture and add shine to your LOC/LCO routine or under protective styles.",
-      },
+      { title: "Seal in moisture", body: "Apply on hair as a sealant." },
       {
         title: "Botanical-rich formula",
-        body: "No sulfates, parabens, phthalates or silicones.", // TODO(CLIENT): verify against real ingredient list
+        body: "No sulfates, parabens, phthalates or silicones.", // TODO(CLIENT): recheck against the full ingredient list
       },
     ],
     howToUse: [
-      // TODO(CLIENT): confirm all steps. Scalp care is from the brochure; the rest are drafts.
-      {
-        title: "Scalp care",
-        body: "Apply a few drops directly to the scalp using the dropper. Gently massage with your fingertips for 3 to 5 minutes.",
-      },
-      {
-        title: "Pre-poo",
-        body: "Apply generously from root to tip on dry or slightly damp hair. Leave on for 20–30 minutes (or longer, as you prefer), then shampoo and condition as usual.",
-      },
-      {
-        title: "Hot oil treatment",
-        body: "Warm the sealed bottle in a bowl of warm (not hot) water. Test the temperature on your wrist, then apply to hair and scalp. Cover with a cap for 20–30 minutes, then wash out.",
-      },
-      {
-        title: "Sealing (LOC/LCO) and protective styles",
-        body: "After your leave-in and cream, smooth a small amount over the length of your hair to seal in moisture before styling. A little goes a long way.",
-      },
+      { title: "Scalp care", body: OIL_SCALP_STEP },
+      { title: "Seal in moisture", body: "Apply on hair as a sealant." },
     ],
     ingredientsInci:
-      "TODO(CLIENT): full INCI ingredient list (known: rosemary, vitamin E)",
-    warnings: [...COMMON_WARNINGS, STORAGE].join("\n"),
-    sizeLabel: "100 ml", // from the label; TODO(CLIENT): confirm
-    priceCents: 10000, // PLACEHOLDER R100.00 — TODO(CLIENT): real price
-    compareAtPriceCents: null,
-    stock: 20, // PLACEHOLDER — TODO(CLIENT): real stock
+      "TODO(CLIENT): full INCI ingredient list (known: rosemary, vitamin E, castor oil)",
+    warnings: [...COMMON_WARNINGS, STORAGE, "Shelf life: 1 year."].join("\n"),
+    sizeLabel: "100 ml",
+    priceCents: 11000,
+    compareAtPriceCents: null, // the old price (R100) was lower, so there is no "was" price to show
+    stock: 20,
     active: true,
     sortOrder: 1,
     images: [
       {
-        src: "/images/products/oil-1.svg",
-        alt: "Kunta Nia Hair Growth Oil bottle (placeholder image)",
+        src: "/images/products/oil-1.webp",
+        alt: "Three bottles of Kunta Nia Hair Growth Oil, Rosemary & Vitamin E, on cream cloth with dried flowers",
       },
       {
-        src: "/images/products/oil-2.svg",
-        alt: "Kunta Nia Hair Growth Oil bottle, second view (placeholder image)",
+        src: "/images/products/oil-2.webp",
+        alt: "Close view of three Kunta Nia Hair Growth Oil bottles showing the maroon label and golden oil",
       },
     ],
-    seoTitle: "Hair Growth Oil", // TODO(CLIENT): review
+    seoTitle: "Hair Growth Oil",
     seoDescription:
-      "A botanical-rich scalp oil with rosemary and vitamin E, applied with a dropper and massaged into the scalp.", // TODO(CLIENT): review
+      "A botanical-rich scalp oil with rosemary, castor oil and vitamin E, applied with a dropper and massaged into the scalp.",
   },
   {
-    slug: "pre-wash-conditioning-mask", // TODO(CLIENT): confirm name
-    name: "Pre-wash Conditioning Mask", // label reads "Pre-wash Conditioning Mask, Hibiscus & Fenugreek, 100ml"
+    slug: "pre-wash-conditioning-mask",
+    name: "Pre-wash Conditioning Mask",
     shortName: "Conditioning Mask",
     tagline: "Hibiscus & Fenugreek pre-wash mask.",
     description:
-      // TODO(CLIENT): approve claim wording
-      "A botanical-rich pre-wash conditioning mask with hibiscus and fenugreek that deeply conditions and softens, and helps strengthen strands against breakage. Contains hydrolysed wheat protein and coconut.", // TODO(CLIENT): confirm allergens
+      "A botanical-rich pre-wash conditioning mask with hibiscus and fenugreek that deeply conditions and softens, and helps strengthen strands against breakage. Contains hydrolysed wheat protein and coconut.",
     benefits: [
-      // TODO(CLIENT): approve claim wording
       {
         title: "Deeply conditions and softens",
         body: "Leaves hair feeling soft, smooth and easier to manage.",
@@ -141,53 +131,85 @@ export const seedProducts: SeedProduct[] = [
       },
       {
         title: "Botanical-rich formula",
-        body: "No sulfates, parabens, phthalates or silicones.", // TODO(CLIENT): verify against real ingredient list
+        body: "No sulfates, parabens, phthalates or silicones.", // TODO(CLIENT): recheck against the full ingredient list
       },
-      { title: "Cruelty-free", body: "Not tested on animals." }, // TODO(CLIENT): confirm; no certification logo unless certified
     ],
-    howToUse: [
-      // From the brochure. TODO(CLIENT): confirm
-      { title: "Rinse", body: "Rinse hair." },
-      {
-        title: "Apply",
-        body: "Apply the mask and distribute evenly from root to tips.",
-      },
-      {
-        title: "Leave in",
-        body: "Leave in for 20 minutes, then rinse out thoroughly.",
-      },
-      {
-        title: "Complete your wash day",
-        body: "Shampoo thoroughly and rinse well, then condition and finish your wash day as usual.",
-      },
-      { title: "How often", body: "Use every 2 to 3 weeks." },
-    ],
+    howToUse: MASK_STEPS,
     ingredientsInci:
       "TODO(CLIENT): full INCI ingredient list (known: hibiscus, fenugreek, hydrolysed wheat protein, coconut)",
     warnings: [
       ...COMMON_WARNINGS,
-      "Allergen notice: contains hydrolysed wheat protein (gluten) and coconut. Do not use if you are allergic to wheat, gluten or coconut.", // TODO(CLIENT): confirm allergen notice
+      MASK_ALLERGEN,
       STORAGE,
-      "Avoid getting water directly into the jar, to preserve freshness.",
+      MASK_WATER,
+      "Shelf life: 9 months.",
     ].join("\n"),
-    sizeLabel: "100 ml", // from the label; TODO(CLIENT): confirm
-    priceCents: 15000, // PLACEHOLDER R150.00 — TODO(CLIENT): real price
-    compareAtPriceCents: null,
-    stock: 20, // PLACEHOLDER — TODO(CLIENT): real stock
+    sizeLabel: "250 ml", // client correction: the jar is 250 ml (the photographed label says 100ml)
+    priceCents: 15000,
+    compareAtPriceCents: null, // the old price (R120) was lower, so there is no "was" price to show
+    stock: 20,
     active: true,
     sortOrder: 2,
     images: [
       {
-        src: "/images/products/mask-1.svg",
-        alt: "Kunta Nia Pre-wash Conditioning Mask jar (placeholder image)",
+        src: "/images/products/mask-1.webp",
+        alt: "Kunta Nia Pre-wash Conditioning Mask, Hibiscus & Fenugreek: two closed jars and one open jar showing the pink mask",
       },
       {
-        src: "/images/products/mask-2.svg",
-        alt: "Kunta Nia Pre-wash Conditioning Mask jar, second view (placeholder image)",
+        src: "/images/products/mask-2.webp",
+        alt: "Two jars of Kunta Nia Pre-wash Conditioning Mask and an open jar showing its deep pink texture",
       },
     ],
-    seoTitle: "Pre-wash Conditioning Mask", // TODO(CLIENT): review
+    seoTitle: "Pre-wash Conditioning Mask",
     seoDescription:
-      "A botanical-rich pre-wash conditioning mask with hibiscus and fenugreek that softens and helps strengthen strands against breakage.", // TODO(CLIENT): review
+      "A botanical-rich pre-wash conditioning mask with hibiscus and fenugreek that softens and helps strengthen strands against breakage.",
+  },
+  {
+    slug: "kunta-nia-combo",
+    name: "Kunta Nia Combo", // TODO(CLIENT): confirm the name
+    shortName: "Combo",
+    tagline: "Hair Growth Oil and Pre-wash Conditioning Mask together.",
+    description:
+      "Both Kunta Nia products in one combo: the Hair Growth Oil (100 ml) and the Pre-wash Conditioning Mask (250 ml). Use the mask before you wash and the oil on your scalp. The mask contains hydrolysed wheat protein and coconut.",
+    benefits: [
+      {
+        title: "Both products together",
+        body: "Hair Growth Oil (100 ml) and Pre-wash Conditioning Mask (250 ml).",
+      },
+      {
+        title: "Save R30",
+        body: "R230 for the combo, against R260 if bought separately.",
+      },
+    ],
+    howToUse: [
+      ...MASK_STEPS.map((s) => ({ title: `Mask: ${s.title}`, body: s.body })),
+      { title: "Oil: Scalp care", body: OIL_SCALP_STEP },
+      { title: "Oil: Seal in moisture", body: "Apply on hair as a sealant." },
+    ],
+    ingredientsInci:
+      "TODO(CLIENT): full INCI ingredient lists for both products (see the Hair Growth Oil and Pre-wash Conditioning Mask pages)",
+    warnings: [
+      ...COMMON_WARNINGS,
+      MASK_ALLERGEN,
+      STORAGE,
+      MASK_WATER,
+      "Shelf life: Hair Growth Oil 1 year; Pre-wash Conditioning Mask 9 months.",
+    ].join("\n"),
+    sizeLabel: "Oil 100 ml + mask 250 ml",
+    priceCents: 23000,
+    compareAtPriceCents: 26000, // R110 + R150 bought separately
+    stock: 5,
+    active: true,
+    sortOrder: 3,
+    images: [
+      {
+        // TODO(CLIENT): a photo of the combo box itself. This is the range photo for now.
+        src: "/images/products/combo-1.webp",
+        alt: "Kunta Nia Hair Growth Oil bottles and Pre-wash Conditioning Mask jars together",
+      },
+    ],
+    seoTitle: "Kunta Nia Combo: Hair Growth Oil and Conditioning Mask",
+    seoDescription:
+      "The Kunta Nia Hair Growth Oil and Pre-wash Conditioning Mask together in one combo at a combined price.",
   },
 ];

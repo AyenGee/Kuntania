@@ -141,3 +141,38 @@ All wording is in `content/emails.ts`. Review each email before launch:
 - [ ] A default **social share image** (`public/og.jpg`, about 1200x630) so links shared on WhatsApp, Facebook and X show a preview. Then switch `twitter.card` to `summary_large_image` in `src/app/layout.tsx`
 - [ ] A **logo** file (for the Organization structured data and emails)
 - [ ] Analytics choice (Plausible or Umami) and its settings (`ANALYTICS_*`); none is loaded until configured
+
+## 15. Launch (Phase 9)
+
+- [ ] **Legal check on returns:** have a legal professional confirm how the ECT Act s44 cooling-off right and the Consumer Protection Act apply to opened cosmetics, and align the Shipping & Returns policy and Terms with it. The current draft (opened products not returnable unless defective) must not go live unchecked
+- [ ] Ask the legal adviser whether the Information Officer must be registered with the Information Regulator (POPIA)
+- [ ] Decide who owns each account (domain, hosting, database, PayFast, email, analytics): they should be in the client's name
+- [ ] Real product photo files delivered to the developer (the owner then selects them in the admin)
+- [ ] Work through [`LAUNCH_CHECKLIST.md`](LAUNCH_CHECKLIST.md)
+
+## 16. Photos and logo (design pass, October 2026)
+
+Source: 14 phone images supplied by the client. Prepared for the web by `scripts/prepare-images.py`.
+
+- [ ] **7 of the 14 images look AI-generated** (they carry a small Gemini sparkle mark, now cropped off) and the product label text in them is wrong in places ("Hlbiscus", "Vltamin E", "OlI"). Used only for atmosphere: the oil-on-scalp image (How to use card). The other AI images (satin bottles, mask + oil on brown, diagonal split, brand card, logo on satin) are **not used** yet. Client to confirm she is happy with AI imagery and that the tool's terms allow commercial use
+- [ ] Real product photos in use: the range photo (home banner and story band), oil bottles and mask jars (product cards and pages). Ask for **more real photos**: a single oil bottle and a single mask jar on a clean background, and a landscape lifestyle shot, would improve the product pages
+- [ ] **Clean logo file** (transparent PNG or SVG). The emblem on the site was extracted from an AI-generated poster; the "KUNTA NIA" wordmark is set in the site's heading font instead, because the poster lettering couldn't be separated from its background
+- [ ] Confirm the announcement-bar text ("Delivery anywhere in South Africa") and add the flat shipping fee when decided (`content/site.ts`)
+- [ ] Approve the new homepage wording in `content/home.ts` (hero line, story, three "Why Kunta Nia" cards, how-to-use steps)
+
+## 17. Answers received (October 2026) and what is still open
+
+Applied to the site from the client's reply: business details, sizes (oil 100 ml, mask 250 ml), prices (oil R110, mask R150, combo R230), stock (20 / 20 / 5), shelf life, flat R86 delivery (free over R450), door-to-door only, 1 day to pack, 2 to 4 days delivery, customer pays return shipping, announcement bar text, "cruelty-free" removed, castor oil confirmed, seal-in-moisture wording.
+
+Still open:
+
+- [ ] **BobGo integration** (orders synced to the BobGo dashboard): needs the BobGo API access and a build step; not started
+- [ ] **Delivery-area list**: which towns or postal codes count as "major cities and metropolitan areas". The restriction is built (`deliveryArea` in `content/site.ts`) but OFF until the list exists
+- [ ] **Mask label says 100ml** in the photos but the jar is 250 ml: label and website must match
+- [ ] **Combo**: confirm the name ("Kunta Nia Combo"), supply a photo, shelf life, and whether to show the R260 "was" price
+- [ ] **VAT**: registered or not (and the VAT number)
+- [ ] **Registration number**: confirm a sole proprietor has none to show
+- [ ] **Information Officer email**: the business email is used for now
+- [ ] **Full INCI ingredient lists** for both products (castor oil is in the oil)
+- [ ] **Returns wording**: the customer pays return shipping for change-of-mind returns; faulty or damaged goods are at our cost. Lawyer to confirm (ECT Act s44, Consumer Protection Act)
+- [ ] **"Hair Growth" name**: kept at her request; the on-page copy stays at the softened wording. A name that promises growth still needs evidence behind it

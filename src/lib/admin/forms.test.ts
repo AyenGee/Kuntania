@@ -8,6 +8,7 @@ const product = {
   description: "Description",
   benefits: JSON.stringify([{ title: "Scalp care", body: "Nourishes" }]),
   howToUse: JSON.stringify([{ title: "Step", body: "Apply" }]),
+  images: JSON.stringify([{ src: "/images/products/oil-1.jpg", alt: "The oil bottle" }]),
   ingredientsInci: "Rosemary",
   warnings: "External use",
   sizeLabel: "100 ml",
@@ -47,6 +48,11 @@ describe("productFormSchema", () => {
     ["stock", "1.5"],
     ["compareAtPrice", "100"], // not higher than the 149.90 price
     ["benefits", "not json"],
+    ["images", "[]"],
+    ["images", JSON.stringify([{ src: "https://evil.example/x.jpg", alt: "x" }])],
+    ["images", JSON.stringify([{ src: "/images/products/../../secret.jpg", alt: "x" }])],
+    ["images", JSON.stringify([{ src: "/images/products/a.jpg", alt: "" }])],
+    ["images", JSON.stringify([{ src: "/images/products/a.exe", alt: "x" }])],
     ["benefits", JSON.stringify([{ title: "", body: "x" }])],
     ["name", ""],
   ])("rejects %s=%s", (field, value) => {

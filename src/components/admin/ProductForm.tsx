@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { saveProductAction } from "@/app/admin/(protected)/products/actions";
 import { Field, SubmitButton } from "@/components/forms/Field";
 import type { FormState } from "@/lib/validation/forms";
+import { PhotoListField } from "./PhotoListField";
 import { TitledListField } from "./TitledListField";
 
 const initial: FormState = { ok: false };
@@ -16,6 +17,7 @@ export type ProductFormInitial = {
   description: string;
   benefits: { title: string; body: string }[];
   howToUse: { title: string; body: string }[];
+  images: { src: string; alt: string }[];
   ingredientsInci: string;
   warnings: string;
   sizeLabel: string;
@@ -35,6 +37,16 @@ export function ProductForm({ product }: { product: ProductFormInitial }) {
   // After a failed save, keep what the owner typed; otherwise show the saved values.
   const val = (key: keyof ProductFormInitial) =>
     (v[key] ?? (product[key] as string)) as string;
+  const photos = () => {
+    try {
+      const parsed = v.images ? JSON.parse(v.images) : null;
+      return Array.isArray(parsed)
+        ? (parsed as { src: string; alt: string }[])
+        : product.images;
+    } catch {
+      return product.images;
+    }
+  };
   const list = (key: "benefits" | "howToUse") => {
     try {
       const parsed = v[key] ? JSON.parse(v[key]) : null;
@@ -157,6 +169,13 @@ export function ProductForm({ product }: { product: ProductFormInitial }) {
         label="How to use"
         initial={list("howToUse")}
         error={errors.howToUse}
+      />
+
+      <PhotoListField
+        key={`photos-${state.values ? "e" : "s"}`}
+        name="images"
+        initial={photos()}
+        error={errors.images}
       />
 
       <Field

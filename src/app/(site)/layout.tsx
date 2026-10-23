@@ -1,11 +1,15 @@
 import { Analytics } from "@/components/Analytics";
 import { JsonLd } from "@/components/JsonLd";
+import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { organizationJsonLd } from "@/lib/organization-jsonld";
 import { siteUrl } from "@/lib/site-url";
 
-/** Public storefront chrome. The admin area has its own layout (see app/admin). */
+/**
+ * Public storefront chrome. Pages choose their own width: the home and shop pages run
+ * full-bleed, everything else sits in the (narrow) column. The admin has its own layout.
+ */
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
@@ -17,8 +21,9 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       >
         Skip to content
       </a>
+      <AnnouncementBar />
       <Header />
-      <main id="main" className="mx-auto w-full max-w-site flex-1 px-4 py-8">
+      <main id="main" className="flex-1">
         {children}
       </main>
       <Footer />

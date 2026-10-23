@@ -70,6 +70,35 @@ const titledList = z.string().transform((raw, ctx) => {
   }
 });
 
+/** Product photos: files already placed in public/images/products, plus descriptive alt text. */
+const photoList = z.string().transform((raw, ctx) => {
+  try {
+    return z
+      .array(
+        z.object({
+          src: z
+            .string()
+            .trim()
+            .regex(
+              /^\/images\/products\/[A-Za-z0-9._-]+\.(jpe?g|png|webp|avif|svg)$/i,
+              "Photo path must look like /images/products/my-photo.jpg",
+            ),
+          alt: z.string().trim().min(1, "Describe the photo").max(200),
+        }),
+      )
+      .min(1)
+      .max(8)
+      .parse(JSON.parse(raw));
+  } catch {
+    ctx.addIssue({
+      code: "custom",
+      message:
+        "Add at least one photo. Each needs a file path like /images/products/my-photo.jpg and a short description",
+    });
+    return z.NEVER;
+  }
+});
+
 export const productFormSchema = z
   .object({
     name: z.string().trim().min(1, "Please enter a name").max(120),
@@ -78,6 +107,7 @@ export const productFormSchema = z
     description: z.string().trim().min(1, "Please enter a description").max(3000),
     benefits: titledList,
     howToUse: titledList,
+    images: photoList,
     ingredientsInci: z.string().trim().min(1, "Please enter the ingredients").max(4000),
     warnings: z.string().trim().min(1, "Please enter warnings").max(3000),
     sizeLabel: z.string().trim().min(1, "Please enter the size").max(40),

@@ -11,10 +11,10 @@ export const emailCopy = {
     subject: (orderNumber: string) => `Your Kunta Nia order ${orderNumber} is confirmed`,
     heading: "Thank you for your order!",
     intro: "We've received your payment and your order is confirmed.",
-    // TODO(CLIENT): confirm processing and delivery times (also used in the FAQ)
+    // Times confirmed by the client (see fulfilment in content/site.ts and the FAQ).
     nextSteps: [
-      "We'll pack your order within TODO(CLIENT): number business days.",
-      "When it ships, we'll email you the courier and tracking details.",
+      "We'll pack your order within 1 business day.",
+      "When it ships, we'll email you the courier and tracking details. Delivery usually takes 2 to 4 business days.",
       "You can check your order any time on our order status page.",
     ],
   },

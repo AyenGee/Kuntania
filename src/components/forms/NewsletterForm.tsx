@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { subscribeToNewsletter } from "@/app/(site)/newsletter/actions";
+import { subscribeToNewsletter } from "@/app/(site)/(narrow)/newsletter/actions";
 import type { FormState } from "@/lib/validation/forms";
 import { Honeypot, SubmitButton } from "./Field";
 import { FormAlert } from "./FormAlert";

@@ -1,7 +1,10 @@
 "use client";
 
 import { useActionState } from "react";
-import { lookupOrder, type OrderStatusState } from "@/app/(site)/order-status/actions";
+import {
+  lookupOrder,
+  type OrderStatusState,
+} from "@/app/(site)/(narrow)/order-status/actions";
 import { Field, Honeypot, SubmitButton } from "./Field";
 import { FormAlert } from "./FormAlert";
 

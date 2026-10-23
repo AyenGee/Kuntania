@@ -6,7 +6,7 @@ These terms apply to all purchases made through this website. By placing an orde
 
 ## About us
 
-This website is operated by TODO(CLIENT): registered business name, registration number TODO(CLIENT): number, of TODO(CLIENT): physical address. Our contact details are on the [contact page](/contact).
+This website is operated by Kunta Nia, a sole proprietor, of 46 Nielson Drive, Blairgowrie, 2194, Johannesburg. You can reach us at contact@kuntania.com or on 062 176 2631, and our details are also on the [contact page](/contact).
 
 ## Ordering
 

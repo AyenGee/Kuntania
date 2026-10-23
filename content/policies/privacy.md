@@ -6,7 +6,7 @@ We respect your privacy and handle your personal information in line with the Pr
 
 ## Who is responsible
 
-The responsible party is TODO(CLIENT): registered business name. Our Information Officer is TODO(CLIENT): name, reachable at TODO(CLIENT): email.
+The responsible party is Kunta Nia, a sole proprietor, of 46 Nielson Drive, Blairgowrie, 2194, Johannesburg. Our Information Officer is Beene Milambo, reachable at contact@kuntania.com.
 
 ## What we collect and why
 
@@ -21,7 +21,7 @@ We only collect what we need. We do not create customer accounts, and we do not 
 We share information only with service providers who help us run the shop, and only as needed:
 
 - **PayFast** — to process your payment.
-- **Courier or pick-up point providers** — your name, address and phone number, to deliver your order. TODO(CLIENT): name the couriers used.
+- **BobGo (our shipping platform) and couriers** — your name, address and phone number, so your order can be booked and delivered. Couriers used are The Courier Guy, and Fastway or RAM where they are quicker or cheaper for your address.
 - **Email provider** — to send order and service emails. TODO(CLIENT): name the provider.
 - **Hosting and database providers** — to run the website and store data. TODO(CLIENT): name the providers and where data is stored.
 

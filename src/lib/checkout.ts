@@ -1,6 +1,8 @@
-import { shipping } from "@content/site";
+import { deliveryArea, shipping } from "@content/site";
+import { isServiceablePostalCode } from "@/lib/delivery-area";
 import { getDb } from "@/lib/db";
-import { resolveCart, type Resolution } from "@/lib/cart-resolve";
+import { devFallback } from "@/lib/catalogue";
+import { resolveCart, type ProductForCart, type Resolution } from "@/lib/cart-resolve";
 import type { CartItem } from "@/lib/cart";
 import { normaliseCode, type DiscountRow } from "@/lib/discounts";
 import { getEnv } from "@/lib/env";
@@ -18,17 +20,15 @@ export async function loadResolution(input: {
 }): Promise<Resolution> {
   const db = getDb();
   const ids = [...new Set(input.items.map((i) => i.productId))];
-  const rows = ids.length
-    ? await db.product.findMany({ where: { id: { in: ids } } })
-    : [];
   const code = input.discountCode ? normaliseCode(input.discountCode) : null;
-  const discount: DiscountRow | null = code
-    ? await db.discountCode.findUnique({ where: { code } })
-    : null;
 
-  return resolveCart({
-    items: input.items,
-    products: rows.map((p) => ({
+  let products: ProductForCart[];
+  let discount: DiscountRow | null = null;
+  try {
+    const rows = ids.length
+      ? await db.product.findMany({ where: { id: { in: ids } } })
+      : [];
+    products = rows.map((p) => ({
       id: p.id,
       slug: p.slug,
       name: p.name,
@@ -37,7 +37,29 @@ export async function loadResolution(input: {
       stock: p.stock,
       active: p.active,
       images: imagesSchema.catch([]).parse(p.images),
-    })),
+    }));
+    if (code) discount = await db.discountCode.findUnique({ where: { code } });
+  } catch (error) {
+    // DEVELOPMENT ONLY (rethrows in production): with no database, price the cart from the
+    // seed products so the cart can be previewed. Discount codes can't exist without a database.
+    products = devFallback(error)
+      .filter((p) => ids.includes(p.id))
+      .map((p) => ({
+        id: p.id,
+        slug: p.slug,
+        name: p.name,
+        sizeLabel: p.sizeLabel,
+        priceCents: p.priceCents,
+        stock: p.stock,
+        active: p.active,
+        images: p.images,
+      }));
+    discount = null;
+  }
+
+  return resolveCart({
+    items: input.items,
+    products,
     discountCode: code,
     discount,
     shippingMethod: input.shippingMethod,
@@ -83,6 +105,13 @@ export async function placeOrder(input: CheckoutInput): Promise<PlaceOrderResult
       ok: false,
       message: resolution.discountError,
       fieldErrors: { discountCode: resolution.discountError },
+    };
+  }
+  if (!isServiceablePostalCode(input.postalCode, deliveryArea)) {
+    return {
+      ok: false,
+      message: deliveryArea.message,
+      fieldErrors: { postalCode: deliveryArea.message },
     };
   }
   if (resolution.shippingError) {
