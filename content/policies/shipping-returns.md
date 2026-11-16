@@ -4,9 +4,9 @@ Last updated: TODO(CLIENT): date (set when approved)
 
 ## Delivery
 
-We deliver **nationwide, door to door, to major cities and metropolitan areas**. We can't currently deliver to deep rural areas or outlying postal codes. We don't offer pick-up points or collection.
+We deliver **nationwide, door to door**. We don't offer pick-up points or collection.
 
-- **Delivery fee:** a flat rate of R86 per order.
+- **Delivery fee:** R87 per order to major cities and metropolitan areas, and R120 per order to rural and remote areas. Your exact fee is shown at checkout once you enter your postal code.
 - **Free delivery:** orders over R450 ship free.
 - **Couriers:** we ship with The Courier Guy, and may use Fastway or RAM where they are quicker or cheaper for your address.
 

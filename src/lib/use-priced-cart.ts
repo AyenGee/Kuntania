@@ -22,18 +22,19 @@ export function usePricedCart(
   shippingMethod: ShippingMethod,
   discountCode: string | null,
   refreshKey = 0,
+  postalCode: string | null = null,
 ) {
   const [outcome, setOutcome] = useState<Outcome | null>(null);
   const [notices, setNotices] = useState<string[]>([]);
 
   const itemsKey = useMemo(() => JSON.stringify(items), [items]);
   // Identifies exactly what a response is for; stale responses are ignored.
-  const key = `${itemsKey}|${shippingMethod}|${discountCode ?? ""}|${refreshKey}`;
+  const key = `${itemsKey}|${shippingMethod}|${discountCode ?? ""}|${refreshKey}|${postalCode ?? ""}`;
 
   useEffect(() => {
     if (items.length === 0) return;
     let cancelled = false;
-    priceCartAction({ items, shippingMethod, discountCode })
+    priceCartAction({ items, shippingMethod, discountCode, postalCode })
       .then((result) => {
         if (cancelled) return;
         if (!result.ok) {

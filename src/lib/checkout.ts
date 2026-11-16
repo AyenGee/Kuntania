@@ -17,6 +17,7 @@ export async function loadResolution(input: {
   items: CartItem[];
   shippingMethod: ShippingMethod;
   discountCode: string | null;
+  postalCode?: string | null;
 }): Promise<Resolution> {
   const db = getDb();
   const ids = [...new Set(input.items.map((i) => i.productId))];
@@ -64,6 +65,7 @@ export async function loadResolution(input: {
     discount,
     shippingMethod: input.shippingMethod,
     shippingConfig: shipping,
+    postalCode: input.postalCode,
     vatRegistered: getEnv().VAT_REGISTERED,
     now: new Date(),
   });
@@ -89,6 +91,7 @@ export async function placeOrder(input: CheckoutInput): Promise<PlaceOrderResult
     items: input.cart,
     shippingMethod: input.deliveryMethod,
     discountCode: input.discountCode ?? null,
+    postalCode: input.postalCode,
   });
 
   if (resolution.issues.length > 0) {

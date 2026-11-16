@@ -162,7 +162,7 @@ Source: 14 phone images supplied by the client. Prepared for the web by `scripts
 
 ## 17. Answers received (October 2026) and what is still open
 
-Applied to the site from the client's reply: business details, sizes (oil 100 ml, mask 100 ml), prices (oil R110, mask R150, combo R230), stock (20 / 20 / 5), shelf life, flat R86 delivery (free over R450), door-to-door only, 1 day to pack, 2 to 4 days delivery, customer pays return shipping, announcement bar text, "cruelty-free" removed, castor oil confirmed, seal-in-moisture wording.
+Applied to the site from the client's reply: business details, sizes (oil 100 ml, mask 100 ml), prices (oil R110, mask R150, combo R230), stock (20 / 20 / 5), shelf life, R87 delivery to major cities and metros, R120 to rural and remote areas (free over R450), door-to-door only, 1 day to pack, 2 to 4 days delivery, customer pays return shipping, announcement bar text, "cruelty-free" removed, castor oil confirmed, seal-in-moisture wording.
 
 Still open:
 
@@ -176,3 +176,8 @@ Still open:
 - [ ] **Full INCI ingredient lists** for both products (castor oil is in the oil)
 - [ ] **Returns wording**: the customer pays return shipping for change-of-mind returns; faulty or damaged goods are at our cost. Lawyer to confirm (ECT Act s44, Consumer Protection Act)
 - [ ] **"Hair Growth" name**: kept at her request; the on-page copy stays at the softened wording. A name that promises growth still needs evidence behind it
+
+## Shipping zones (added November 2026)
+
+- [ ] **Confirm the list of metro postal codes** in `content/site.ts` (`shipping.metroPostalCodeRanges`). It is a starting list from the main metro ranges, not the courier's own zones. Any valid postal code outside it is charged the rural / remote rate (R120); everything inside is R87.
+- [ ] Confirm that **free delivery over R450** applies in both zones (it currently does).

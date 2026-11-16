@@ -123,7 +123,9 @@ export function CartView() {
         )}
         <Totals resolution={resolution} shippingLabel="Shipping (courier estimate)" />
         <p className="text-sm text-ink-muted">
-          Final shipping is confirmed at checkout. Discount codes can be added there.
+          Shipping shown is for major cities and metros; rural and remote areas are
+          charged a higher rate, confirmed at checkout once you enter your postal code.
+          Discount codes can be added there.
         </p>
         <Link
           href="/checkout"

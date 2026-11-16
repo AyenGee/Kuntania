@@ -16,6 +16,10 @@ const inputSchema = z.object({
     .max(50),
   shippingMethod: z.enum(["COURIER", "PICKUP_POINT", "COLLECTION"]),
   discountCode: z.string().trim().max(40).nullable(),
+  postalCode: z
+    .string()
+    .regex(/^\d{4}$/)
+    .nullish(),
 });
 
 export type PriceCartResult = { ok: true; resolution: Resolution } | { ok: false };
@@ -28,13 +32,18 @@ export type PriceCartResult = { ok: true; resolution: Resolution } | { ok: false
 export async function priceCartAction(raw: unknown): Promise<PriceCartResult> {
   const parsed = inputSchema.safeParse(raw);
   if (!parsed.success) return { ok: false };
-  const { items, shippingMethod } = parsed.data;
+  const { items, shippingMethod, postalCode } = parsed.data;
   let discountCode = parsed.data.discountCode || null;
 
   try {
     if (discountCode && !(await checkRateLimit("discount", 30, 60 * 60))) {
       discountCode = null;
-      const resolution = await loadResolution({ items, shippingMethod, discountCode });
+      const resolution = await loadResolution({
+        items,
+        shippingMethod,
+        discountCode,
+        postalCode,
+      });
       return {
         ok: true,
         resolution: {
@@ -45,7 +54,12 @@ export async function priceCartAction(raw: unknown): Promise<PriceCartResult> {
     }
     return {
       ok: true,
-      resolution: await loadResolution({ items, shippingMethod, discountCode }),
+      resolution: await loadResolution({
+        items,
+        shippingMethod,
+        discountCode,
+        postalCode,
+      }),
     };
   } catch (error) {
     console.error(

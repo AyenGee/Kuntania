@@ -7,8 +7,10 @@ import {
   availableShippingOptions,
   freeShippingRemainingCents,
   shippingCostCents,
+  shippingZone,
   type ShippingConfig,
   type ShippingMethod,
+  type ShippingZone,
 } from "@/lib/shipping";
 
 /** The product facts the resolver needs (loaded fresh from the database, never the client). */
@@ -48,6 +50,8 @@ export type Resolution = {
   discount: { code: string; id: string } | null;
   discountError: string | null;
   shippingMethod: ShippingMethod;
+  /** Courier zone for the postal code given (metro until a valid postal code is known). */
+  shippingZone: ShippingZone;
   /** Set when the chosen method isn't offered. */
   shippingError: string | null;
   shippingOptions: { method: ShippingMethod; label: string; costCents: number }[];
@@ -70,6 +74,8 @@ export function resolveCart(input: {
   discount: DiscountRow | null;
   shippingMethod: ShippingMethod;
   shippingConfig: ShippingConfig;
+  /** Delivery postal code, if known yet (the cart page doesn't know it). */
+  postalCode?: string | null;
   vatRegistered: boolean;
   now: Date;
   perOrderMax?: number;
@@ -143,9 +149,14 @@ export function resolveCart(input: {
   const cfg = input.shippingConfig;
   const shippingOptions = availableShippingOptions(cfg).map((o) => ({
     ...o,
-    costCents: shippingCostCents(o.method, afterDiscount, cfg) ?? 0,
+    costCents: shippingCostCents(o.method, afterDiscount, cfg, input.postalCode) ?? 0,
   }));
-  const chosenCost = shippingCostCents(input.shippingMethod, afterDiscount, cfg);
+  const chosenCost = shippingCostCents(
+    input.shippingMethod,
+    afterDiscount,
+    cfg,
+    input.postalCode,
+  );
 
   return {
     lines,
@@ -160,6 +171,7 @@ export function resolveCart(input: {
     discount,
     discountError,
     shippingMethod: input.shippingMethod,
+    shippingZone: shippingZone(input.postalCode, cfg),
     shippingError: chosenCost === null ? "That delivery method isn't available." : null,
     shippingOptions,
     freeShippingRemainingCents: freeShippingRemainingCents(afterDiscount, cfg),

@@ -140,3 +140,54 @@ describe("computeTotals", () => {
     ).toBe(0);
   });
 });
+
+describe("shipping zones (metro vs rural and remote)", () => {
+  const zoned: ShippingConfig = {
+    courierFlatRateCents: 8700,
+    remoteRateCents: 12000,
+    metroPostalCodeRanges: [
+      [2000, 2199],
+      [7700, 8099],
+    ],
+    freeShippingThresholdCents: 45000,
+    pickupPoint: null,
+    localCollection: null,
+  };
+
+  it("charges the metro rate inside a metro range, including its edges", () => {
+    for (const code of ["2000", "2146", "2199", "7700", "8001"]) {
+      expect(shippingCostCents("COURIER", 10000, zoned, code)).toBe(8700);
+    }
+  });
+
+  it("charges the rural / remote rate outside the metro ranges", () => {
+    for (const code of ["1999", "2200", "5000", "9999"]) {
+      expect(shippingCostCents("COURIER", 10000, zoned, code)).toBe(12000);
+    }
+  });
+
+  it("quotes the metro rate until a valid 4-digit postal code is known", () => {
+    for (const code of [undefined, null, "", "21", "abcd", "21460"]) {
+      expect(shippingCostCents("COURIER", 10000, zoned, code)).toBe(8700);
+    }
+  });
+
+  it("uses one rate everywhere when there is no remote rate or no metro list", () => {
+    expect(
+      shippingCostCents("COURIER", 10000, { ...zoned, remoteRateCents: null }, "9999"),
+    ).toBe(8700);
+    expect(
+      shippingCostCents(
+        "COURIER",
+        10000,
+        { ...zoned, metroPostalCodeRanges: [] },
+        "9999",
+      ),
+    ).toBe(8700);
+  });
+
+  it("is free over the threshold in either zone", () => {
+    expect(shippingCostCents("COURIER", 45000, zoned, "9999")).toBe(0);
+    expect(shippingCostCents("COURIER", 45000, zoned, "2146")).toBe(0);
+  });
+});

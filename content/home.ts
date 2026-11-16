@@ -78,7 +78,7 @@ export const home = {
   whyShop: [
     {
       title: "Door-to-door delivery",
-      body: "Courier delivery in 2 to 4 business days to major cities and metropolitan areas. R86 flat rate, free over R450.",
+      body: "Courier delivery in 2 to 4 business days. R87 to major cities and metros, R120 to rural and remote areas, free over R450.",
       icon: "truck",
     },
     {

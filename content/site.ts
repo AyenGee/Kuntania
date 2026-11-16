@@ -17,7 +17,7 @@ export const site = {
 
 /** Thin bar above the header (the reference site has one for shipping). Set to null to hide it. */
 export const announcement: string | null =
-  "Nationwide delivery to major cities and metropolitan areas";
+  "Nationwide delivery: R87 to major cities and metros, R120 to rural and remote areas";
 
 /** Legal disclosures shown in the footer (ECT Act s43). Supplied by the client, October 2026. */
 export const business = {
@@ -59,13 +59,50 @@ export const nav = {
 } as const;
 
 /**
- * Shipping (confirmed by the client, October 2026): flat R86, free over R450, door-to-door
- * courier delivery only (The Courier Guy via BobGo; Fastway or RAM when cheaper). No pick-up
- * points and no collection. Couriers are booked through BobGo (integration still to be built).
+ * Shipping (client, updated November 2026): R87 standard to major cities and metropolitan
+ * areas, R120 to rural and remote areas, door-to-door courier delivery only (The Courier Guy
+ * via BobGo; Fastway or RAM when cheaper). No pick-up points and no collection. Couriers are
+ * booked through BobGo (integration still to be built). Free over R450 is unchanged.
  */
 export const shipping = {
-  /** Flat courier fee: R86.00 */
-  courierFlatRateCents: 8600,
+  /** Standard courier fee to major cities and metropolitan areas: R87.00 */
+  courierFlatRateCents: 8700,
+  /** Courier fee to rural and remote areas: R120.00 */
+  remoteRateCents: 12000 as number | null,
+  /**
+   * Postal codes that count as "major city / metropolitan area" (inclusive 4-digit ranges).
+   * Any other valid postal code is charged the rural / remote rate.
+   * TODO(CLIENT): confirm this list (or replace it with BobGo's zones). It is a starting point
+   * from the main metro postal code ranges, not the courier's own list.
+   */
+  metroPostalCodeRanges: [
+    // Pretoria / Tshwane, Centurion
+    [1, 199],
+    // Johannesburg north, Sandton, Randburg, Rosebank
+    [2000, 2199],
+    // East Rand: Germiston, Boksburg, Alberton, Benoni, Springs, Kempton Park, Edenvale,
+    // Midrand, Roodepoort, Soweto, Lenasia
+    [1400, 1899],
+    // Cape Town and surrounds (CBD, southern suburbs, Bellville, Durbanville, Mitchells Plain)
+    [7405, 7550],
+    [7700, 8099],
+    // Durban, Pinetown, Westville, Umhlanga, Amanzimtoti
+    [3600, 3629],
+    [4000, 4199],
+    [4300, 4399],
+    // Pietermaritzburg
+    [3200, 3299],
+    // Gqeberha (Port Elizabeth)
+    [6000, 6099],
+    // East London
+    [5200, 5299],
+    // Bloemfontein
+    [9300, 9399],
+    // Mbombela (Nelspruit)
+    [1200, 1219],
+    // Kimberley
+    [8300, 8349],
+  ] as readonly (readonly [number, number])[],
   /** Orders at or above R450.00 (after any discount) ship free. */
   freeShippingThresholdCents: 45000 as number | null,
   pickupPoint: null as { label: string; flatRateCents: number } | null,
@@ -83,8 +120,7 @@ export const shipping = {
 export const deliveryArea = {
   restrictToPostalCodes: false,
   postalCodeRanges: [] as [number, number][],
-  message:
-    "Sorry, we don't deliver to this area yet. We deliver to major cities and metropolitan areas.",
+  message: "Sorry, we don't deliver to this area yet.",
 } as const;
 
 /** How long things take (shown in the FAQ, policy and emails). */

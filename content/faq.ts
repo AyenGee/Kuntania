@@ -18,7 +18,7 @@ export const faq: FaqEntry[] = [
   },
   {
     question: "How much is delivery?",
-    answer: `A flat ${rands(shipping.courierFlatRateCents)} per order${
+    answer: `${rands(shipping.courierFlatRateCents)} per order to major cities and metropolitan areas, and ${rands(shipping.remoteRateCents ?? shipping.courierFlatRateCents)} to rural and remote areas${
       shipping.freeShippingThresholdCents !== null
         ? `, and delivery is free on orders over ${rands(shipping.freeShippingThresholdCents)}`
         : ""
@@ -27,7 +27,7 @@ export const faq: FaqEntry[] = [
   {
     question: "Where do you deliver?",
     answer:
-      "We deliver nationwide, door to door, to major cities and metropolitan areas. We can't currently deliver to deep rural areas or outlying postal codes. We don't offer pick-up points or collection.",
+      "We deliver nationwide, door to door, including rural and remote areas (at a higher delivery fee). Enter your postal code at checkout to see your exact delivery fee. We don't offer pick-up points or collection.",
   },
   {
     question: "What is your returns policy?",

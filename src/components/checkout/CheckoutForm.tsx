@@ -25,6 +25,8 @@ export function CheckoutForm() {
   const [codeInput, setCodeInput] = useState("");
   const [appliedCode, setAppliedCode] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  // The courier fee depends on where we deliver, so the postal code re-prices the order.
+  const [postalCode, setPostalCode] = useState(initial.values?.postalCode ?? "");
   const [state, action, pending] = useActionState(
     async (prev: CheckoutState, formData: FormData) => {
       const next = await placeOrderAction(prev, formData);
@@ -38,7 +40,13 @@ export function CheckoutForm() {
     state: priced,
     notices,
     dismissNotices,
-  } = usePricedCart(items, method, appliedCode, refreshKey);
+  } = usePricedCart(
+    items,
+    method,
+    appliedCode,
+    refreshKey,
+    /^\d{4}$/.test(postalCode) ? postalCode : null,
+  );
 
   // Order created: hand the customer to the payment page (the form must not be re-submitted).
   if (state.ok && state.payment) return <PaymentRedirectForm payment={state.payment} />;
@@ -200,6 +208,7 @@ export function CheckoutForm() {
               maxLength={4}
               autoComplete="postal-code"
               defaultValue={v.postalCode}
+              onChange={(e) => setPostalCode(e.target.value.trim())}
               error={errors.postalCode}
             />
           </div>
