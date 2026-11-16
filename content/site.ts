@@ -49,7 +49,6 @@ export const nav = {
     { label: "Shop", href: "/shop" },
     { label: "FAQ", href: "/faq" },
     { label: "Contact", href: "/contact" },
-    { label: "Track order", href: "/order-status" },
   ],
   footerPolicies: [
     { label: "Shipping & Returns", href: "/shipping-returns" },

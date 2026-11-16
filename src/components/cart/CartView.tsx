@@ -19,12 +19,20 @@ export function CartView() {
       <div>
         {notices.length > 0 && <Notices notices={notices} onDismiss={dismissNotices} />}
         <p>Your cart is empty.</p>
-        <Link
-          href="/shop"
-          className="mt-4 inline-block rounded-control bg-brand px-5 py-2.5 text-brand-contrast"
-        >
-          Continue shopping
-        </Link>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link
+            href="/shop"
+            className="inline-block rounded-control bg-brand px-5 py-2.5 text-brand-contrast"
+          >
+            Continue shopping
+          </Link>
+          <Link
+            href="/order-status"
+            className="inline-block rounded-control border border-brand px-5 py-2.5 text-brand"
+          >
+            Track order
+          </Link>
+        </div>
       </div>
     );
   }
