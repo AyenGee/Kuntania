@@ -9,7 +9,7 @@ export const home = {
     // The tagline comes from the client's brochure: "Growth with purpose".
     heading: "Growth with purpose",
     // TODO(CLIENT): approve wording
-    body: "Botanical hair care for natural hair: a Pre-wash Conditioning Mask and a Hair Growth Oil.",
+    body: "Botanical hair care for natural hair: a Pre-wash Strengthening Mask and a Hair Growth Oil.",
     cta: { label: "Shop the range", href: "/shop" },
   },
 
@@ -33,7 +33,7 @@ export const home = {
     items: [
       {
         title: "Botanical ingredients",
-        body: "Rosemary and vitamin E in our Hair Growth Oil. Hibiscus and fenugreek in our Pre-wash Conditioning Mask.", // TODO(CLIENT): confirm
+        body: "Rosemary and vitamin E in our Hair Growth Oil. Hibiscus and fenugreek in our Pre-wash Strengthening Mask.", // TODO(CLIENT): confirm
       },
       {
         title: "Made for textured hair",
@@ -51,7 +51,7 @@ export const home = {
     heading: "How to use",
     cards: [
       {
-        title: "Pre-wash Conditioning Mask",
+        title: "Pre-wash Strengthening Mask",
         steps: [
           "Rinse your hair and apply the mask, distributing evenly from root to tips.",
           "Leave in for 20 minutes, then rinse out thoroughly.",
@@ -59,7 +59,7 @@ export const home = {
           "Use every 2 to 3 weeks.",
         ],
         image: "maskPhoto", // key in the image map used by the HowToUse component
-        href: "/products/pre-wash-conditioning-mask",
+        href: "/products/pre-wash-strengthening-mask",
       },
       {
         title: "Hair Growth Oil",

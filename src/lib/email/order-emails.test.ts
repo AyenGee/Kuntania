@@ -18,8 +18,10 @@ vi.mock("@/lib/env", () => ({
 const envOwner = { value: "owner@example.co.za" as string | undefined };
 
 const sendMail = vi.fn<(m: { to: string; subject: string }) => Promise<boolean>>();
+const mail = { configured: true };
 vi.mock("./send", () => ({
   sendMail: (m: { to: string; subject: string }) => sendMail(m),
+  emailConfigured: () => mail.configured,
 }));
 
 const {
@@ -34,6 +36,7 @@ beforeEach(() => {
   sendMail.mockReset();
   sendMail.mockResolvedValue(true);
   envOwner.value = "owner@example.co.za";
+  mail.configured = true;
   orderRow = {
     id: "o1",
     orderNumber: "KN-10001",
@@ -92,6 +95,14 @@ describe("order emails", () => {
     sendMail.mockResolvedValue(false);
     await expect(sendOrderConfirmation("o1")).resolves.toBe(false);
     expect(events.map((e) => e.type)).toEqual(["email_failed"]);
+  });
+
+  it("says plainly that nothing was emailed when no mail server is set up", async () => {
+    mail.configured = false;
+    sendMail.mockResolvedValue(false);
+    await expect(sendOrderConfirmation("o1")).resolves.toBe(false);
+    expect(events.map((e) => e.type)).toEqual(["email_skipped"]);
+    expect(events[0].message).toContain("send this one yourself");
   });
 
   it("never throws even if the mailer itself blows up", async () => {

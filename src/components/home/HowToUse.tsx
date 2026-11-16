@@ -12,7 +12,7 @@ const PHOTOS = {
     src: "/images/products/mask-2.webp",
     width: 1200,
     height: 1600,
-    alt: "Two jars of Kunta Nia Pre-wash Conditioning Mask and an open jar showing the mask",
+    alt: "Two jars of Kunta Nia Pre-wash Strengthening Mask and an open jar showing the mask",
   },
   scalpMood: images.moodScalp,
 } as const;

@@ -6,7 +6,7 @@ We respect your privacy and handle your personal information in line with the Pr
 
 ## Who is responsible
 
-The responsible party is Kunta Nia, a sole proprietor, of 46 Nielson Drive, Blairgowrie, 2194, Johannesburg. Our Information Officer is Beene Milambo, reachable at contact@kuntania.com.
+The responsible party is Kunta Nia, a sole proprietor, of 46 Nielson Drive, Blairgowrie, 2194, Johannesburg. Our Information Officer is Beene Milambo, reachable at kuntania.contact@gmail.com.
 
 ## What we collect and why
 

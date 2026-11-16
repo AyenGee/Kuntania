@@ -2,13 +2,14 @@
  * Seed data for the launch products. The database is the source of truth once
  * seeded (the owner edits products in /admin); re-running the seed never overwrites edits.
  *
- * Confirmed by the client (October 2026): product names, sizes (oil 100 ml, mask 100 ml),
+ * Confirmed by the client (October 2026): product names, sizes (oil 100 ml, mask 250 ml),
  * prices (oil R110, mask R150, combo R230), starting stock (20 / 20 / 5), shelf life
  * (oil 1 year, mask 9 months), allergen notice, storage, directions, and the softened
  * claim wording. Removed at her request: the "cruelty-free" claim (not certified).
  *
- * Still open: the complete INCI ingredient lists (TODO(CLIENT)), and the combo's name and
- * photo. See docs/CLIENT_TODO.md.
+ * Updated November 2026: mask renamed Pre-wash Strengthening Mask (250 ml), full ingredient
+ * lists, free scrunchie with the combo. Still open: new mask and combo photos (the client will
+ * send them) and the combo's name. See docs/CLIENT_TODO.md.
  */
 
 export type TitledText = { title: string; body: string };
@@ -87,7 +88,7 @@ export const seedProducts: SeedProduct[] = [
       { title: "Seal in moisture", body: "Apply on hair as a sealant." },
     ],
     ingredientsInci:
-      "TODO(CLIENT): full INCI ingredient list (known: rosemary, vitamin E, castor oil)",
+      "Ricinus Communis (Castor) Seed Oil, Persea Gratissima (Avocado) Oil, Vitis Vinifera (Grapeseed) Oil, Rosmarinus Officinalis (Rosemary) Leaf Oil, Tocopherol (Vitamin E)",
     warnings: [...COMMON_WARNINGS, STORAGE, "Shelf life: 1 year."].join("\n"),
     sizeLabel: "100 ml",
     priceCents: 11000,
@@ -110,12 +111,12 @@ export const seedProducts: SeedProduct[] = [
       "A botanical-rich scalp oil with rosemary, castor oil and vitamin E, applied with a dropper and massaged into the scalp.",
   },
   {
-    slug: "pre-wash-conditioning-mask",
-    name: "Pre-wash Conditioning Mask",
-    shortName: "Conditioning Mask",
+    slug: "pre-wash-strengthening-mask",
+    name: "Pre-wash Strengthening Mask",
+    shortName: "Strengthening Mask",
     tagline: "Hibiscus & Fenugreek pre-wash mask.",
     description:
-      "A botanical-rich pre-wash conditioning mask with hibiscus and fenugreek that deeply conditions and softens, and helps strengthen strands against breakage. Contains hydrolysed wheat protein and coconut.",
+      "A botanical-rich pre-wash strengthening mask with hibiscus and fenugreek that deeply conditions and softens, and helps strengthen strands against breakage. Contains hydrolysed wheat protein and coconut.",
     benefits: [
       {
         title: "Deeply conditions and softens",
@@ -136,7 +137,7 @@ export const seedProducts: SeedProduct[] = [
     ],
     howToUse: MASK_STEPS,
     ingredientsInci:
-      "TODO(CLIENT): full INCI ingredient list (known: hibiscus, fenugreek, hydrolysed wheat protein, coconut)",
+      "Aqua (Water), Hibiscus Sabdariffa Flower Extract (Hibiscus), Trigonella Foenum-Graecum Seed Extract (Fenugreek), Butyrospermum Parkii Butter, Behentrimonium Methosulfate (and) Cetearyl Alcohol (BTMS-25), Cetearyl Alcohol, Cocos Nucifera (Coconut) Oil, Hydrolyzed Wheat Protein, Phenoxyethanol",
     warnings: [
       ...COMMON_WARNINGS,
       MASK_ALLERGEN,
@@ -144,7 +145,7 @@ export const seedProducts: SeedProduct[] = [
       MASK_WATER,
       "Shelf life: 9 months.",
     ].join("\n"),
-    sizeLabel: "100 ml", // client confirmed 100 ml (October 2026)
+    sizeLabel: "250 ml", // client confirmed 250 ml (November 2026, after the label change)
     priceCents: 15000,
     compareAtPriceCents: null, // the old price (R120) was lower, so there is no "was" price to show
     stock: 20,
@@ -153,45 +154,48 @@ export const seedProducts: SeedProduct[] = [
     images: [
       {
         src: "/images/products/mask-1.webp",
-        alt: "Kunta Nia Pre-wash Conditioning Mask, Hibiscus & Fenugreek: two closed jars and one open jar showing the pink mask",
+        alt: "Kunta Nia Pre-wash Strengthening Mask, Hibiscus & Fenugreek: two closed jars and one open jar showing the pink mask",
       },
       {
         src: "/images/products/mask-2.webp",
-        alt: "Two jars of Kunta Nia Pre-wash Conditioning Mask and an open jar showing its deep pink texture",
+        alt: "Two jars of Kunta Nia Pre-wash Strengthening Mask and an open jar showing its deep pink texture",
       },
     ],
-    seoTitle: "Pre-wash Conditioning Mask",
+    seoTitle: "Pre-wash Strengthening Mask",
     seoDescription:
-      "A botanical-rich pre-wash conditioning mask with hibiscus and fenugreek that softens and helps strengthen strands against breakage.",
+      "A botanical-rich pre-wash strengthening mask with hibiscus and fenugreek that softens and helps strengthen strands against breakage.",
   },
   {
     slug: "kunta-nia-combo",
     name: "Kunta Nia Combo", // TODO(CLIENT): confirm the name
     shortName: "Combo",
-    tagline: "Hair Growth Oil and Pre-wash Conditioning Mask together.",
+    tagline: "Hair Growth Oil and Pre-wash Strengthening Mask together.",
     description:
-      "Both Kunta Nia products in one combo: the Hair Growth Oil (100 ml) and the Pre-wash Conditioning Mask (100 ml). Use the mask before you wash and the oil on your scalp. The mask contains hydrolysed wheat protein and coconut.",
+      "Both Kunta Nia products in one combo: the Hair Growth Oil (100 ml) and the Pre-wash Strengthening Mask (250 ml). Use the mask before you wash and the oil on your scalp. Every combo comes with a free scrunchie. The mask contains hydrolysed wheat protein and coconut.",
     benefits: [
       {
         title: "Both products together",
-        body: "Hair Growth Oil (100 ml) and Pre-wash Conditioning Mask (100 ml).",
+        body: "Hair Growth Oil (100 ml) and Pre-wash Strengthening Mask (250 ml).",
       },
+      { title: "Free scrunchie", body: "Every combo comes with a free scrunchie." },
     ],
     howToUse: [
       ...MASK_STEPS.map((s) => ({ title: `Mask: ${s.title}`, body: s.body })),
       { title: "Oil: Scalp care", body: OIL_SCALP_STEP },
       { title: "Oil: Seal in moisture", body: "Apply on hair as a sealant." },
     ],
-    ingredientsInci:
-      "TODO(CLIENT): full INCI ingredient lists for both products (see the Hair Growth Oil and Pre-wash Conditioning Mask pages)",
+    ingredientsInci: [
+      "Hair Growth Oil: Ricinus Communis (Castor) Seed Oil, Persea Gratissima (Avocado) Oil, Vitis Vinifera (Grapeseed) Oil, Rosmarinus Officinalis (Rosemary) Leaf Oil, Tocopherol (Vitamin E)",
+      "Pre-wash Strengthening Mask: Aqua (Water), Hibiscus Sabdariffa Flower Extract (Hibiscus), Trigonella Foenum-Graecum Seed Extract (Fenugreek), Butyrospermum Parkii Butter, Behentrimonium Methosulfate (and) Cetearyl Alcohol (BTMS-25), Cetearyl Alcohol, Cocos Nucifera (Coconut) Oil, Hydrolyzed Wheat Protein, Phenoxyethanol",
+    ].join("\n"),
     warnings: [
       ...COMMON_WARNINGS,
       MASK_ALLERGEN,
       STORAGE,
       MASK_WATER,
-      "Shelf life: Hair Growth Oil 1 year; Pre-wash Conditioning Mask 9 months.",
+      "Shelf life: Hair Growth Oil 1 year; Pre-wash Strengthening Mask 9 months.",
     ].join("\n"),
-    sizeLabel: "Oil 100 ml + mask 100 ml",
+    sizeLabel: "Oil 100 ml + mask 250 ml",
     priceCents: 23000,
     compareAtPriceCents: null, // client: the combo is simply R230, no struck-through price
     stock: 5,
@@ -201,11 +205,11 @@ export const seedProducts: SeedProduct[] = [
       {
         // Client-supplied photo of both products together.
         src: "/images/products/combo-2.webp",
-        alt: "Kunta Nia Pre-wash Conditioning Mask jar and Hair Growth Oil bottle with fenugreek seeds, rosemary and a hibiscus petal",
+        alt: "Kunta Nia Pre-wash Strengthening Mask jar and Hair Growth Oil bottle with fenugreek seeds, rosemary and a hibiscus petal",
       },
     ],
-    seoTitle: "Kunta Nia Combo: Hair Growth Oil and Conditioning Mask",
+    seoTitle: "Kunta Nia Combo: Hair Growth Oil and Strengthening Mask",
     seoDescription:
-      "The Kunta Nia Hair Growth Oil and Pre-wash Conditioning Mask together in one combo at a combined price.",
+      "The Kunta Nia Hair Growth Oil and Pre-wash Strengthening Mask together in one combo, with a free scrunchie.",
   },
 ];

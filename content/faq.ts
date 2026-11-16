@@ -37,7 +37,7 @@ export const faq: FaqEntry[] = [
   {
     question: "How often should I use the products?",
     answer:
-      "Use the Pre-wash Conditioning Mask every 2 to 3 weeks, before you wash. With the Hair Growth Oil, apply a few drops directly to the scalp with the dropper and massage with your fingertips for 3 to 5 minutes. Each product page has full directions for use.",
+      "Use the Pre-wash Strengthening Mask every 2 to 3 weeks, before you wash. With the Hair Growth Oil, apply a few drops directly to the scalp with the dropper and massage with your fingertips for 3 to 5 minutes. Each product page has full directions for use.",
   },
   {
     question: "Are your products safe for children?",

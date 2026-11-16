@@ -11,6 +11,16 @@ export type MailInput = {
   replyTo?: string;
 };
 
+/** True when the shop is set up to send email (SMTP host and sender address both set). */
+export function emailConfigured(): boolean {
+  try {
+    const env = getEnv();
+    return Boolean(env.SMTP_HOST && env.EMAIL_FROM);
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Send an email. Never throws: failures are logged and reported via the return value,
  * so an email problem can never break an order, contact or signup flow.

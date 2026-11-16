@@ -28,7 +28,7 @@ Your rights under the Consumer Protection Act, including the right to goods that
 
 If your order arrives damaged, or a product is defective, **we cover the cost of the return and replacement or refund**:
 
-- Contact us within TODO(CLIENT): number days of delivery at contact@kuntania.com.
+- Contact us within TODO(CLIENT): number days of delivery at kuntania.contact@gmail.com.
 - Include your order number, a description of the problem and clear photos of the product and packaging.
 - We will arrange a replacement or refund once we have confirmed the issue.
 

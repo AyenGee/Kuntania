@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Shop",
   description:
-    "Shop Kunta Nia natural hair care: Hair Growth Oil and Pre-wash Conditioning Mask.",
+    "Shop Kunta Nia natural hair care: Hair Growth Oil and Pre-wash Strengthening Mask.",
   alternates: { canonical: "/shop" },
 };
 

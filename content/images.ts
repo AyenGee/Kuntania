@@ -33,7 +33,7 @@ export const images = {
     src: "/images/site/range-feature.webp",
     width: 1600,
     height: 1069,
-    alt: "Kunta Nia Pre-wash Conditioning Mask jars and Hair Growth Oil bottles together",
+    alt: "Kunta Nia Pre-wash Strengthening Mask jars and Hair Growth Oil bottles together",
     kind: "real",
   },
   /** Oil bottles on burgundy satin (atmosphere only). */

@@ -28,12 +28,12 @@ export const business = {
   /** TODO(CLIENT): VAT number, or null if not VAT registered (client has not answered yet). */
   vatNumber: null as string | null,
   physicalAddress: "46 Nielson Drive, Blairgowrie, 2194, Johannesburg",
-  email: "contact@kuntania.com",
+  email: "kuntania.contact@gmail.com",
   phone: "062 176 2631",
   informationOfficer: {
     name: "Beene Milambo",
     /** TODO(CLIENT): the client gave no separate email; the business email is used. */
-    email: "contact@kuntania.com",
+    email: "kuntania.contact@gmail.com",
   },
 } as const;
 

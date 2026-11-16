@@ -7,7 +7,7 @@ import {
   ownerNewOrderEmail,
   type OrderEmailData,
 } from "./order-templates";
-import { sendMail, type MailInput } from "./send";
+import { emailConfigured, sendMail, type MailInput } from "./send";
 
 /**
  * Order emails: load the order, build the message, send it, and record the outcome in the
@@ -61,11 +61,18 @@ async function recordEmailEvent(
   sent: boolean,
 ): Promise<void> {
   try {
+    // With no mail server set up the shop doesn't email anyone: the owner writes to customers
+    // by hand, so say that plainly instead of calling it a failure.
+    const off = !sent && !emailConfigured();
     await getDb().orderEvent.create({
       data: {
         orderId,
-        type: sent ? "email_sent" : "email_failed",
-        message: sent ? `Email sent: ${label}.` : `Email FAILED to send: ${label}.`,
+        type: sent ? "email_sent" : off ? "email_skipped" : "email_failed",
+        message: sent
+          ? `Email sent: ${label}.`
+          : off
+            ? `Not emailed automatically (${label}): send this one yourself.`
+            : `Email FAILED to send: ${label}.`,
       },
     });
   } catch {

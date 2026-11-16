@@ -25,7 +25,7 @@ const order: OrderEmailData = {
   items: [
     { name: "Hair Growth Oil", size: "100 ml", quantity: 2, lineTotalCents: 20000 },
     {
-      name: "Pre-wash Conditioning Mask",
+      name: "Pre-wash Strengthening Mask",
       size: "100 ml",
       quantity: 1,
       lineTotalCents: 15000,
@@ -55,7 +55,7 @@ describe("orderConfirmationEmail", () => {
   it("includes items, totals, address and next steps in both html and text", () => {
     for (const body of [mail.text, mail.html]) {
       expect(body).toContain("Hair Growth Oil");
-      expect(body).toContain("Pre-wash Conditioning Mask");
+      expect(body).toContain("Pre-wash Strengthening Mask");
       expect(body).toContain("Johannesburg");
       expect(body).toContain("Gauteng");
       expect(body).toMatch(/395[.,]00/); // total

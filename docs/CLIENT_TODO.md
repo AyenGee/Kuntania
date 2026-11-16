@@ -99,7 +99,7 @@ Seeded values in `content/products.ts` are **placeholders**. Replace them (or ed
 
 Read from the two brochure images supplied in chat. Treat as likely answers to confirm:
 
-- [ ] **Product names on the labels:** "Hair Growth Oil" (Rosemary & Vitamin E, 100ml) and "Pre-wash Conditioning Mask" (Hibiscus & Fenugreek, 100ml). The site now uses these label names (slugs `hair-growth-oil`, `pre-wash-conditioning-mask`). Confirm final names, and that "Hair Growth" is acceptable (claims review).
+- [ ] **Product names on the labels:** "Hair Growth Oil" (Rosemary & Vitamin E, 100ml) and "Pre-wash Strengthening Mask" (Hibiscus & Fenugreek, 250ml; renamed November 2026). The site now uses these label names (slugs `hair-growth-oil`, `pre-wash-conditioning-mask`). Confirm final names, and that "Hair Growth" is acceptable (claims review).
 - [ ] **Sizes:** both 100 ml per the labels.
 - [ ] **Key ingredients:** oil: rosemary, vitamin E; mask: hibiscus, fenugreek. Full INCI still required.
 - [ ] **Mask directions (brochure):** apply to rinsed hair root to tips, leave 20 minutes, rinse thoroughly, shampoo and condition; use every 2 to 3 weeks.
@@ -181,3 +181,9 @@ Still open:
 
 - [ ] **Confirm the list of metro postal codes** in `content/site.ts` (`shipping.metroPostalCodeRanges`). It is a starting list from the main metro ranges, not the courier's own zones. Any valid postal code outside it is charged the rural / remote rate (R120); everything inside is R87.
 - [ ] Confirm that **free delivery over R450** applies in both zones (it currently does).
+
+## Client changes, November 2026
+
+- [x] Business email is now kuntania.contact@gmail.com (site, policies). Automatic emails are switched off: the owner writes to customers by hand.
+- [x] Mask renamed **Pre-wash Strengthening Mask** (250 ml), full ingredient lists for the mask and the oil, free scrunchie in the combo description.
+- [ ] **Photos to come from the client:** new mask photos (new label), the mask "How to use" image, a new combo image and a second combo image.
