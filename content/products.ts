@@ -153,11 +153,11 @@ export const seedProducts: SeedProduct[] = [
     sortOrder: 2,
     images: [
       {
-        src: "/images/products/mask-1.webp",
-        alt: "Kunta Nia Pre-wash Strengthening Mask, Hibiscus & Fenugreek: two closed jars and one open jar showing the pink mask",
+        src: "/images/products/mask-3.webp",
+        alt: "Two closed jars and one open jar of Kunta Nia Pre-wash Strengthening Mask, Hibiscus & Fenugreek, 250 ml, showing the pink mask, on cream cloth with dried flowers",
       },
       {
-        src: "/images/products/mask-2.webp",
+        src: "/images/products/mask-4.webp",
         alt: "Two jars of Kunta Nia Pre-wash Strengthening Mask and an open jar showing its deep pink texture",
       },
     ],
@@ -203,9 +203,9 @@ export const seedProducts: SeedProduct[] = [
     sortOrder: 3,
     images: [
       {
-        // Client-supplied photo of both products together.
-        src: "/images/products/combo-2.webp",
-        alt: "Kunta Nia Pre-wash Strengthening Mask jar and Hair Growth Oil bottle with fenugreek seeds, rosemary and a hibiscus petal",
+        // Client-supplied photo of both products together. TODO(CLIENT): a second combo photo.
+        src: "/images/products/combo-3.webp",
+        alt: "Kunta Nia Pre-wash Strengthening Mask jar and Hair Growth Oil bottle on cream cloth with dried flowers",
       },
     ],
     seoTitle: "Kunta Nia Combo: Hair Growth Oil and Strengthening Mask",

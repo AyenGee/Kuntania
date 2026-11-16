@@ -9,10 +9,12 @@ import { home } from "@content/home";
  */
 const PHOTOS = {
   maskPhoto: {
-    src: "/images/products/mask-2.webp",
-    width: 1200,
-    height: 1600,
-    alt: "Two jars of Kunta Nia Pre-wash Strengthening Mask and an open jar showing the mask",
+    src: "/images/site/howto-mask.webp",
+    width: 896,
+    height: 1195,
+    alt: "Pink mask being worked through wet natural hair in the shower",
+    /** The photo is portrait but shown in a wide frame: keep the hands and hair in view. */
+    position: "center 40%",
   },
   scalpMood: images.moodScalp,
 } as const;
@@ -37,6 +39,9 @@ export function HowToUse() {
                 width={photo.width}
                 height={photo.height}
                 sizes="(min-width: 768px) 50vw, 100vw"
+                style={{
+                  objectPosition: "position" in photo ? photo.position : undefined,
+                }}
                 className="aspect-[16/10] w-full object-cover"
               />
               <div className="p-6">

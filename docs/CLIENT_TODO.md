@@ -186,4 +186,6 @@ Still open:
 
 - [x] Business email is now kuntania.contact@gmail.com (site, policies). Automatic emails are switched off: the owner writes to customers by hand.
 - [x] Mask renamed **Pre-wash Strengthening Mask** (250 ml), full ingredient lists for the mask and the oil, free scrunchie in the combo description.
-- [ ] **Photos to come from the client:** new mask photos (new label), the mask "How to use" image, a new combo image and a second combo image.
+- [x] New mask photos, the mask "How to use" photo and one combo photo received and added.
+- [ ] **Still to come:** a second combo photo.
+- [ ] **Label typo:** in two of the new mask photos the jar label reads "Strengthoning" (the other jar in the same photo reads "Strengthening"). Check the printed labels.
