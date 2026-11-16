@@ -49,12 +49,12 @@ export const nav = {
     { label: "Shop", href: "/shop" },
     { label: "FAQ", href: "/faq" },
     { label: "Contact", href: "/contact" },
+    { label: "Track order", href: "/order-status" },
   ],
   footerPolicies: [
     { label: "Shipping & Returns", href: "/shipping-returns" },
     { label: "Terms & Conditions", href: "/terms" },
     { label: "Privacy Policy", href: "/privacy" },
-    { label: "Track an order", href: "/order-status" },
   ],
 } as const;
 
