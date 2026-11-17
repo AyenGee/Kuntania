@@ -9,6 +9,7 @@ import {
 } from "@/app/(site)/(narrow)/checkout/actions";
 import { Totals } from "@/components/cart/Totals";
 import { Field, Honeypot, SelectField, SubmitButton } from "@/components/forms/Field";
+import type { Resolution } from "@/lib/cart-resolve";
 import { formatZar } from "@/lib/money";
 import { PROVINCES } from "@/lib/provinces";
 import type { ShippingMethod } from "@/lib/shipping";
@@ -48,6 +49,14 @@ export function CheckoutForm() {
     /^\d{4}$/.test(postalCode) ? postalCode : null,
   );
 
+  // Re-pricing (a new postal code, a discount code) must not replace the form with a loading
+  // message: that would wipe everything the customer has typed. Keep showing the last priced
+  // order until the new one arrives.
+  const [lastResolution, setLastResolution] = useState<Resolution | null>(null);
+  if (priced.status === "ready" && priced.resolution !== lastResolution) {
+    setLastResolution(priced.resolution);
+  }
+
   // Order created: hand the customer to the payment page (the form must not be re-submitted).
   if (state.ok && state.payment) return <PaymentRedirectForm payment={state.payment} />;
 
@@ -70,16 +79,16 @@ export function CheckoutForm() {
     );
   }
 
-  if (priced.status === "error") {
+  if (priced.status === "error" && !lastResolution) {
     return (
       <p role="alert" className="text-danger">
         We couldn&rsquo;t load your order just now. Please refresh the page and try again.
       </p>
     );
   }
-  if (priced.status === "loading") return <p aria-busy="true">Loading checkout…</p>;
-
-  const { resolution } = priced;
+  const resolution = priced.status === "ready" ? priced.resolution : lastResolution;
+  if (!resolution) return <p aria-busy="true">Loading checkout…</p>;
+  const repricing = priced.status !== "ready";
   const methodLabel =
     resolution.shippingOptions.find((o) => o.method === method)?.label ?? "Shipping";
   // Only send the code if the server accepted it.
@@ -346,7 +355,12 @@ export function CheckoutForm() {
         </div>
 
         <Totals resolution={resolution} shippingLabel={`Shipping (${methodLabel})`} />
-        <SubmitButton pending={pending}>Place order and pay</SubmitButton>
+        <SubmitButton
+          pending={pending || repricing}
+          pendingLabel={repricing && !pending ? "Updating total…" : "Sending…"}
+        >
+          Place order and pay
+        </SubmitButton>
         <p className="text-sm text-ink-muted">
           You&rsquo;ll be taken to our secure payment partner to pay.
         </p>
