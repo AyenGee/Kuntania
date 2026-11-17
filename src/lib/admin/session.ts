@@ -4,8 +4,13 @@ import { redirect } from "next/navigation";
 import { getIronSession, type SessionOptions } from "iron-session";
 import { getDb } from "@/lib/db";
 import { getEnv } from "@/lib/env";
+import { passwordVersion } from "./password-version";
 
-export type AdminSessionData = { adminId?: string };
+export type AdminSessionData = {
+  adminId?: string;
+  /** passwordVersion() of the password in force when the admin signed in. */
+  pv?: string;
+};
 
 /** Absolute session lifetime: the owner signs in again after 8 hours. */
 export const ADMIN_SESSION_TTL_SECONDS = 8 * 60 * 60;
@@ -34,17 +39,19 @@ export type AdminIdentity = { id: string; email: string; name: string };
 
 /**
  * The signed-in admin, or null. The session cookie is only a pointer: the admin must still
- * exist in the database, so deleting a user signs them out immediately.
+ * exist in the database, so deleting a user signs them out immediately, and the password must
+ * be the same one they signed in with, so resetting a password signs out every older session.
  * Cached per request.
  */
 export const getAdmin = cache(async (): Promise<AdminIdentity | null> => {
   const session = await getAdminSession();
-  if (!session.adminId) return null;
+  if (!session.adminId || !session.pv) return null;
   const admin = await getDb().adminUser.findUnique({
     where: { id: session.adminId },
-    select: { id: true, email: true, name: true },
+    select: { id: true, email: true, name: true, passwordHash: true },
   });
-  return admin;
+  if (!admin || passwordVersion(admin.passwordHash) !== session.pv) return null;
+  return { id: admin.id, email: admin.email, name: admin.name };
 });
 
 /**

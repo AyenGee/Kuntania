@@ -4,6 +4,7 @@ import {
   checkSucceededPayment,
   createYocoProvider,
   parseYocoEvent,
+  redactedEvent,
   verifyWebhookSignature,
   yocoModeOf,
 } from "./yoco";
@@ -232,5 +233,29 @@ describe("createYocoProvider", () => {
       siteUrl: "https://shop.example.test",
     });
     await expect(provider.createPayment(order)).rejects.toThrow();
+  });
+});
+
+describe("redactedEvent", () => {
+  it("keeps what reconciliation needs and drops card details", () => {
+    const body = JSON.stringify({
+      id: "evt_1",
+      type: "payment.succeeded",
+      payload: {
+        id: "p_1",
+        amount: 11000,
+        currency: "ZAR",
+        status: "succeeded",
+        mode: "test",
+        metadata: { checkoutId: "ch_1" },
+        paymentMethodDetails: {
+          type: "card",
+          card: { maskedCard: "************1111", cardHolder: "Jane Doe" },
+        },
+      },
+    });
+    const kept = redactedEvent(parseYocoEvent(body)!);
+    expect(kept.payload).toMatchObject({ id: "p_1", amount: 11000, mode: "test" });
+    expect(JSON.stringify(kept)).not.toMatch(/Jane|1111|paymentMethodDetails/);
   });
 });

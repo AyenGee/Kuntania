@@ -30,6 +30,13 @@ export type PriceCartResult = { ok: true; resolution: Resolution } | { ok: false
  * Discount-code lookups are rate limited so codes can't be guessed in bulk.
  */
 export async function priceCartAction(raw: unknown): Promise<PriceCartResult> {
+  // Generous (a shopper changing quantities makes a few calls), but stops a script from
+  // hammering the database through this endpoint.
+  try {
+    if (!(await checkRateLimit("cart-price", 300, 10 * 60))) return { ok: false };
+  } catch {
+    return { ok: false };
+  }
   const parsed = inputSchema.safeParse(raw);
   if (!parsed.success) return { ok: false };
   const { items, shippingMethod, postalCode } = parsed.data;

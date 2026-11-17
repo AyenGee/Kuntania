@@ -1,6 +1,15 @@
 import { store } from "@content/site";
 import { getDb } from "@/lib/db";
 
+/** Delete rate-limit counters from windows that ended long ago (they only matter briefly). */
+export async function purgeOldRateLimits(now: Date = new Date()): Promise<number> {
+  const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const result = await getDb().rateLimit.deleteMany({
+    where: { windowStart: { lt: cutoff } },
+  });
+  return result.count;
+}
+
 /**
  * Cancel PENDING_PAYMENT orders older than the configured expiry (default 48 hours).
  * Safe against a payment arriving at the same moment: the cancel is a conditional update on

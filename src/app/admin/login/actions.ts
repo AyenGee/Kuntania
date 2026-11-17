@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getDb } from "@/lib/db";
+import { passwordVersion } from "@/lib/admin/password-version";
 import { getAdminSession } from "@/lib/admin/session";
 import { checkRateLimit } from "@/lib/rate-limit";
 import type { FormState } from "@/lib/validation/forms";
@@ -51,6 +52,7 @@ export async function loginAction(
 
     const session = await getAdminSession();
     session.adminId = admin.id;
+    session.pv = passwordVersion(admin.passwordHash);
     await session.save();
     await db.adminUser.update({
       where: { id: admin.id },

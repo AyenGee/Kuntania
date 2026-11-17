@@ -1,5 +1,5 @@
 import { isAuthorizedCron } from "@/lib/cron-auth";
-import { cancelStalePendingOrders } from "@/lib/pending-orders";
+import { cancelStalePendingOrders, purgeOldRateLimits } from "@/lib/pending-orders";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -11,7 +11,8 @@ export async function GET(request: Request): Promise<Response> {
   }
   try {
     const cancelled = await cancelStalePendingOrders();
-    console.info(JSON.stringify({ event: "cron.cancel_pending", cancelled }));
+    const purged = await purgeOldRateLimits();
+    console.info(JSON.stringify({ event: "cron.cancel_pending", cancelled, purged }));
     return Response.json({ cancelled });
   } catch (error) {
     console.error(

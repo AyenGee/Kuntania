@@ -79,6 +79,26 @@ export function parseYocoEvent(body: string): YocoEvent | null {
   }
 }
 
+/**
+ * What we keep of a webhook. The full Yoco payload also carries payment-method details (the
+ * card holder's name, masked card number, expiry), which we have no use for, so it is not stored.
+ */
+export function redactedEvent(event: YocoEvent) {
+  const { id, type, payload } = event;
+  return {
+    id: id ?? null,
+    type,
+    payload: {
+      id: payload.id,
+      amount: payload.amount,
+      currency: payload.currency,
+      status: payload.status ?? null,
+      mode: payload.mode ?? null,
+      metadata: payload.metadata,
+    },
+  };
+}
+
 export type PaymentCheck = { ok: true } | { ok: false; reason: string };
 
 /**

@@ -4,6 +4,7 @@ import { applyCompletedPayment } from "@/lib/payments/apply-payment";
 import {
   checkSucceededPayment,
   parseYocoEvent,
+  redactedEvent,
   verifyWebhookSignature,
   yocoModeOf,
 } from "@/lib/payments/yoco";
@@ -58,7 +59,10 @@ export async function POST(request: Request): Promise<Response> {
   let notificationId: string;
   try {
     const row = await db.paymentNotification.create({
-      data: { provider: "yoco", rawPayload: JSON.parse(body) },
+      data: {
+        provider: "yoco",
+        rawPayload: JSON.parse(JSON.stringify(redactedEvent(event))),
+      },
       select: { id: true },
     });
     notificationId = row.id;
