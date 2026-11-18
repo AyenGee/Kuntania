@@ -15,6 +15,7 @@ import { PROVINCES } from "@/lib/provinces";
 import type { ShippingMethod } from "@/lib/shipping";
 import { useCart } from "@/lib/use-cart";
 import { usePricedCart } from "@/lib/use-priced-cart";
+import { saPhoneHandlers } from "@/components/forms/phone";
 import { PaymentRedirectForm } from "./PaymentRedirectForm";
 import { FormAlert } from "@/components/forms/FormAlert";
 
@@ -142,7 +143,8 @@ export function CheckoutForm() {
             type="tel"
             required
             autoComplete="tel"
-            hint="South African number, e.g. 082 123 4567"
+            hint="South African number, e.g. +27 82 123 4567"
+            {...saPhoneHandlers}
             defaultValue={v.phone}
             error={errors.phone}
           />

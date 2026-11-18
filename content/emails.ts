@@ -13,7 +13,7 @@ export const emailCopy = {
     intro: "We've received your payment and your order is confirmed.",
     // Times confirmed by the client (see fulfilment in content/site.ts and the FAQ).
     nextSteps: [
-      "We'll pack your order within 1 business day.",
+      "We'll pack your order within 3 to 5 business days.",
       "When it ships, we'll email you the courier and tracking details. Delivery usually takes 2 to 4 business days.",
       "You can check your order any time on our order status page.",
     ],

@@ -124,7 +124,7 @@ export const deliveryArea = {
 
 /** How long things take (shown in the FAQ, policy and emails). */
 export const fulfilment = {
-  packingTime: "1 business day",
+  packingTime: "3 to 5 business days",
   deliveryTime: "2 to 4 business days",
 } as const;
 

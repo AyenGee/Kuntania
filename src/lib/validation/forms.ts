@@ -9,7 +9,8 @@ const trimmed = (max: number) => z.string().trim().max(max);
  */
 export function normaliseSaPhone(input: string): string | null {
   const digits = input.replace(/[\s\-()]/g, "");
-  const match = /^(?:\+27|27|0)([1-9]\d{8})$/.exec(digits);
+  // +27 / 27 / 0 prefix; people often type +27 and then the leading 0 as well, so allow that.
+  const match = /^(?:(?:\+27|27)0?|0)([1-9]\d{8})$/.exec(digits);
   return match ? `+27${match[1]}` : null;
 }
 

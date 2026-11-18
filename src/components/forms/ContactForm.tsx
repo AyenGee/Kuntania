@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { saPhoneHandlers } from "./phone";
 import { submitContact } from "@/app/(site)/(narrow)/contact/actions";
 import type { FormState } from "@/lib/validation/forms";
 import { Field, Honeypot, SubmitButton } from "./Field";
@@ -47,7 +48,8 @@ export function ContactForm() {
         label="Phone (optional)"
         type="tel"
         autoComplete="tel"
-        hint="South African number, e.g. 082 123 4567"
+        hint="South African number, e.g. +27 82 123 4567"
+        {...saPhoneHandlers}
         defaultValue={v.phone}
         error={errors.phone}
       />
