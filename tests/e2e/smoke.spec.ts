@@ -23,9 +23,11 @@ test.describe("public pages", () => {
     });
   }
 
-  test("policy pages show the DRAFT banner until approved", async ({ page }) => {
-    await page.goto("/privacy");
-    await expect(page.getByRole("note")).toContainText("DRAFT");
+  test("policy pages are approved and show no DRAFT banner", async ({ page }) => {
+    for (const path of ["/privacy", "/terms", "/shipping-returns"]) {
+      await page.goto(path);
+      await expect(page.getByText("DRAFT")).toHaveCount(0);
+    }
   });
 
   test("unknown URLs give a friendly 404 with the site header", async ({ page }) => {

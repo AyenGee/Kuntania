@@ -42,8 +42,7 @@ Legend: _Dev_ = developer · _Client_ = business owner.
       data is stored, and retention periods. The **Information Officer** is named and reachable
       (POPIA). Ask the adviser whether the Information Officer must be **registered with the
       Information Regulator**. _Client_
-- [ ] `POLICIES_APPROVED=true` set in Vercel **only after** the three policies are approved (this
-      removes the red DRAFT banner). Open each policy page afterwards and confirm the banner is gone. _Dev_
+- [x] Policies approved by the client; the DRAFT banner has been removed from the code. _Dev_
 - [ ] Marketing consent check: the newsletter box and the checkout marketing box are **unticked by
       default**, and the unsubscribe page works (subscribe, then unsubscribe with a test address). _Dev_
 - [ ] No cookie banner needed: confirm nothing that sets cookies has been added (see README,

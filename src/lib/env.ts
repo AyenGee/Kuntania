@@ -17,7 +17,6 @@ const schema = z.object({
   CRON_SECRET: optionalString,
 
   VAT_REGISTERED: bool,
-  POLICIES_APPROVED: bool,
 
   /** Yoco secret key: sk_test_... for testing, sk_live_... for real payments. */
   YOCO_SECRET_KEY: optionalString,

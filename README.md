@@ -76,7 +76,6 @@ Documented line by line in [`.env.example`](.env.example). Validated at runtime 
 | `SESSION_SECRET`                                                   | yes                 | 32+ random characters; signs the admin session cookie.                                                              |
 | `CRON_SECRET`                                                      | yes in production   | Authorises the daily clean-up job (`Authorization: Bearer ...`). Vercel Cron sends it automatically once set.       |
 | `VAT_REGISTERED`                                                   | yes                 | `true` if VAT registered (prices are VAT-inclusive, 15%). Shows "VAT included" lines and stores the VAT amount.     |
-| `POLICIES_APPROVED`                                                | yes                 | `true` **only** once the client has approved the policy pages. Until then a red "DRAFT" banner shows in production. |
 | `YOCO_SECRET_KEY`                                                  | yes                 | Yoco Checkout API secret key: `sk_test_...` while testing, `sk_live_...` for real payments.                         |
 | `YOCO_WEBHOOK_SECRET`                                              | yes                 | The `whsec_...` value printed by `npm run yoco:webhook` (shown once).                                               |
 | `YOCO_API_URL`                                                     | never in production | Test-only stand-in for Yoco's API. Ignored unless the key starts with `sk_test_`. Leave blank.                      |

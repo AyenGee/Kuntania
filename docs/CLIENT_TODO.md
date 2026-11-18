@@ -64,7 +64,7 @@ client copy arrives). Each needs `TODO(CLIENT): approve claim wording`.
 - [ ] Shipping & Returns (hygiene note on opened cosmetics; damaged/defective process)
 - [ ] Terms & Conditions
 - [ ] Privacy Policy (POPIA)
-- [ ] Set `POLICIES_APPROVED=true` only after approval
+- [x] Policies approved by the client (DRAFT banner removed)
 
 ## 7. Accounts and credentials (client or developer to provide)
 
