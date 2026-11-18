@@ -25,7 +25,7 @@ export const business = {
   legalForm: "Sole proprietor",
   /** TODO(CLIENT): confirm there is no registration number (null hides it from the footer). */
   registrationNumber: null as string | null,
-  /** TODO(CLIENT): VAT number, or null if not VAT registered (client has not answered yet). */
+  /** Kunta Nia is not a VAT vendor, so there is no VAT number to show. */
   vatNumber: null as string | null,
   physicalAddress: "46 Nielson Drive, Blairgowrie, 2194, Johannesburg",
   email: "kuntania.contact@gmail.com",

@@ -11,7 +11,7 @@ expected to be answered by it.
 - [ ] Registered business name
 - [ ] Legal form (Pty Ltd / CC / sole proprietor)
 - [ ] Company registration number
-- [ ] VAT registered? If yes: VAT number, and set `VAT_REGISTERED=true`
+- [x] VAT: not a VAT vendor (keep `VAT_REGISTERED=false`)
 - [ ] Physical (street) address — required by ECT Act s43
 - [ ] Customer-facing email and phone number
 - [ ] Information Officer name and email (POPIA)
@@ -170,7 +170,7 @@ Still open:
 - [ ] **Delivery-area list**: which towns or postal codes count as "major cities and metropolitan areas". The restriction is built (`deliveryArea` in `content/site.ts`) but OFF until the list exists
 - ~~Mask size~~: confirmed 100 ml, matches the label
 - [ ] **Combo**: confirm the name ("Kunta Nia Combo"), supply a photo, shelf life, and whether to show the R260 "was" price
-- [ ] **VAT**: registered or not (and the VAT number)
+- [x] **VAT**: not a VAT vendor
 - [ ] **Registration number**: confirm a sole proprietor has none to show
 - [ ] **Information Officer email**: the business email is used for now
 - [ ] **Full INCI ingredient lists** for both products (castor oil is in the oil)
